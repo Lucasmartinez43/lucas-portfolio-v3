@@ -4,8 +4,545 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lucas Martinez — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+
+    @font-face {
+      font-family: 'Antro Vectra';
+      src: url('assets/Antro_Vectra.otf') format('opentype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #B1B1B4;
+      font-family: 'Barlow', sans-serif;
+      overflow-x: hidden;
+    }
+
+
+    /* ── HERO ────────────────────────────────────────────────────────── */
+
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Side containers — fixed mask, children rotate inside */
+    .hero-side {
+      position: absolute;
+      width: 808px;
+      height: 808px;
+      top: calc(50vh - 404px);
+      pointer-events: none;
+      overflow: visible;
+    }
+
+    .hero-side-left {
+      left: calc(50% - 683px);
+      mask-image: linear-gradient(to right, transparent 0%, black 55%);
+    }
+
+    .hero-side-right {
+      left: calc(50% - 125px);
+      mask-image: linear-gradient(to left, transparent 0%, black 55%);
+    }
+
+    /* Decor elements fill their side container */
+    .hero-decor {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .hero-decor img {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Non-spinning wrapper that holds the conic reveal mask */
+    .hero-decor-wrap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .hero-decor-wrap-left {
+      --reveal: 0deg;
+      mask-image: conic-gradient(from 270deg, black 0deg, black calc(var(--reveal) - 20deg), transparent var(--reveal), transparent 360deg);
+      animation: circular-reveal 8s cubic-bezier(0.1, 0.8, 0.25, 1) forwards;
+    }
+
+    .hero-decor-wrap-right {
+      --reveal: 0deg;
+      mask-image: conic-gradient(from 90deg, black 0deg, black calc(var(--reveal) - 20deg), transparent var(--reveal), transparent 360deg);
+      animation: circular-reveal 8s cubic-bezier(0.1, 0.8, 0.25, 1) forwards;
+    }
+
+    .hero-colorwheel {
+      opacity: 0.10;
+      animation: spin-decor 120s linear infinite;
+    }
+
+    .hero-protractor {
+      opacity: 0.10;
+      animation: spin-decor 120s linear infinite;
+    }
+
+    /* SVG circles fill their side container */
+    .hero-circle {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .hero-circle circle {
+      stroke-dasharray: 2519;
+      stroke-dashoffset: 2519;
+      animation: trace-circle 8s cubic-bezier(0.1, 0.8, 0.25, 1) forwards;
+    }
+
+    @keyframes trace-circle {
+      to { stroke-dashoffset: 0; }
+    }
+
+    @property --reveal {
+      syntax: '<angle>';
+      initial-value: 0deg;
+      inherits: false;
+    }
+
+    @keyframes circular-reveal {
+      from { --reveal: 0deg; }
+      to { --reveal: 360deg; }
+    }
+
+    @keyframes fade-in-decor {
+      from { opacity: 0; }
+      to { opacity: 0.10; }
+    }
+
+    @keyframes spin-decor {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .hero-text {
+      position: absolute;
+      top: calc(50vh - 107px);
+      left: 50%;
+      transform: translateX(-50%);
+      width: 863px;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .hero-tagline {
+      display: block;
+      font-family: 'Antro Vectra', cursive;
+      font-size: 58px;
+      color: #0F0F12;
+      line-height: normal;
+    }
+
+    .hero-headline {
+      display: block;
+      font-family: 'Barlow', sans-serif;
+      font-size: 100px;
+      font-weight: 700;
+      color: #0F0F12;
+      line-height: normal;
+      margin-top: -48px;
+    }
+
+    .hero-headline .amp {
+      font-weight: 300;
+      color: #CD3D23;
+    }
+
+
+    /* ── CONTENT CARD ────────────────────────────────────────────────── */
+
+    .content {
+      width: 1080px;
+      margin: 0 auto;
+      background-color: #0F0F12;
+      border-radius: 32px;
+      padding: 0 204px 32px;
+    }
+
+
+    /* ── ABOUT ───────────────────────────────────────────────────────── */
+
+    .about {
+      padding: 160px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .about-text {
+      width: 339px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-self: stretch;
+    }
+
+    .about-bio {
+      font-size: 20px;
+      line-height: 32px;
+      color: #FFFFFF;
+    }
+
+    .bio-intro {
+      font-weight: 500;
+    }
+
+    .bio-detail {
+      display: block;
+      font-weight: 300;
+      color: rgba(255, 255, 255, 0.7);
+      margin-top: 32px;
+    }
+
+    .about-cta {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 700;
+      color: #CD3D23;
+      text-decoration: none;
+      line-height: normal;
+    }
+
+    .about-photo-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+
+    .about-photo {
+      position: relative;
+      width: 243px;
+      height: 360px;
+      flex-shrink: 0;
+    }
+
+    .about-photo img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      mix-blend-mode: luminosity;
+      opacity: 0.7;
+      display: block;
+    }
+
+    .about-photo::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(15, 15, 18, 0.8) 0%, rgba(15, 15, 18, 0) 38%);
+      pointer-events: none;
+    }
+
+    .about-signature {
+      position: relative;
+      width: 243px;
+      height: 68px;
+      flex-shrink: 0;
+      margin-top: -68px;
+    }
+
+    .sig-name {
+      position: absolute;
+      font-family: 'Antro Vectra', cursive;
+      font-size: 38px;
+      color: #FFFFFF;
+      left: 8px;
+      top: 5px;
+      white-space: nowrap;
+    }
+
+    .sig-title {
+      position: absolute;
+      font-family: 'Barlow', sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.5);
+      letter-spacing: 4px;
+      left: 18px;
+      top: 46px;
+      white-space: nowrap;
+    }
+
+
+    /* ── PROJECT CARDS ───────────────────────────────────────────────── */
+
+    .cards {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      margin-top: 40px;
+    }
+
+    .card {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      padding: 16px;
+      border-radius: 16px;
+      border: 1px solid transparent;
+    }
+
+    .card-body {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-self: stretch;
+    }
+
+    .card-title-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .card-title {
+      font-size: 32px;
+      font-weight: 700;
+      color: #FFFFFF;
+      line-height: normal;
+    }
+
+    .card-subtitle {
+      font-size: 18px;
+      font-weight: 300;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: normal;
+    }
+
+    .card-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 400;
+      color: #FFFFFF;
+      text-transform: uppercase;
+      line-height: 18px;
+      padding: 2px 8px;
+      border-radius: 13px;
+      background-color: rgba(15, 15, 18, 0.3);
+      white-space: nowrap;
+    }
+
+    .card-image {
+      width: 320px;
+      height: 214px;
+      border-radius: 8px;
+      background-color: #0F0F12;
+      flex-shrink: 0;
+    }
+
+    /* Card gradients + per-card border colors */
+    .card-r7 {
+      background-image: linear-gradient(72deg, rgb(19, 36, 49) 0%, rgb(30, 94, 142) 100%);
+      border-color: #3E7EB8;
+    }
+    .card-recordplus {
+      background-image: linear-gradient(72deg, rgb(35, 27, 39) 0%, rgb(77, 39, 92) 100%);
+      border-color: #7A4A96;
+    }
+    .card-jarvics {
+      background-image: linear-gradient(72deg, rgb(19, 36, 49) 0%, rgb(30, 94, 142) 100%);
+      border-color: #3E7EB8;
+    }
+    .card-tempo {
+      background-image: linear-gradient(72deg, rgb(64, 61, 55) 0%, rgb(119, 111, 94) 100%);
+      border-color: #A89D87;
+    }
+    .card-cashback {
+      background-image: linear-gradient(72deg, rgb(19, 36, 49) 0%, rgb(30, 94, 142) 100%);
+      border-color: #3E7EB8;
+    }
+    .card-playground {
+      border-color: #252530;
+    }
+
+    .card-jarvics .tag,
+    .card-cashback .tag { background-color: rgba(15, 15, 18, 0.5); }
+
+  </style>
 </head>
 <body>
-  <h1>Coming soon.</h1>
+
+  <!-- ── HERO ─────────────────────────────────────────────────────── -->
+  <section class="hero">
+
+    <div class="hero-side hero-side-left">
+      <div class="hero-decor-wrap hero-decor-wrap-left">
+        <div class="hero-decor hero-colorwheel">
+          <img src="assets/color-wheel.webp" alt="" />
+        </div>
+      </div>
+      <svg class="hero-circle" viewBox="0 0 808 808" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="404" cy="404" r="401" fill="none" stroke="#8E8E96" stroke-width="2" transform="rotate(180, 404, 404)"/>
+      </svg>
+    </div>
+
+    <div class="hero-side hero-side-right">
+      <div class="hero-decor-wrap hero-decor-wrap-right">
+        <div class="hero-decor hero-protractor">
+          <img src="assets/Protractor.svg" alt="" />
+        </div>
+      </div>
+      <svg class="hero-circle" viewBox="0 0 808 808" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="404" cy="404" r="401" fill="none" stroke="#8E8E96" stroke-width="2"/>
+      </svg>
+    </div>
+
+    <div class="hero-text">
+      <span class="hero-tagline">Designing at the intersection of</span>
+      <span class="hero-headline">ART<span class="amp">&amp;</span>ENGINEERING</span>
+    </div>
+
+  </section>
+
+  <!-- ── CONTENT CARD ─────────────────────────────────────────────── -->
+  <main class="content">
+
+    <!-- ABOUT -->
+    <section class="about">
+
+      <div class="about-text">
+        <p class="about-bio">
+          <span class="bio-intro">I'm a designer with over 9 years of experience in digital products, the last 5 and a half focused on Product and User Experience.</span>
+          <span class="bio-detail">I currently work at Record TV, one of the Brazil's most important broadcasters, designing for products accessed and downloaded by millions.</span>
+        </p>
+        <a href="#" class="about-cta">READ MORE ABOUT ME</a>
+      </div>
+
+      <div class="about-photo-wrap">
+        <div class="about-photo">
+          <img src="assets/photo-lucas.jpg" alt="Lucas Martinez" />
+        </div>
+        <div class="about-signature">
+          <span class="sig-name">Lucas Martinez</span>
+          <span class="sig-title">senior product designer</span>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- CARDS -->
+    <div class="cards">
+
+      <div class="card card-r7">
+        <div class="card-body">
+          <div class="card-title-group">
+            <p class="card-title">R7.com</p>
+            <p class="card-subtitle">News and Media Portal, reaching more than 70 million monthly users</p>
+          </div>
+          <div class="card-tags">
+            <span class="tag">+300k weekly interactions</span>
+          </div>
+        </div>
+        <div class="card-image"></div>
+      </div>
+
+      <div class="card card-recordplus">
+        <div class="card-body">
+          <div class="card-title-group">
+            <p class="card-title">RecordPlus</p>
+            <p class="card-subtitle">Streaming App for Record TV, with over 13 million downloads across App Store, Play Store and Smart TVs</p>
+          </div>
+          <div class="card-tags">
+            <span class="tag">+12% NEW user</span>
+            <span class="tag">+4pp to paid plans</span>
+          </div>
+        </div>
+        <div class="card-image"></div>
+      </div>
+
+      <div class="card card-jarvics">
+        <div class="card-body">
+          <div class="card-title-group">
+            <p class="card-title">Jarvics</p>
+            <p class="card-subtitle">Enterprise CMS behind R7 publishing and RecordPlus subscribers management</p>
+          </div>
+          <div class="card-tags">
+            <span class="tag">~20% faster XP</span>
+            <span class="tag">3rd party independency</span>
+          </div>
+        </div>
+        <div class="card-image"></div>
+      </div>
+
+      <div class="card card-tempo">
+        <div class="card-body">
+          <div class="card-title-group">
+            <p class="card-title">Tempo</p>
+            <p class="card-subtitle">A end-to-end weather forecast platform, designed for real-world constraints</p>
+          </div>
+          <div class="card-tags">
+            <span class="tag">WCAG</span>
+            <span class="tag">a11y standards</span>
+          </div>
+        </div>
+        <div class="card-image"></div>
+      </div>
+
+      <div class="card card-cashback">
+        <div class="card-body">
+          <div class="card-title-group">
+            <p class="card-title">Cupos+Cashback</p>
+            <p class="card-subtitle">News and Media Portal, reaching more than 70 million monthly users</p>
+          </div>
+          <div class="card-tags">
+            <span class="tag">R$20k weekly savings offered</span>
+          </div>
+        </div>
+        <div class="card-image"></div>
+      </div>
+
+      <div class="card card-playground">
+        <div class="card-body">
+          <div class="card-title-group">
+            <p class="card-title">Playground</p>
+            <p class="card-subtitle">This is a fun place where you will get to know a little bit about me through drawings, work designs, photography and ocasional pictures of my dog</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
 </body>
 </html>
