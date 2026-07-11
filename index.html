@@ -6,7 +6,7 @@
   <title>Lucas Martinez — Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=B612:wght@400&family=JetBrains+Mono:wght@400;700&family=Stack+Sans+Notch:wght@700&family=Stack+Sans+Text:wght@200;300;400;500;700&display=swap" rel="stylesheet" />
   <style>
 
     @font-face {
@@ -24,7 +24,7 @@
 
     body {
       background-color: #B1B1B4;
-      font-family: 'Barlow', sans-serif;
+      font-family: 'Stack Sans Text', sans-serif;
       overflow-x: hidden;
     }
 
@@ -32,9 +32,29 @@
     /* ── HERO ────────────────────────────────────────────────────────── */
 
     .hero {
-      position: relative;
-      min-height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
       overflow: hidden;
+      z-index: 0;
+    }
+
+    .hero-spacer {
+      height: 100vh;
+    }
+
+    /* Constraining wrapper — natural size 1366×808, scales to 80vh max 1360px wide */
+    .hero-bg-wrap {
+      position: absolute;
+      left: calc(50% - 683px);
+      top: calc(50vh - 404px);
+      width: 1366px;
+      height: 808px;
+      transform-origin: 683px 404px;
+      transform: scale(min(calc(80vh / 808px), calc(1360 / 1366)));
+      pointer-events: none;
     }
 
     /* Side containers — fixed mask, children rotate inside */
@@ -42,18 +62,18 @@
       position: absolute;
       width: 808px;
       height: 808px;
-      top: calc(50vh - 404px);
+      top: 0;
       pointer-events: none;
       overflow: visible;
     }
 
     .hero-side-left {
-      left: calc(50% - 683px);
+      left: 0;
       mask-image: linear-gradient(to right, transparent 0%, black 55%);
     }
 
     .hero-side-right {
-      left: calc(50% - 125px);
+      left: 558px;
       mask-image: linear-gradient(to left, transparent 0%, black 55%);
     }
 
@@ -94,12 +114,12 @@
     }
 
     .hero-colorwheel {
-      opacity: 0.10;
+      opacity: 0.08;
       animation: spin-decor 120s linear infinite;
     }
 
     .hero-protractor {
-      opacity: 0.10;
+      opacity: 0.08;
       animation: spin-decor 120s linear infinite;
     }
 
@@ -134,6 +154,16 @@
       to { --reveal: 360deg; }
     }
 
+    @keyframes char-reveal {
+      from { opacity: 0; filter: blur(6px); }
+      to   { opacity: 1; filter: blur(0px); }
+    }
+
+    @keyframes line-reveal {
+      from { transform: scaleY(0.95); }
+      to   { transform: scaleY(1); }
+    }
+
     @keyframes fade-in-decor {
       from { opacity: 0; }
       to { opacity: 0.10; }
@@ -164,16 +194,19 @@
 
     .hero-headline {
       display: block;
-      font-family: 'Barlow', sans-serif;
+      font-family: 'Stack Sans Notch', sans-serif;
       font-size: 100px;
       font-weight: 700;
       color: #0F0F12;
       line-height: normal;
       margin-top: -48px;
+      transform-origin: bottom center;
+      animation: line-reveal 1.25s cubic-bezier(0.4, 0.59, 0.5, 1) 1.85s both;
     }
 
     .hero-headline .amp {
-      font-weight: 300;
+      font-family: 'B612', serif;
+      font-weight: 400;
       color: #CD3D23;
     }
 
@@ -181,6 +214,8 @@
     /* ── CONTENT CARD ────────────────────────────────────────────────── */
 
     .content {
+      position: relative;
+      z-index: 10;
       width: 1080px;
       margin: 0 auto;
       background-color: #0F0F12;
@@ -207,7 +242,7 @@
     }
 
     .about-bio {
-      font-size: 20px;
+      font-size: 18px;
       line-height: 32px;
       color: #FFFFFF;
     }
@@ -218,7 +253,7 @@
 
     .bio-detail {
       display: block;
-      font-weight: 300;
+      font-weight: 200;
       color: rgba(255, 255, 255, 0.7);
       margin-top: 32px;
     }
@@ -226,8 +261,8 @@
     .about-cta {
       display: inline-block;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 14px;
-      font-weight: 700;
+      font-size: 16px;
+      font-weight: 400;
       color: #CD3D23;
       text-decoration: none;
       line-height: normal;
@@ -279,19 +314,21 @@
       font-size: 38px;
       color: #FFFFFF;
       left: 8px;
-      top: 5px;
+      top: -5px;
       white-space: nowrap;
     }
 
     .sig-title {
       position: absolute;
-      font-family: 'Barlow', sans-serif;
-      font-size: 12px;
-      font-weight: 400;
+      font-family: 'Stack Sans Text', sans-serif;
+      font-size: 11px;
+      font-weight: 300;
       color: rgba(255, 255, 255, 0.5);
       letter-spacing: 4px;
-      left: 18px;
+      left: 0;
+      right: 0;
       top: 46px;
+      text-align: center;
       white-space: nowrap;
     }
 
@@ -337,8 +374,8 @@
     }
 
     .card-subtitle {
-      font-size: 18px;
-      font-weight: 300;
+      font-size: 16px;
+      font-weight: 200;
       color: rgba(255, 255, 255, 0.7);
       line-height: normal;
     }
@@ -406,26 +443,30 @@
   <!-- ── HERO ─────────────────────────────────────────────────────── -->
   <section class="hero">
 
-    <div class="hero-side hero-side-left">
-      <div class="hero-decor-wrap hero-decor-wrap-left">
-        <div class="hero-decor hero-colorwheel">
-          <img src="assets/color-wheel.webp" alt="" />
-        </div>
-      </div>
-      <svg class="hero-circle" viewBox="0 0 808 808" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="404" cy="404" r="401" fill="none" stroke="#8E8E96" stroke-width="2" transform="rotate(180, 404, 404)"/>
-      </svg>
-    </div>
+    <div class="hero-bg-wrap">
 
-    <div class="hero-side hero-side-right">
-      <div class="hero-decor-wrap hero-decor-wrap-right">
-        <div class="hero-decor hero-protractor">
-          <img src="assets/Protractor.svg" alt="" />
+      <div class="hero-side hero-side-left">
+        <div class="hero-decor-wrap hero-decor-wrap-left">
+          <div class="hero-decor hero-colorwheel">
+            <img src="assets/color-wheel.webp" alt="" />
+          </div>
         </div>
+        <svg class="hero-circle" viewBox="0 0 808 808" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="404" cy="404" r="401" fill="none" stroke="#8E8E96" stroke-width="2" transform="rotate(180, 404, 404)"/>
+        </svg>
       </div>
-      <svg class="hero-circle" viewBox="0 0 808 808" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="404" cy="404" r="401" fill="none" stroke="#8E8E96" stroke-width="2"/>
-      </svg>
+
+      <div class="hero-side hero-side-right">
+        <div class="hero-decor-wrap hero-decor-wrap-right">
+          <div class="hero-decor hero-protractor">
+            <img src="assets/Protractor.svg" alt="" />
+          </div>
+        </div>
+        <svg class="hero-circle" viewBox="0 0 808 808" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="404" cy="404" r="401" fill="none" stroke="#8E8E96" stroke-width="2"/>
+        </svg>
+      </div>
+
     </div>
 
     <div class="hero-text">
@@ -436,6 +477,7 @@
   </section>
 
   <!-- ── CONTENT CARD ─────────────────────────────────────────────── -->
+  <div class="hero-spacer"></div>
   <main class="content">
 
     <!-- ABOUT -->
@@ -544,5 +586,39 @@
     </div>
   </main>
 
+  <script>
+    (function () {
+      function splitChars(el, baseDelay, stagger, dur) {
+        var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+        var nodes = [];
+        var n;
+        while ((n = walker.nextNode())) nodes.push(n);
+        var i = 0;
+        nodes.forEach(function (textNode) {
+          var parent = textNode.parentNode;
+          var frag = document.createDocumentFragment();
+          textNode.textContent.split('').forEach(function (char) {
+            var s = document.createElement('span');
+            s.textContent = char === ' ' ? ' ' : char;
+            s.style.cssText = 'display:inline-block;animation:char-reveal ' + dur + 's cubic-bezier(0.4,0.59,0.5,1) ' + (baseDelay + i * stagger).toFixed(3) + 's both';
+            i++;
+            frag.appendChild(s);
+          });
+          parent.replaceChild(frag, textNode);
+        });
+      }
+      splitChars(document.querySelector('.hero-tagline'), 0.85, 0.022, 0.85);
+      splitChars(document.querySelector('.hero-headline'), 1.85, 0.042, 1.15);
+    })();
+
+    (function () {
+      var bgWrap = document.querySelector('.hero-bg-wrap');
+      function onScroll() {
+        var progress = Math.min(window.scrollY / window.innerHeight, 1);
+        bgWrap.style.opacity = 1 - progress;
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+    })();
+  </script>
 </body>
 </html>
