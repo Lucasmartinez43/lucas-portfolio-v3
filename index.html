@@ -31,6 +31,15 @@
 
     /* ── HERO ────────────────────────────────────────────────────────── */
 
+    .ink-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
     .hero {
       position: fixed;
       top: 0;
@@ -38,7 +47,7 @@
       width: 100%;
       height: 100vh;
       overflow: hidden;
-      z-index: 0;
+      z-index: 2;
     }
 
     .hero-spacer {
@@ -182,6 +191,7 @@
       width: 863px;
       text-align: center;
       white-space: nowrap;
+      z-index: 2;
     }
 
     .hero-tagline {
@@ -338,7 +348,7 @@
     .cards {
       display: flex;
       flex-direction: column;
-      gap: 40px;
+      gap: 24px;
       margin-top: 40px;
     }
 
@@ -349,6 +359,7 @@
       padding: 16px;
       border-radius: 16px;
       border: 1px solid transparent;
+      will-change: transform;
     }
 
     .card-body {
@@ -367,7 +378,7 @@
     }
 
     .card-title {
-      font-size: 32px;
+      font-size: 24px;
       font-weight: 700;
       color: #FFFFFF;
       line-height: normal;
@@ -468,6 +479,8 @@
       </div>
 
     </div>
+
+    <canvas class="ink-canvas"></canvas>
 
     <div class="hero-text">
       <span class="hero-tagline">Designing at the intersection of</span>
@@ -612,6 +625,45 @@
     })();
 
     (function () {
+      var MAX_TILT = 3;
+      var LERP = 0.06;
+
+      document.querySelectorAll('.card').forEach(function (card) {
+        var cur = { x: 0, y: 0 };
+        var tgt = { x: 0, y: 0 };
+        var raf = null;
+        var hovered = false;
+
+        function tick() {
+          cur.x += (tgt.x - cur.x) * LERP;
+          cur.y += (tgt.y - cur.y) * LERP;
+          card.style.transform = 'perspective(800px) rotateX(' + cur.x.toFixed(3) + 'deg) rotateY(' + cur.y.toFixed(3) + 'deg)';
+          if (hovered || Math.abs(tgt.x - cur.x) > 0.01 || Math.abs(tgt.y - cur.y) > 0.01) {
+            raf = requestAnimationFrame(tick);
+          } else {
+            cur.x = 0; cur.y = 0;
+            card.style.transform = '';
+            raf = null;
+          }
+        }
+
+        card.addEventListener('mousemove', function (e) {
+          var r = card.getBoundingClientRect();
+          tgt.y =  ((e.clientX - (r.left + r.width  / 2)) / (r.width  / 2)) * MAX_TILT;
+          tgt.x = -((e.clientY - (r.top  + r.height / 2)) / (r.height / 2)) * MAX_TILT;
+          hovered = true;
+          if (!raf) raf = requestAnimationFrame(tick);
+        });
+
+        card.addEventListener('mouseleave', function () {
+          hovered = false;
+          tgt.x = 0; tgt.y = 0;
+          if (!raf) raf = requestAnimationFrame(tick);
+        });
+      });
+    })();
+
+    (function () {
       var bgWrap = document.querySelector('.hero-bg-wrap');
       function onScroll() {
         var progress = Math.min(window.scrollY / window.innerHeight, 1);
@@ -619,6 +671,259 @@
       }
       window.addEventListener('scroll', onScroll, { passive: true });
     })();
+  </script>
+
+  <script type="module">
+    import * as THREE from 'https://esm.sh/three@0.156.1';
+
+    const VERT = `
+      precision highp float;
+      uniform float time;
+      varying vec2 vUv;
+      void main() {
+        vUv = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `;
+
+    const FRAG = `
+      uniform sampler2D inputTexture;
+      uniform sampler2D noiseTexture;
+      uniform vec2 tipPosOld;
+      uniform vec2 tipPosNew;
+      uniform float speed;
+      uniform float persistence;
+      uniform float thickness;
+      uniform float time;
+      uniform float waterQuantity;
+      uniform float waterDiffusion;
+      uniform float gravity;
+      uniform vec3 inkColor;
+      varying vec2 vUv;
+
+      float lineSegment(vec2 p, vec2 a, vec2 b, float thickness) {
+        vec2 pa = p - a;
+        vec2 ba = b - a;
+        float h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);
+        float d = length(pa - ba * h);
+        return smoothstep(thickness, thickness * 0.5, d);
+      }
+
+      vec4 blur(sampler2D image, vec2 uv, vec2 resolution, vec2 direction) {
+        vec4 color = vec4(0.0);
+        vec2 off1 = vec2(0.013846153846) * direction;
+        vec2 off2 = vec2(0.032307692308) * direction;
+        color += texture2D(image, uv) * 0.2270270270;
+        color += texture2D(image, uv + vec2(off1 * resolution)) * 0.3162162162;
+        color += texture2D(image, uv - vec2(off1 * resolution)) * 0.3162162162;
+        color += texture2D(image, uv + vec2(off2 * resolution)) * 0.0702702703;
+        color += texture2D(image, uv - vec2(off2 * resolution)) * 0.0702702703;
+        return color;
+      }
+
+      void main() {
+        vec4 noise1 = texture2D(noiseTexture, vUv * 4.0  + vec2(time * 0.1, 0.0));
+        vec4 noise2 = texture2D(noiseTexture, vUv * 8.0  + vec2(0.0, time * 0.1) + noise1.rg * 0.5);
+        vec4 noise3 = texture2D(noiseTexture, vUv * 16.0 + vec2(-time * 0.05, 0.0) + noise2.rg * 0.5);
+        vec4 noise  = (noise1 + noise2 * 0.5 + noise3 * 0.25) / 1.75;
+        float dirX  = (-0.5 + noise.g) * noise.r * 10.0;
+        float dirY  = (-0.5 + noise.b) * noise.r * 10.0;
+
+        vec4  oldTexture = texture2D(inputTexture, vUv);
+        float br  = 1.0 - (oldTexture.r + oldTexture.g + oldTexture.b) / 3.0;
+        vec4  col = oldTexture * (1.0 - waterDiffusion);
+        float p2  = waterDiffusion / 4.0;
+        vec2  stretchUv = vUv * vec2(1.0, 1.0 + gravity);
+        col += blur(inputTexture, stretchUv, vec2(waterQuantity * br), vec2( dirX,  dirY)) * p2;
+        col += blur(inputTexture, stretchUv, vec2(waterQuantity * br), vec2( dirY,  dirX)) * p2;
+        col += blur(inputTexture, stretchUv, vec2(waterQuantity * br), vec2(-dirX, -dirY)) * p2;
+        col += blur(inputTexture, stretchUv, vec2(waterQuantity * br), vec2(-dirY, -dirX)) * p2;
+        col.rgb *= persistence;
+
+        if (speed > 0.0) {
+          float th = clamp(thickness, 0.0001, 0.1);
+          float lineValue = lineSegment(vUv, tipPosOld, tipPosNew, th);
+          col.rgb = mix(col.rgb, inkColor, lineValue);
+          col.rgb = clamp(col.rgb, vec3(0.0), vec3(1.0));
+        }
+
+        gl_FragColor = vec4(col);
+      }
+    `;
+
+    class BufferSim {
+      constructor(renderer, width, height, shader) {
+        this.renderer = renderer;
+        this.shader   = shader;
+        this.orthoScene  = new THREE.Scene();
+        this.orthoCamera = new THREE.OrthographicCamera(
+          width / -2, width / 2, height / 2, height / -2, 0.00001, 1000
+        );
+        const opts = {
+          wrapS: THREE.ClampToEdgeWrapping, wrapT: THREE.ClampToEdgeWrapping,
+          minFilter: THREE.LinearFilter,    magFilter: THREE.LinearFilter,
+          format: THREE.RGBAFormat,         type: THREE.FloatType,
+          stencilBuffer: false,             depthBuffer: false,
+        };
+        const fbo = new THREE.WebGLRenderTarget(width, height, opts);
+        fbo.texture.generateMipmaps = false;
+        this.fbos    = [fbo, fbo.clone()];
+        this.current = 0;
+        this.output  = this.fbos[0];
+        this.orthoScene.add(new THREE.Mesh(new THREE.PlaneGeometry(width, height), this.shader));
+      }
+      render() {
+        this.shader.uniforms.inputTexture.value = this.fbos[this.current].texture;
+        this.current = 1 - this.current;
+        this.output  = this.fbos[this.current];
+        this.renderer.setRenderTarget(this.output);
+        this.renderer.render(this.orthoScene, this.orthoCamera);
+      }
+    }
+
+    class InkEffect {
+      constructor({ canvas, inkColor = 0x130918 }) {
+        this.inkColor  = inkColor;
+        this.winWidth  = window.innerWidth;
+        this.winHeight = window.innerHeight;
+        new THREE.TextureLoader().load('https://assets.codepen.io/264161/noise_1.jpg', (tex) => {
+          this.noiseTexture = tex;
+          this.noiseTexture.wrapS = THREE.RepeatWrapping;
+          this.noiseTexture.wrapT = THREE.RepeatWrapping;
+          this.init(canvas);
+        });
+      }
+
+      init(canvas) {
+        this.renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+        this.renderer.setPixelRatio(window.devicePixelRatio);
+        this.renderer.setSize(this.winWidth, this.winHeight);
+
+        this.orthoCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+        this.scene       = new THREE.Scene();
+
+        this.mouse   = new THREE.Vector2(-1, -1);
+        this.tip     = new THREE.Vector2(-1, -1);
+        this.tipOld  = new THREE.Vector2(-1, -1);
+        this.thickness = 0.002;
+        this.pressure  = 0;
+        this.mouseDown = false;
+        this.persistence = 0.980;
+        this.clock = new THREE.Clock();
+        this.time  = 0;
+
+        this.createSim();
+        this.createQuad();
+        this.createListeners();
+        this.draw();
+      }
+
+      createSim() {
+        this.simMat = new THREE.ShaderMaterial({
+          uniforms: {
+            inputTexture:   { value: null },
+            noiseTexture:   { value: this.noiseTexture },
+            persistence:    { value: this.persistence },
+            thickness:      { value: this.thickness },
+            waterDiffusion: { value: 0.1 },
+            waterQuantity:  { value: 0.3 },
+            gravity:        { value: 0.0 },
+            time:           { value: 0 },
+            tipPosOld:      { value: new THREE.Vector2(0.5, 0.5) },
+            tipPosNew:      { value: new THREE.Vector2(0.5, 0.5) },
+            speed:          { value: 0.0 },
+            inkColor:       { value: new THREE.Color(0xffffff) },
+          },
+          vertexShader:   VERT,
+          fragmentShader: FRAG,
+        });
+        this.bufferSim = new BufferSim(this.renderer, 1024, 1024, this.simMat);
+      }
+
+      createQuad() {
+        const mat = new THREE.ShaderMaterial({
+          transparent: true,
+          uniforms: {
+            tSim:     { value: null },
+            inkColor: { value: new THREE.Color(this.inkColor) },
+          },
+          vertexShader: `
+            varying vec2 vUv;
+            void main() { vUv = uv; gl_Position = vec4(position, 1.0); }
+          `,
+          fragmentShader: `
+            uniform sampler2D tSim;
+            uniform vec3 inkColor;
+            varying vec2 vUv;
+            void main() {
+              vec4  tex   = texture2D(tSim, vUv);
+              float alpha = (tex.r + tex.g + tex.b) / 3.0;
+              gl_FragColor = vec4(inkColor, alpha);
+            }
+          `,
+        });
+        this.quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), mat);
+        this.scene.add(this.quad);
+      }
+
+      createListeners() {
+        window.addEventListener('resize', () => {
+          this.winWidth  = window.innerWidth;
+          this.winHeight = window.innerHeight;
+          this.renderer.setSize(this.winWidth, this.winHeight);
+        });
+        window.addEventListener('mousemove', (e) => {
+          this.mouse.set(
+            e.clientX / this.winWidth,
+            1.0 - e.clientY / this.winHeight
+          );
+        });
+        window.addEventListener('mousedown', () => {
+          this.mouseDown = true;
+          document.body.style.userSelect = 'none';
+        });
+        window.addEventListener('mouseup', () => {
+          this.mouseDown = false;
+          document.body.style.userSelect = '';
+        });
+      }
+
+      draw() {
+        requestAnimationFrame(this.draw.bind(this));
+        const dt   = this.clock.getDelta();
+        this.time += dt;
+
+        // Lag the drawing tip behind the real cursor (lower = more lag)
+        this.tipOld.copy(this.tip);
+        this.tip.x += (this.mouse.x - this.tip.x) * 0.08;
+        this.tip.y += (this.mouse.y - this.tip.y) * 0.08;
+        const speed = this.tipOld.distanceTo(this.tip);
+
+        if (this.mouseDown && this.pressure < 0.015) {
+          this.pressure += dt * 0.05;
+        } else if (!this.mouseDown) {
+          this.pressure *= Math.pow(0.9, dt * 30);
+        }
+
+        this.simMat.uniforms.tipPosOld.value.copy(this.tipOld);
+        this.simMat.uniforms.tipPosNew.value.copy(this.tip);
+        this.simMat.uniforms.speed.value       = speed * 10;
+        this.simMat.uniforms.thickness.value   = this.thickness + this.pressure;
+        this.simMat.uniforms.time.value        = this.time;
+        this.simMat.uniforms.persistence.value = Math.pow(this.persistence, dt * 10);
+
+        this.bufferSim.render();
+        this.quad.material.uniforms.tSim.value = this.bufferSim.output.texture;
+
+        this.renderer.setRenderTarget(null);
+        this.renderer.render(this.scene, this.orthoCamera);
+      }
+    }
+
+    new InkEffect({
+      canvas:   document.querySelector('.ink-canvas'),
+      inkColor: 0x130918,
+    });
   </script>
 </body>
 </html>
