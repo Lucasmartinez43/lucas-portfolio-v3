@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=B612:wght@400&family=JetBrains+Mono:wght@400;700&family=Stack+Sans+Notch:wght@700&family=Stack+Sans+Text:wght@200;300;400;500;700&display=swap" rel="stylesheet" />
   <style>
+    :root { --cursor-ink: #130918; }
 
     @font-face {
       font-family: 'Antro Vectra';
@@ -20,7 +21,83 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      cursor: none !important;
     }
+
+    .cursor-ring,
+    .cursor-dot {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      left: -100px;
+      top: -100px;
+    }
+
+    .cursor-ring {
+      width: 24px;
+      height: 24px;
+      border: 1.5px solid var(--cursor-ink);
+      transition: border-color 0.3s ease, border-width 0.2s ease;
+    }
+
+    .cursor-ring.over-content { border-color: #ffffff; }
+    .cursor-ring.is-hovering  { border-width: 2px; }
+
+    .cursor-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--cursor-ink);
+      transition: width 0.2s ease, height 0.2s ease, opacity 0.2s ease, background-color 0.3s ease;
+    }
+
+    .cursor-dot.over-content  { background: #ffffff; }
+
+    .cursor-dot.is-hovering {
+      width: 24px;
+      height: 24px;
+      opacity: 0.3;
+    }
+
+    .cursor-brush {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      left: -100px;
+      top: -100px;
+      display: none;
+    }
+
+    /* Nib line — dragged indicator for flat nib pen */
+    .cursor-dot-nib {
+      position: fixed;
+      width: 5px;
+      height: 2px;
+      border-radius: 1px;
+      background: var(--cursor-ink);
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%) rotate(135deg);
+      left: -100px;
+      top: -100px;
+      display: none;
+      transition: background-color 0.3s ease, width 0.12s ease;
+    }
+    .cursor-dot-nib.over-content  { background: #ffffff; }
+    .cursor-dot-nib.is-pressing   { width: 14px; }
+
+    /* Swap dragged indicator per pen — ring is always unchanged */
+    body.pen-1 .cursor-dot               { display: none; }
+    body.pen-1 .cursor-dot-nib           { display: block; }
+    body.pen-1 .cursor-dot.is-hovering   { display: block; }
+    body.pen-1 .cursor-dot-nib.is-hovering { display: none; }
+
+    body.pen-2 .cursor-dot               { display: none; }
+    body.pen-2 .cursor-brush             { display: block; }
+    body.pen-2 .cursor-dot.is-hovering   { display: block; }
+    body.pen-2 .cursor-brush.is-hovering { display: none; }
 
     body {
       background-color: #B1B1B4;
@@ -31,13 +108,24 @@
 
     /* ── HERO ────────────────────────────────────────────────────────── */
 
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background-image:
+        linear-gradient(to right,  rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
     .ink-canvas {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
-      z-index: 1;
       pointer-events: none;
+      z-index: 1;
     }
 
     .hero {
@@ -45,13 +133,13 @@
       top: 0;
       left: 0;
       width: 100%;
-      height: 100vh;
+      height: 101vh;
       overflow: hidden;
       z-index: 2;
     }
 
     .hero-spacer {
-      height: 100vh;
+      height: calc(100vh + 4px);
     }
 
     /* Constraining wrapper — natural size 1366×808, scales to 80vh max 1360px wide */
@@ -122,13 +210,40 @@
       animation: circular-reveal 8s cubic-bezier(0.1, 0.8, 0.25, 1) forwards;
     }
 
+    .hero-cleanup {
+      position: absolute;
+      width: 808px;
+      height: 808px;
+      top: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at center, #B1B1B4 55%, transparent 75%);
+    }
+
+    .hero-cleanup-left {
+      left: 0;
+      --reveal: 0deg;
+      mask-image:
+        conic-gradient(from 270deg, black 0deg, black calc(var(--reveal) - 20deg), transparent var(--reveal), transparent 360deg),
+        linear-gradient(to right, transparent 0%, black 55%);
+      animation: circular-reveal 8s cubic-bezier(0.1, 0.8, 0.25, 1) forwards;
+    }
+
+    .hero-cleanup-right {
+      left: 558px;
+      --reveal: 0deg;
+      mask-image:
+        conic-gradient(from 90deg, black 0deg, black calc(var(--reveal) - 20deg), transparent var(--reveal), transparent 360deg),
+        linear-gradient(to left, transparent 0%, black 55%);
+      animation: circular-reveal 8s cubic-bezier(0.1, 0.8, 0.25, 1) forwards;
+    }
+
     .hero-colorwheel {
-      opacity: 0.08;
+      opacity: 0.1;
       animation: spin-decor 120s linear infinite;
     }
 
     .hero-protractor {
-      opacity: 0.08;
+      opacity: 0.1;
       animation: spin-decor 120s linear infinite;
     }
 
@@ -171,6 +286,34 @@
     @keyframes line-reveal {
       from { transform: scaleY(0.95); }
       to   { transform: scaleY(1); }
+    }
+
+    @keyframes explore-fadein {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .hero-explore {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      color: #8E8E96;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 16px;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      opacity: 0;
+      animation: explore-fadein 1.8s ease 1.85s both;
+      white-space: nowrap;
     }
 
     @keyframes fade-in-decor {
@@ -229,8 +372,8 @@
       width: 1080px;
       margin: 0 auto;
       background-color: #0F0F12;
-      border-radius: 32px;
-      padding: 0 204px 32px;
+      border-radius: 56px;
+      padding: 0 204px 160px;
     }
 
 
@@ -239,7 +382,7 @@
     .about {
       padding: 160px 16px;
       display: flex;
-      align-items: center;
+      align-items: stretch;
       justify-content: space-between;
     }
 
@@ -247,18 +390,17 @@
       width: 339px;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      align-self: stretch;
+      justify-content: flex-start;
     }
 
     .about-bio {
-      font-size: 18px;
+      font-size: 16px;
       line-height: 32px;
       color: #FFFFFF;
     }
 
     .bio-intro {
-      font-weight: 500;
+      font-weight: 700;
     }
 
     .bio-detail {
@@ -268,8 +410,16 @@
       margin-top: 32px;
     }
 
+    .bio-bold {
+      font-weight: 700;
+      color: #FFFFFF;
+    }
+
     .about-cta {
-      display: inline-block;
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
       font-family: 'JetBrains Mono', monospace;
       font-size: 16px;
       font-weight: 400;
@@ -278,10 +428,21 @@
       line-height: normal;
     }
 
+    .cta-underline {
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: currentColor;
+      pointer-events: none;
+    }
+
     .about-photo-wrap {
       display: flex;
       flex-direction: column;
       align-items: flex-end;
+      justify-content: space-between;
     }
 
     .about-photo {
@@ -345,6 +506,204 @@
 
     /* ── PROJECT CARDS ───────────────────────────────────────────────── */
 
+    .scroll-spacer {
+      height: 100vh;
+    }
+
+    /* ── CLOSING ─────────────────────────────────────────────────────── */
+
+    .hero-closing {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 18vh 0 100px;
+      visibility: hidden;
+    }
+
+    .closing-phrase {
+      text-align: center;
+    }
+
+    .closing-line2 {
+      opacity: 0;
+    }
+
+    .closing-dot {
+      color: #CD3D23;
+    }
+
+    .closing-line1 {
+      display: block;
+      font-family: 'Stack Sans Notch', sans-serif;
+      font-size: 40px;
+      font-weight: 700;
+      color: #0F0F12;
+      line-height: normal;
+    }
+
+    .closing-line2 {
+      display: block;
+      font-family: 'Antro Vectra', cursive;
+      font-size: 80px;
+      color: #0F0F12;
+      line-height: 1;
+      margin-top: 4px;
+    }
+
+    .closing-tools {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-top: auto;
+      background: #ffffff;
+      border-radius: 58px;
+      padding: 8px;
+      box-shadow: 0 2px 16px rgba(0, 0, 0, 0.12);
+      transform: translateY(120px);
+      opacity: 0;
+    }
+
+    .closing-settled .closing-tools {
+      transform: translateY(0);
+      opacity: 1;
+      transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+                  opacity 0.4s ease;
+    }
+
+    .tool-pens {
+      display: flex;
+      gap: 8px;
+    }
+
+    .tool-pen {
+      width: 32px;
+      height: 32px;
+      border-radius: 21px;
+      border: none;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #0f0f12;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .tool-pen.tool-pen-active {
+      background: #e5e5e5;
+      color: #CD3D23;
+    }
+
+    .tool-divider {
+      width: 2px;
+      height: 24px;
+      background: #b1b1b4;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    .tool-colors {
+      display: flex;
+      gap: 8px;
+    }
+
+    .tool-color {
+      width: 26px;
+      height: 26px;
+      border-radius: 13px;
+      border: none;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+    }
+
+    .tool-color[data-ink="#130918"] {
+      background: #ffffff;
+    }
+
+    .tool-color.tool-color-active {
+      box-shadow: 0 0 0 1px #0f0f12;
+    }
+
+    .color-dot {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: block;
+      flex-shrink: 0;
+    }
+
+    .closing-footer {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%) translateY(var(--footer-offset, 100%));
+      width: 1080px;
+      background: #0F0F12;
+      border-radius: 56px 56px 0 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 28px 0;
+      visibility: visible;
+    }
+
+    .closing-contacts {
+      display: flex;
+      align-items: center;
+      gap: 64px;
+    }
+
+    .contact-link {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 16px;
+      font-weight: 400;
+      color: #CD3D23;
+      text-decoration: none;
+      line-height: normal;
+    }
+
+    .contact-icon {
+      flex-shrink: 0;
+    }
+
+    .email-clip-wrap {
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .email-inner {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-check { display: none; }
+
+    @keyframes email-slide-out {
+      from { transform: translateY(0); }
+      to   { transform: translateY(-130%); }
+    }
+
+    @keyframes email-slide-in {
+      from { transform: translateY(130%); }
+      to   { transform: translateY(0); }
+    }
+
+    .email-inner.slide-out { animation: email-slide-out 0.18s ease forwards; }
+    .email-inner.slide-in  { animation: email-slide-in  0.18s ease forwards; }
+
     .cards {
       display: flex;
       flex-direction: column;
@@ -353,6 +712,7 @@
     }
 
     .card {
+      position: relative;
       display: flex;
       gap: 16px;
       align-items: flex-start;
@@ -360,9 +720,30 @@
       border-radius: 16px;
       border: 1px solid transparent;
       will-change: transform;
+      --gx: 50%;
+      --gy: 50%;
+    }
+
+    .card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      border-radius: 16px;
+      background: radial-gradient(circle 280px at var(--gx) var(--gy), rgba(255, 255, 255, 0.07) 0%, transparent 60%);
+      mix-blend-mode: screen;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .card:hover::after {
+      opacity: 1;
     }
 
     .card-body {
+      position: relative;
+      z-index: 1;
       flex: 1;
       min-width: 0;
       display: flex;
@@ -412,6 +793,8 @@
     }
 
     .card-image {
+      position: relative;
+      z-index: 1;
       width: 320px;
       height: 214px;
       border-radius: 8px;
@@ -451,10 +834,22 @@
 </head>
 <body>
 
+  <p style="position:fixed;bottom:8px;left:8px;margin:0;font-family:'Stack Sans Text',sans-serif;font-weight:300;font-size:12px;color:#838386;pointer-events:none;z-index:9999;letter-spacing:0.02em;">Lucas Martinez &copy; 2026</p>
+
+  <div class="cursor-ring"></div>
+  <div class="cursor-dot"></div>
+  <div class="cursor-dot-nib"></div>
+  <canvas class="cursor-brush" width="60" height="60"></canvas>
+
+  <div class="bg-grid"></div>
+
   <!-- ── HERO ─────────────────────────────────────────────────────── -->
   <section class="hero">
 
     <div class="hero-bg-wrap">
+
+      <div class="hero-cleanup hero-cleanup-left"></div>
+      <div class="hero-cleanup hero-cleanup-right"></div>
 
       <div class="hero-side hero-side-left">
         <div class="hero-decor-wrap hero-decor-wrap-left">
@@ -482,10 +877,75 @@
 
     <canvas class="ink-canvas"></canvas>
 
+    <div class="hero-closing">
+
+      <div class="closing-phrase">
+        <span class="closing-line1">Every project starts with a rough sketch<span class="closing-dot">.</span></span>
+        <span class="closing-line2">Let's draw something together</span>
+      </div>
+
+      <div class="closing-tools">
+        <div class="tool-pens">
+          <button class="tool-pen tool-pen-active" title="Round tip">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M11 10L14 13" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M6.5 21C7.19224 21 7.86892 20.7947 8.4445 20.4101C9.02007 20.0256 9.46867 19.4789 9.73358 18.8394C9.99849 18.1999 10.0678 17.4961 9.93275 16.8172C9.7977 16.1383 9.46436 15.5146 8.97487 15.0251C8.48539 14.5356 7.86175 14.2023 7.18282 14.0673C6.50388 13.9322 5.80015 14.0015 5.16061 14.2664C4.52107 14.5313 3.97444 14.9799 3.58986 15.5555C3.20527 16.1311 3 16.8078 3 17.5C3.00019 18.1656 2.74705 18.8063 2.292 19.292C2.15179 19.4319 2.05626 19.6102 2.01752 19.8044C1.97879 19.9986 1.9986 20.2 2.07443 20.3829C2.15027 20.5659 2.27872 20.7222 2.44349 20.832C2.60827 20.9419 2.80196 21.0004 3 21H6.5Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M9.969 17.031L21.378 5.624C21.7761 5.22591 21.9997 4.68599 21.9997 4.123C21.9997 3.56002 21.7761 3.02009 21.378 2.622C20.9799 2.22391 20.44 2.00027 19.877 2.00027C19.314 2.00027 18.7741 2.22391 18.376 2.622L6.967 14.031" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <button class="tool-pen" title="Flat nib">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M21.293 8.293C21.4805 8.48053 21.5858 8.73484 21.5858 9C21.5858 9.26516 21.4805 9.51947 21.293 9.707L19.707 11.293C19.5195 11.4805 19.2652 11.5858 19 11.5858C18.7348 11.5858 18.4805 11.4805 18.293 11.293L12.707 5.707C12.5195 5.51947 12.4142 5.26516 12.4142 5C12.4142 4.73484 12.5195 4.48053 12.707 4.293L14.293 2.707C14.4805 2.51953 14.7348 2.41421 15 2.41421C15.2652 2.41421 15.5195 2.51953 15.707 2.707L21.293 8.293Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M13 6L6.126 7.375C5.93898 7.4124 5.76655 7.50251 5.62906 7.63468C5.49157 7.76686 5.39474 7.9356 5.35 8.121L2.028 20.765C1.98773 20.9316 1.99094 21.1057 2.03732 21.2707C2.08371 21.4357 2.17171 21.5859 2.29289 21.7071C2.41406 21.8283 2.56435 21.9163 2.72933 21.9627C2.8943 22.0091 3.06843 22.0123 3.235 21.972L15.879 18.65C16.0644 18.6053 16.2331 18.5084 16.3653 18.3709C16.4975 18.2334 16.5876 18.061 16.625 17.874L18 11" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M2.3 21.7L9.586 14.414" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M13 13C13 11.8954 12.1046 11 11 11C9.89543 11 9 11.8954 9 13C9 14.1046 9.89543 15 11 15C12.1046 15 13 14.1046 13 13Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <button class="tool-pen" title="Rough brush">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M14.622 17.897L3.942 14.984" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M18.376 2.622C18.5731 2.42489 18.8071 2.26853 19.0647 2.16185C19.3222 2.05517 19.5982 2.00027 19.877 2.00027C20.1558 2.00027 20.4318 2.05517 20.6893 2.16185C20.9469 2.26853 21.1809 2.42489 21.378 2.622C21.5751 2.81912 21.7315 3.05312 21.8381 3.31067C21.9448 3.56821 21.9997 3.84424 21.9997 4.123C21.9997 4.40176 21.9448 4.67779 21.8381 4.93534C21.7315 5.19288 21.5751 5.42689 21.378 5.624L17.36 9.643C17.2663 9.73677 17.2136 9.86392 17.2136 9.9965C17.2136 10.1291 17.2663 10.2562 17.36 10.35L18.304 11.294C18.7559 11.746 19.0097 12.3589 19.0097 12.998C19.0097 13.6371 18.7559 14.25 18.304 14.702L17.36 15.646C17.2662 15.7397 17.1391 15.7924 17.0065 15.7924C16.8739 15.7924 16.7468 15.7397 16.653 15.646L8.354 7.348C8.26026 7.25424 8.2076 7.12708 8.2076 6.9945C8.2076 6.86192 8.26026 6.73477 8.354 6.641L9.298 5.697C9.74995 5.24512 10.3629 4.99126 11.002 4.99126C11.6411 4.99126 12.254 5.24512 12.706 5.697L13.65 6.641C13.7438 6.73474 13.8709 6.78739 14.0035 6.78739C14.1361 6.78739 14.2632 6.73474 14.357 6.641L18.376 2.622Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M9 8C7.196 10.71 5.03 11.46 2.417 11.948C2.33031 11.9638 2.24925 12.002 2.1818 12.0587C2.11435 12.1154 2.06285 12.1887 2.03236 12.2713C2.00188 12.354 1.99346 12.4432 2.00796 12.5301C2.02245 12.617 2.05934 12.6987 2.115 12.767L9.435 21.65C9.58368 21.8079 9.77966 21.9132 9.99341 21.95C10.2072 21.9868 10.4271 21.9531 10.62 21.854C12.735 20.405 16 16.792 16 15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="tool-divider"></div>
+        <div class="tool-colors">
+          <button class="tool-color tool-color-active" data-ink="#130918" title="Black"><span class="color-dot" style="background:#130918;"></span></button>
+          <button class="tool-color" data-ink="#507BAF" title="Deep Blue"><span class="color-dot" style="background:#507BAF;"></span></button>
+          <button class="tool-color" data-ink="#76528E" title="Deep Purple"><span class="color-dot" style="background:#76528E;"></span></button>
+          <button class="tool-color" data-ink="#A89D87" title="Deep Gold"><span class="color-dot" style="background:#A89D87;"></span></button>
+        </div>
+      </div>
+
+      <div class="closing-footer">
+        <div class="closing-contacts">
+          <a href="#" class="contact-link contact-email">
+            <span class="email-clip-wrap">
+              <span class="email-inner">
+                <svg class="contact-icon icon-copy" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                <svg class="contact-icon icon-check" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                <span class="email-text">LUCASMARTINEZ43@GMAIL.COM</span>
+              </span>
+            </span>
+          </a>
+          <a href="https://linkedin.com/in/lucasmartinez43" class="contact-link" target="_blank" rel="noopener">LINKEDIN</a>
+        </div>
+      </div>
+
+    </div>
+
     <div class="hero-text">
       <span class="hero-tagline">Designing at the intersection of</span>
       <span class="hero-headline">ART<span class="amp">&amp;</span>ENGINEERING</span>
     </div>
+
+    <button class="hero-explore" aria-label="Explore">
+      EXPLORE
+      <svg width="14" height="9" viewBox="0 0 14 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M1 1L7 7L13 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
 
   </section>
 
@@ -498,20 +958,28 @@
 
       <div class="about-text">
         <p class="about-bio">
-          <span class="bio-intro">I'm a designer with over 9 years of experience in digital products, the last 5 and a half focused on Product and User Experience.</span>
-          <span class="bio-detail">I currently work at Record TV, one of the Brazil's most important broadcasters, designing for products accessed and downloaded by millions.</span>
+          <span class="bio-intro">I'm a Senior Product Designer with 5 and<br>a half years of experience, designing and<br>scaling end-to-end products that reach<br>tens of millions of people.</span>
+          <span class="bio-detail">Before that, 8 years were spent between<br>Mechanical Engineering studies and Visual<br>Design work, building a foundation balanced<br>by an analytical mindset and a creative eye.</span>
+          <span class="bio-detail">Below, you can explore some of my recent<br>work on <span class="bio-bold">R7.com</span> and <span class="bio-bold">RecordPlus</span>, along with<br>the <span class="bio-bold">CMS</span> behind these two products and<br>selected <span class="bio-bold">0→1 projects</span>.</span>
         </p>
-        <a href="#" class="about-cta">READ MORE ABOUT ME</a>
       </div>
 
       <div class="about-photo-wrap">
-        <div class="about-photo">
-          <img src="assets/photo-lucas.jpg" alt="Lucas Martinez" />
+        <div class="about-photo-sig">
+          <div class="about-photo">
+            <img src="assets/photo-lucas.jpg" alt="Lucas Martinez" />
+          </div>
+          <div class="about-signature">
+            <span class="sig-name">Lucas Martinez</span>
+            <span class="sig-title">senior product designer</span>
+          </div>
         </div>
-        <div class="about-signature">
-          <span class="sig-name">Lucas Martinez</span>
-          <span class="sig-title">senior product designer</span>
-        </div>
+        <a href="#" class="about-cta">
+          READ MORE ABOUT ME
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+          </svg>
+        </a>
       </div>
 
     </section>
@@ -523,7 +991,7 @@
         <div class="card-body">
           <div class="card-title-group">
             <p class="card-title">R7.com</p>
-            <p class="card-subtitle">News and Media Portal, reaching more than 70 million monthly users</p>
+            <p class="card-subtitle">News and Media Portal,<br>reaching more than<br>70 million monthly users</p>
           </div>
           <div class="card-tags">
             <span class="tag">+300k weekly interactions</span>
@@ -536,7 +1004,7 @@
         <div class="card-body">
           <div class="card-title-group">
             <p class="card-title">RecordPlus</p>
-            <p class="card-subtitle">Streaming App for Record TV, with over 13 million downloads across App Store, Play Store and Smart TVs</p>
+            <p class="card-subtitle">Streaming App for Record TV, with<br>over 13 million downloads across<br>App Store, Play Store and Smart TVs</p>
           </div>
           <div class="card-tags">
             <span class="tag">+12% NEW user</span>
@@ -550,7 +1018,7 @@
         <div class="card-body">
           <div class="card-title-group">
             <p class="card-title">Jarvics</p>
-            <p class="card-subtitle">Enterprise CMS behind R7 publishing and RecordPlus subscribers management</p>
+            <p class="card-subtitle">Enterprise CMS behind R7<br>publishing and RecordPlus<br>subscribers management</p>
           </div>
           <div class="card-tags">
             <span class="tag">~20% faster XP</span>
@@ -564,7 +1032,7 @@
         <div class="card-body">
           <div class="card-title-group">
             <p class="card-title">Tempo</p>
-            <p class="card-subtitle">A end-to-end weather forecast platform, designed for real-world constraints</p>
+            <p class="card-subtitle">A end-to-end weather forecast<br>platform, designed<br>for real-world constraints</p>
           </div>
           <div class="card-tags">
             <span class="tag">WCAG</span>
@@ -578,7 +1046,7 @@
         <div class="card-body">
           <div class="card-title-group">
             <p class="card-title">Cupos+Cashback</p>
-            <p class="card-subtitle">News and Media Portal, reaching more than 70 million monthly users</p>
+            <p class="card-subtitle">News and Media Portal, reaching<br>more than 70 million monthly users</p>
           </div>
           <div class="card-tags">
             <span class="tag">R$20k weekly savings offered</span>
@@ -591,15 +1059,26 @@
         <div class="card-body">
           <div class="card-title-group">
             <p class="card-title">Playground</p>
-            <p class="card-subtitle">This is a fun place where you will get to know a little bit about me through drawings, work designs, photography and ocasional pictures of my dog</p>
+            <p class="card-subtitle">This is a casual place where you will get to know<br>a little more about me through drawings, designs,<br>photography and ocasional pictures of my dog</p>
           </div>
         </div>
       </div>
 
     </div>
   </main>
+  <div class="scroll-spacer"></div>
 
   <script>
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
+    var _lockScroll = function (e) { e.preventDefault(); };
+    window.addEventListener('wheel',     _lockScroll, { passive: false });
+    window.addEventListener('touchmove', _lockScroll, { passive: false });
+    setTimeout(function () {
+      window.removeEventListener('wheel',     _lockScroll);
+      window.removeEventListener('touchmove', _lockScroll);
+    }, 3200);
+
     (function () {
       function splitChars(el, baseDelay, stagger, dur) {
         var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
@@ -622,6 +1101,119 @@
       }
       splitChars(document.querySelector('.hero-tagline'), 0.85, 0.022, 0.85);
       splitChars(document.querySelector('.hero-headline'), 1.85, 0.042, 1.15);
+    })();
+
+    (function () {
+      var ring     = document.querySelector('.cursor-ring');
+      var dot      = document.querySelector('.cursor-dot');
+      var nib      = document.querySelector('.cursor-dot-nib');
+      var brush    = document.querySelector('.cursor-brush');
+      var brushCtx = brush ? brush.getContext('2d') : null;
+      var mx = -100, my = -100;
+      var dx = -100, dy = -100;
+      var hovering  = false;
+      var brushDown = false;
+      var brushDark = false;
+      var brushR    = 5;
+
+      function drawBrush(r) {
+        if (!brushCtx) return;
+        var W = brush.width, H = brush.height;
+        brushCtx.clearRect(0, 0, W, H);
+        for (var i = 0; i < 6; i++) {
+          var angle = (i / 6) * Math.PI * 2 - Math.PI / 2;
+          var x = W / 2 + Math.cos(angle) * r;
+          var y = H / 2 + Math.sin(angle) * r;
+          brushCtx.beginPath();
+          brushCtx.arc(x, y, 2, 0, Math.PI * 2);
+          brushCtx.fillStyle = brushDark ? '#ffffff' : (window.currentInkColor || '#130918');
+          brushCtx.fill();
+        }
+      }
+
+      window.addEventListener('mousemove', function (e) {
+        mx = e.clientX;
+        my = e.clientY;
+        ring.style.left = mx + 'px';
+        ring.style.top  = my + 'px';
+        hovering = !!e.target.closest('a, button, .card');
+        dot.classList.toggle('is-hovering', hovering);
+        nib.classList.toggle('is-hovering', hovering);
+        ring.classList.toggle('is-hovering', hovering);
+        brush.classList.toggle('is-hovering', hovering);
+        var onDark = !!e.target.closest('.content, .closing-footer');
+        ring.classList.toggle('over-content', onDark);
+        dot.classList.toggle('over-content', onDark);
+        nib.classList.toggle('over-content', onDark);
+        brushDark = onDark;
+      });
+
+      window.addEventListener('mousedown', function () { brushDown = true;  nib.classList.add('is-pressing');    });
+      window.addEventListener('mouseup',   function () { brushDown = false; nib.classList.remove('is-pressing'); });
+
+      document.addEventListener('mouseleave', function () {
+        ring.style.visibility  = 'hidden';
+        dot.style.visibility   = 'hidden';
+        nib.style.visibility   = 'hidden';
+        brush.style.visibility = 'hidden';
+      });
+
+      document.addEventListener('mouseenter', function () {
+        ring.style.visibility  = '';
+        dot.style.visibility   = '';
+        nib.style.visibility   = '';
+        brush.style.visibility = '';
+      });
+
+      drawBrush(brushR);
+
+      (function tick() {
+        var factor = hovering ? 1 : 0.08;
+        dx += (mx - dx) * factor;
+        dy += (my - dy) * factor;
+        dot.style.left   = dx + 'px';
+        dot.style.top    = dy + 'px';
+        nib.style.left   = dx + 'px';
+        nib.style.top    = dy + 'px';
+        brush.style.left = dx + 'px';
+        brush.style.top  = dy + 'px';
+        var targetR = brushDown ? 10 : 5;
+        brushR += (targetR - brushR) * 0.18;
+        drawBrush(brushR);
+        requestAnimationFrame(tick);
+      })();
+    })();
+
+    window.currentPen = 0;
+    (function () {
+      var buttons = document.querySelectorAll('.tool-pen');
+      buttons.forEach(function (btn, idx) {
+        btn.addEventListener('click', function () {
+          buttons.forEach(function (b) { b.classList.remove('tool-pen-active'); });
+          btn.classList.add('tool-pen-active');
+          window.currentPen = idx;
+          document.body.classList.remove('pen-1', 'pen-2');
+          if (idx > 0) document.body.classList.add('pen-' + idx);
+        });
+      });
+    })();
+
+    (function () {
+      var buttons = document.querySelectorAll('.tool-color');
+      buttons.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          buttons.forEach(function (b) { b.classList.remove('tool-color-active'); });
+          btn.classList.add('tool-color-active');
+          var hex = btn.dataset.ink;
+
+          if (window.inkEffect) {
+            window.inkEffect.simMat.uniforms.inkColor.value.set(hex);
+          }
+
+          window.currentInkColor = hex;
+          document.documentElement.style.setProperty('--cursor-ink', hex);
+        });
+      });
     })();
 
     (function () {
@@ -653,6 +1245,8 @@
           tgt.x = -((e.clientY - (r.top  + r.height / 2)) / (r.height / 2)) * MAX_TILT;
           hovered = true;
           if (!raf) raf = requestAnimationFrame(tick);
+          card.style.setProperty('--gx', ((e.clientX - r.left) / r.width  * 100) + '%');
+          card.style.setProperty('--gy', ((e.clientY - r.top)  / r.height * 100) + '%');
         });
 
         card.addEventListener('mouseleave', function () {
@@ -664,12 +1258,199 @@
     })();
 
     (function () {
+      function attachUnderline(el) {
+        var u = document.createElement('span');
+        u.className = 'cta-underline';
+        el.appendChild(u);
+
+        var head = 0, tail = 0, phase = 'idle', queued = null;
+        var raf = null, t0 = null, fH, fT, outOffset;
+        var DUR = 256;
+
+        function ease(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
+        function paint() {
+          u.style.clipPath = 'inset(0 '+((1-head)*100).toFixed(2)+'% 0 '+(tail*100).toFixed(2)+'%)';
+        }
+        function tick(now) {
+          if (!t0) t0 = now;
+          var e = ease(Math.min((now - t0) / DUR, 1));
+          if (phase === 'in') {
+            head = fH + (1 - fH) * e;
+            tail = fT + (0 - fT) * e;
+          } else {
+            var offset = e * outOffset;
+            tail = fT + offset;
+            head = Math.min(fH + offset, 1);
+          }
+          paint();
+          if (now - t0 < DUR) {
+            raf = requestAnimationFrame(tick);
+          } else {
+            if (phase === 'out') { head = 0; tail = 0; paint(); }
+            phase = 'idle'; raf = null;
+            if (queued) { var q = queued; queued = null; go(q); }
+          }
+        }
+        function go(p) {
+          if (raf) cancelAnimationFrame(raf);
+          phase = p; fH = head; fT = tail;
+          if (p === 'out') outOffset = 1 - tail;
+          t0 = null;
+          raf = requestAnimationFrame(tick);
+        }
+
+        el.addEventListener('mouseenter', function () {
+          if (el.classList.contains('underline-disabled')) return;
+          if (phase === 'out') { queued = 'in'; }
+          else { queued = null; go('in'); }
+        });
+        el.addEventListener('mouseleave', function () {
+          queued = null;
+          if (phase !== 'out') go('out');
+        });
+        paint();
+      }
+
+      document.querySelectorAll('.about-cta, .contact-link').forEach(attachUnderline);
+    })();
+
+    (function () {
+      var emailLink  = document.querySelector('.contact-email');
+      if (!emailLink) return;
+      var emailInner = emailLink.querySelector('.email-inner');
+      var iconCopy   = emailLink.querySelector('.icon-copy');
+      var iconCheck  = emailLink.querySelector('.icon-check');
+      var emailText  = emailLink.querySelector('.email-text');
+      var timer  = null;
+      var copied = false;
+
+      document.fonts.ready.then(function () {
+        emailLink.style.minWidth = emailLink.getBoundingClientRect().width + 'px';
+      });
+
+      function slideTransition(swapFn) {
+        emailInner.classList.remove('slide-in');
+        emailInner.classList.add('slide-out');
+        setTimeout(function () {
+          swapFn();
+          emailInner.classList.remove('slide-out');
+          emailInner.classList.add('slide-in');
+          function onEnd() {
+            emailInner.classList.remove('slide-in');
+            emailInner.removeEventListener('animationend', onEnd);
+          }
+          emailInner.addEventListener('animationend', onEnd);
+        }, 180);
+      }
+
+      emailLink.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (copied) return;
+        navigator.clipboard.writeText('lucas.martinez43@gmail.com').then(function () {
+          copied = true;
+          emailLink.dispatchEvent(new MouseEvent('mouseleave', { bubbles: true }));
+          emailLink.classList.add('underline-disabled');
+          slideTransition(function () {
+            iconCopy.style.display  = 'none';
+            iconCheck.style.display = 'inline';
+            emailText.textContent   = 'EMAIL COPIED!';
+          });
+          if (timer) clearTimeout(timer);
+          timer = setTimeout(function () {
+            slideTransition(function () {
+              iconCopy.style.display  = '';
+              iconCheck.style.display = 'none';
+              emailText.textContent   = 'LUCASMARTINEZ43@GMAIL.COM';
+            });
+            emailLink.classList.remove('underline-disabled');
+            copied = false;
+            timer  = null;
+          }, 2500);
+        });
+      });
+    })();
+
+    (function () {
+      var heroText      = document.querySelector('.hero-text');
+      var heroExplore   = document.querySelector('.hero-explore');
+      var heroClosing   = document.querySelector('.hero-closing');
+      var closingFooter = document.querySelector('.closing-footer');
+      var content       = document.querySelector('.content');
+      var closingPhrase = document.querySelector('.closing-phrase');
+      var closingLine1  = document.querySelector('.closing-line1');
+      var closingLine2  = document.querySelector('.closing-line2');
+      var settled         = false;
+      var closingAnimated = false;
+
+      function splitCharsClosing(el, baseDelay, stagger, dur) {
+        var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+        var nodes = []; var n;
+        while ((n = walker.nextNode())) nodes.push(n);
+        var i = 0;
+        nodes.forEach(function (textNode) {
+          var parent = textNode.parentNode;
+          var frag = document.createDocumentFragment();
+          textNode.textContent.split('').forEach(function (char) {
+            var s = document.createElement('span');
+            s.textContent = char === ' ' ? ' ' : char;
+            s.style.cssText = 'display:inline-block;animation:char-reveal ' + dur + 's cubic-bezier(0.4,0.59,0.5,1) ' + (baseDelay + i * stagger).toFixed(3) + 's both';
+            i++;
+            frag.appendChild(s);
+          });
+          parent.replaceChild(frag, textNode);
+        });
+      }
+
+      function onScroll() {
+        var totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+        var past = window.scrollY / totalScroll >= 0.5;
+        heroText.style.visibility    = past ? 'hidden'  : '';
+        heroExplore.style.visibility = past ? 'hidden'  : '';
+        heroClosing.style.visibility = past ? 'visible' : 'hidden';
+
+        // Footer reveal: slides up when content bottom is ≤ 56px from viewport bottom
+        var footerH    = closingFooter.offsetHeight;
+        var triggerY   = window.innerHeight - 56;
+        var contentBot = content.getBoundingClientRect().bottom;
+        var past56     = Math.max(0, triggerY - contentBot);
+        var offset     = Math.max(0, footerH - past56);
+        closingFooter.style.setProperty('--footer-offset', offset + 'px');
+
+        // Phrase + toolbar: fire once when line1 clears the content card (~96% scroll)
+        if (past && contentBot < window.innerHeight * 0.22 && !closingAnimated) {
+          closingAnimated = true;
+          setTimeout(function () {
+            closingLine2.style.opacity = '1';
+            splitCharsClosing(closingLine2, 0, 0.024, 0.52);
+          }, 500);
+          setTimeout(function () {
+            heroClosing.classList.add('closing-settled');
+            settled = true;
+          }, 1950);
+        }
+      }
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    })();
+
+    (function () {
       var bgWrap = document.querySelector('.hero-bg-wrap');
       function onScroll() {
         var progress = Math.min(window.scrollY / window.innerHeight, 1);
         bgWrap.style.opacity = 1 - progress;
       }
       window.addEventListener('scroll', onScroll, { passive: true });
+    })();
+
+    (function () {
+      var btn = document.querySelector('.hero-explore');
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        var content = document.querySelector('.content');
+        var top = content.getBoundingClientRect().top + window.scrollY - 64;
+        window.scrollTo({ top: top, behavior: 'smooth' });
+      });
     })();
   </script>
 
@@ -730,7 +1511,7 @@
         float dirY  = (-0.5 + noise.b) * noise.r * 10.0;
 
         vec4  oldTexture = texture2D(inputTexture, vUv);
-        float br  = 1.0 - (oldTexture.r + oldTexture.g + oldTexture.b) / 3.0;
+        float br  = 1.0 - oldTexture.a;
         vec4  col = oldTexture * (1.0 - waterDiffusion);
         float p2  = waterDiffusion / 4.0;
         vec2  stretchUv = vUv * vec2(1.0, 1.0 + gravity);
@@ -739,12 +1520,15 @@
         col += blur(inputTexture, stretchUv, vec2(waterQuantity * br), vec2(-dirX, -dirY)) * p2;
         col += blur(inputTexture, stretchUv, vec2(waterQuantity * br), vec2(-dirY, -dirX)) * p2;
         col.rgb *= persistence;
+        col.a   *= persistence;
 
         if (speed > 0.0) {
           float th = clamp(thickness, 0.0001, 0.1);
           float lineValue = lineSegment(vUv, tipPosOld, tipPosNew, th);
           col.rgb = mix(col.rgb, inkColor, lineValue);
+          col.a   = mix(col.a, 1.0, lineValue);
           col.rgb = clamp(col.rgb, vec3(0.0), vec3(1.0));
+          col.a   = clamp(col.a, 0.0, 1.0);
         }
 
         gl_FragColor = vec4(col);
@@ -807,6 +1591,7 @@
         this.tipOld  = new THREE.Vector2(-1, -1);
         this.thickness = 0.002;
         this.pressure  = 0;
+        this.brushR    = 0.012;
         this.mouseDown = false;
         this.persistence = 0.980;
         this.clock = new THREE.Clock();
@@ -832,7 +1617,7 @@
             tipPosOld:      { value: new THREE.Vector2(0.5, 0.5) },
             tipPosNew:      { value: new THREE.Vector2(0.5, 0.5) },
             speed:          { value: 0.0 },
-            inkColor:       { value: new THREE.Color(0xffffff) },
+            inkColor:       { value: new THREE.Color(this.inkColor) },
           },
           vertexShader:   VERT,
           fragmentShader: FRAG,
@@ -844,8 +1629,7 @@
         const mat = new THREE.ShaderMaterial({
           transparent: true,
           uniforms: {
-            tSim:     { value: null },
-            inkColor: { value: new THREE.Color(this.inkColor) },
+            tSim: { value: null },
           },
           vertexShader: `
             varying vec2 vUv;
@@ -853,12 +1637,10 @@
           `,
           fragmentShader: `
             uniform sampler2D tSim;
-            uniform vec3 inkColor;
             varying vec2 vUv;
             void main() {
-              vec4  tex   = texture2D(tSim, vUv);
-              float alpha = (tex.r + tex.g + tex.b) / 3.0;
-              gl_FragColor = vec4(inkColor, alpha);
+              vec4 tex = texture2D(tSim, vUv);
+              gl_FragColor = vec4(tex.rgb, tex.a);
             }
           `,
         });
@@ -893,7 +1675,7 @@
         const dt   = this.clock.getDelta();
         this.time += dt;
 
-        // Lag the drawing tip behind the real cursor (lower = more lag)
+        // Lag the drawing tip behind the real cursor
         this.tipOld.copy(this.tip);
         this.tip.x += (this.mouse.x - this.tip.x) * 0.08;
         this.tip.y += (this.mouse.y - this.tip.y) * 0.08;
@@ -905,25 +1687,80 @@
           this.pressure *= Math.pow(0.9, dt * 30);
         }
 
-        this.simMat.uniforms.tipPosOld.value.copy(this.tipOld);
-        this.simMat.uniforms.tipPosNew.value.copy(this.tip);
+        // Smooth brush radius for rough brush (grows on mousedown)
+        const targetBrushR = this.mouseDown ? 0.016 : 0.010;
+        this.brushR += (targetBrushR - this.brushR) * Math.min(dt * 8, 1);
+
+        const persistence = Math.pow(this.persistence, dt * 10);
         this.simMat.uniforms.speed.value       = speed * 10;
-        this.simMat.uniforms.thickness.value   = this.thickness + this.pressure;
         this.simMat.uniforms.time.value        = this.time;
-        this.simMat.uniforms.persistence.value = Math.pow(this.persistence, dt * 10);
+        this.simMat.uniforms.persistence.value = persistence;
 
-        this.bufferSim.render();
+        const pen = window.currentPen || 0;
+
+        if (pen === 1) {
+          // Flat nib: 9 parallel strokes, pixel-based so angle is true 45° in screen space
+          // Screen direction top-right → bottom-left: (-1/√2, 1/√2) px
+          // UV: (Δscreen.x / width, −Δscreen.y / height)
+          const NIB_COUNT   = 9;
+          const NIB_HALF_PX = 7 + this.pressure * 1000;
+          const inv         = 1 / Math.SQRT2;
+          const nibUvDx     = -inv * NIB_HALF_PX / this.winWidth;
+          const nibUvDy     = -inv * NIB_HALF_PX / this.winHeight;
+          const baseThick   = 0.001 + this.pressure * 0.05;
+          for (let i = 0; i < NIB_COUNT; i++) {
+            const t = (i / (NIB_COUNT - 1) - 0.5) * 2;
+            this.simMat.uniforms.tipPosOld.value.set(this.tipOld.x + nibUvDx * t, this.tipOld.y + nibUvDy * t);
+            this.simMat.uniforms.tipPosNew.value.set(this.tip.x    + nibUvDx * t, this.tip.y    + nibUvDy * t);
+            this.simMat.uniforms.thickness.value = baseThick;
+            if (i > 0) {
+              this.simMat.uniforms.waterDiffusion.value = 0.0;
+              this.simMat.uniforms.persistence.value    = 1.0;
+            }
+            this.bufferSim.render();
+          }
+          this.simMat.uniforms.waterDiffusion.value = 0.1;
+          this.simMat.uniforms.persistence.value    = persistence;
+
+        } else if (pen === 2) {
+          // Rough brush: 6 dots in hexagonal arrangement
+          const dotThick = 0.003 + this.pressure * 0.2;
+          for (let i = 0; i < 6; i++) {
+            const angle = (i / 6) * Math.PI * 2;
+            const ox = Math.cos(angle) * this.brushR;
+            const oy = Math.sin(angle) * this.brushR;
+            this.simMat.uniforms.tipPosOld.value.set(this.tipOld.x + ox, this.tipOld.y + oy);
+            this.simMat.uniforms.tipPosNew.value.set(this.tip.x    + ox, this.tip.y    + oy);
+            this.simMat.uniforms.thickness.value = dotThick;
+            if (i > 0) {
+              this.simMat.uniforms.waterDiffusion.value = 0.0;
+              this.simMat.uniforms.persistence.value    = 1.0;
+            }
+            this.bufferSim.render();
+          }
+          this.simMat.uniforms.waterDiffusion.value = 0.1;
+          this.simMat.uniforms.persistence.value    = persistence;
+
+        } else {
+          // Round tip (default)
+          this.simMat.uniforms.tipPosOld.value.copy(this.tipOld);
+          this.simMat.uniforms.tipPosNew.value.copy(this.tip);
+          this.simMat.uniforms.thickness.value   = this.thickness + this.pressure;
+          this.bufferSim.render();
+        }
+
         this.quad.material.uniforms.tSim.value = this.bufferSim.output.texture;
-
         this.renderer.setRenderTarget(null);
         this.renderer.render(this.scene, this.orthoCamera);
       }
+
     }
 
-    new InkEffect({
+    window.inkEffect = new InkEffect({
       canvas:   document.querySelector('.ink-canvas'),
       inkColor: 0x130918,
     });
+    window.currentInkColor = '#130918';
   </script>
 </body>
 </html>
