@@ -8,7 +8,43 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=B612:wght@400&family=JetBrains+Mono:wght@400;700&family=Stack+Sans+Notch:wght@700&family=Stack+Sans+Text:wght@200;300;400;500;700&display=swap" rel="stylesheet" />
   <style>
-    :root { --cursor-ink: #130918; }
+    :root {
+      --cursor-ink: #130918;
+      --bg:               #B1B1B4;
+      --grid-line:        rgba(255, 255, 255, 0.1);
+      --decor-opacity:    0.1;
+      --circle-stroke:    #8E8E96;
+      --explore-color:    #8E8E96;
+      --text-hero:        #0F0F12;
+      --copyright-color:  #838386;
+      --container-border: rgba(0, 0, 0, 0.1);
+      --playground-border:#252530;
+      --toolbox-bg:       #ffffff;
+      --toolbox-shadow:   0 2px 16px rgba(0, 0, 0, 0.12);
+      --pen-icon:         #0f0f12;
+      --pen-active-bg:    #e5e5e5;
+      --divider-color:    #b1b1b4;
+      --color-ring:       0 0 0 1px #0f0f12;
+    }
+
+    :root[data-theme="dark"] {
+      --cursor-ink: #E8E8F0;
+      --bg:               #0F0F12;
+      --grid-line:        rgba(255, 255, 255, 0.05);
+      --decor-opacity:    0.3;
+      --circle-stroke:    rgba(255, 255, 255, 0.15);
+      --explore-color:    rgba(255, 255, 255, 0.28);
+      --text-hero:        #ffffff;
+      --copyright-color:  rgba(255, 255, 255, 0.2);
+      --container-border: rgba(255, 255, 255, 0.22);
+      --playground-border:rgba(255, 255, 255, 0.22);
+      --toolbox-bg:       #1e1d26;
+      --toolbox-shadow:   0 2px 24px rgba(0, 0, 0, 0.5);
+      --pen-icon:         #ffffff;
+      --pen-active-bg:    rgba(0, 0, 0, 0.35);
+      --divider-color:    rgba(255, 255, 255, 0.18);
+      --color-ring:       0 0 0 2px #ffffff;
+    }
 
     @font-face {
       font-family: 'Antro Vectra';
@@ -100,7 +136,7 @@
     body.pen-2 .cursor-brush.is-hovering { display: none; }
 
     body {
-      background-color: #B1B1B4;
+      background-color: var(--bg);
       font-family: 'Stack Sans Text', sans-serif;
       overflow-x: hidden;
     }
@@ -114,8 +150,8 @@
       z-index: 1;
       pointer-events: none;
       background-image:
-        linear-gradient(to right,  rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+        linear-gradient(to right,  var(--grid-line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
       background-size: 40px 40px;
     }
 
@@ -216,7 +252,7 @@
       height: 808px;
       top: 0;
       pointer-events: none;
-      background: radial-gradient(circle at center, #B1B1B4 55%, transparent 75%);
+      background: radial-gradient(circle at center, var(--bg) 55%, transparent 75%);
     }
 
     .hero-cleanup-left {
@@ -238,12 +274,12 @@
     }
 
     .hero-colorwheel {
-      opacity: 0.1;
+      opacity: var(--decor-opacity);
       animation: spin-decor 120s linear infinite;
     }
 
     .hero-protractor {
-      opacity: 0.1;
+      opacity: var(--decor-opacity);
       animation: spin-decor 120s linear infinite;
     }
 
@@ -261,7 +297,7 @@
       stroke-dasharray: 2519;
       stroke-dashoffset: 2519;
       animation: trace-circle 8s cubic-bezier(0.1, 0.8, 0.25, 1) forwards;
-      stroke: #8E8E96;
+      stroke: var(--circle-stroke);
     }
 
     @keyframes trace-circle {
@@ -303,7 +339,7 @@
       flex-direction: column;
       align-items: center;
       gap: 5px;
-      color: #8E8E96;
+      color: var(--explore-color);
       font-family: 'JetBrains Mono', monospace;
       font-size: 16px;
       font-weight: 400;
@@ -343,7 +379,7 @@
       display: block;
       font-family: 'Antro Vectra', cursive;
       font-size: 58px;
-      color: #0F0F12;
+      color: var(--text-hero);
       line-height: normal;
     }
 
@@ -352,7 +388,7 @@
       font-family: 'Stack Sans Notch', sans-serif;
       font-size: 100px;
       font-weight: 700;
-      color: #0F0F12;
+      color: var(--text-hero);
       line-height: normal;
       margin-top: -48px;
       transform-origin: bottom center;
@@ -380,9 +416,9 @@
 
     .about-container {
       width: min(780px, calc(100vw - 128px));
-      background: #ffffff;
+      background: #0F0F12;
       border-radius: 20px;
-      border: 1px solid rgba(0, 0, 0, 0.1);
+      border: 1px solid var(--container-border);
     }
 
 
@@ -549,7 +585,7 @@
       font-family: 'Stack Sans Notch', sans-serif;
       font-size: 40px;
       font-weight: 700;
-      color: #0F0F12;
+      color: var(--text-hero);
       line-height: normal;
       white-space: nowrap;
     }
@@ -558,7 +594,7 @@
       display: block;
       font-family: 'Antro Vectra', cursive;
       font-size: 80px;
-      color: #0F0F12;
+      color: var(--text-hero);
       line-height: 1;
       margin-top: 4px;
       white-space: nowrap;
@@ -569,10 +605,10 @@
       align-items: center;
       gap: 20px;
       margin-top: auto;
-      background: #ffffff;
+      background: var(--toolbox-bg);
       border-radius: 58px;
       padding: 8px;
-      box-shadow: 0 2px 16px rgba(0, 0, 0, 0.12);
+      box-shadow: var(--toolbox-shadow);
       transform: translateY(120px);
       opacity: 0;
     }
@@ -598,20 +634,20 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #0f0f12;
+      color: var(--pen-icon);
       cursor: pointer;
       padding: 0;
     }
 
     .tool-pen.tool-pen-active {
-      background: #e5e5e5;
+      background: var(--pen-active-bg);
       color: #CD3D23;
     }
 
     .tool-divider {
       width: 2px;
       height: 24px;
-      background: #b1b1b4;
+      background: var(--divider-color);
       border-radius: 2px;
       flex-shrink: 0;
     }
@@ -640,7 +676,7 @@
     }
 
     .tool-color.tool-color-active {
-      box-shadow: 0 0 0 1px #0f0f12;
+      box-shadow: var(--color-ring);
     }
 
     .color-dot {
@@ -657,9 +693,9 @@
       left: 50%;
       transform: translateX(-50%) translateY(var(--footer-offset, 100%));
       width: min(780px, calc(100vw - 128px));
-      background: #ffffff;
+      background: #0F0F12;
       border-radius: 20px 20px 0 0;
-      border: 1px solid rgba(0, 0, 0, 0.1);
+      border: 1px solid var(--container-border);
       border-bottom: none;
       display: flex;
       justify-content: center;
@@ -839,8 +875,8 @@
       border-color: #3E7EB8;
     }
     .card-playground {
-      border-color: #252530;
-      background: transparent;
+      border-color: var(--playground-border);
+      background: #0F0F12;
     }
 
     .card-jarvics .tag,
@@ -862,11 +898,31 @@
 
     }
 
+    .theme-toggle {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 9999;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      color: var(--pen-icon);
+      opacity: 0.45;
+      transition: opacity 0.2s ease, color 0.3s ease;
+    }
+    .theme-toggle:hover { opacity: 1; }
+
   </style>
 </head>
 <body>
 
-  <p style="position:fixed;bottom:8px;left:8px;margin:0;font-family:'Stack Sans Text',sans-serif;font-weight:300;font-size:12px;color:#838386;pointer-events:none;z-index:9999;letter-spacing:0.02em;">Lucas Martinez &copy; 2026</p>
+  <p style="position:fixed;bottom:8px;left:8px;margin:0;font-family:'Stack Sans Text',sans-serif;font-weight:300;font-size:12px;color:var(--copyright-color);pointer-events:none;z-index:9999;letter-spacing:0.02em;">Lucas Martinez &copy; 2026</p>
+
+  <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+    <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+    <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+  </button>
 
   <div class="cursor-ring"></div>
   <div class="cursor-dot"></div>
@@ -1563,6 +1619,47 @@
       }
       window.addEventListener('resize', fitClosingText, { passive: true });
     })();
+
+    (function () {
+      var LIGHT_INK    = '#130918';
+      var DARK_INK     = '#D8D8E0';
+      var LIGHT_CURSOR = '#130918';
+      var DARK_CURSOR  = '#E8E8F0';
+
+      function applyTheme(theme) {
+        var isDark = theme === 'dark';
+        document.documentElement.setAttribute('data-theme', theme);
+
+        document.getElementById('icon-moon').style.display = isDark ? '' : 'none';
+        document.getElementById('icon-sun').style.display  = isDark ? 'none' : '';
+
+        var newInk   = isDark ? DARK_INK : LIGHT_INK;
+        var newCursor = isDark ? DARK_CURSOR : LIGHT_CURSOR;
+        var firstBtn = document.querySelectorAll('.tool-color')[0];
+        if (firstBtn) {
+          firstBtn.setAttribute('data-ink', newInk);
+          var dot = firstBtn.querySelector('.color-dot');
+          if (dot) dot.style.background = newInk;
+          if (firstBtn.classList.contains('tool-color-active')) {
+            window.currentInkColor = newInk;
+            document.documentElement.style.setProperty('--cursor-ink', newCursor);
+            if (window.inkEffect) {
+              window.inkEffect.simMat.uniforms.inkColor.value.set(newInk);
+            }
+          }
+        }
+
+        localStorage.setItem('portfolio-theme', theme);
+      }
+
+      document.getElementById('theme-toggle').addEventListener('click', function () {
+        var cur = document.documentElement.getAttribute('data-theme') || 'light';
+        applyTheme(cur === 'dark' ? 'light' : 'dark');
+      });
+
+      var saved = localStorage.getItem('portfolio-theme') || 'light';
+      applyTheme(saved);
+    })();
   </script>
 
   <script type="module">
@@ -1867,11 +1964,11 @@
 
     }
 
+    var _inkHex = window.currentInkColor || '#130918';
     window.inkEffect = new InkEffect({
       canvas:   document.querySelector('.ink-canvas'),
-      inkColor: 0x130918,
+      inkColor: parseInt(_inkHex.replace('#', ''), 16),
     });
-    window.currentInkColor = '#130918';
   </script>
 </body>
 </html>
