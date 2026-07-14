@@ -261,6 +261,7 @@
       stroke-dasharray: 2519;
       stroke-dashoffset: 2519;
       animation: trace-circle 8s cubic-bezier(0.1, 0.8, 0.25, 1) forwards;
+      stroke: #8E8E96;
     }
 
     @keyframes trace-circle {
@@ -331,7 +332,8 @@
       top: calc(50vh - 107px);
       left: 50%;
       transform: translateX(-50%);
-      width: 863px;
+      width: calc(100vw - 128px);
+      max-width: 760px;
       text-align: center;
       white-space: nowrap;
       z-index: 2;
@@ -369,18 +371,25 @@
     .content {
       position: relative;
       z-index: 10;
-      width: 1080px;
-      margin: 0 auto;
-      background-color: #0F0F12;
-      border-radius: 56px;
-      padding: 0 204px 160px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      padding: 80px 0 24px;
+    }
+
+    .about-container {
+      width: min(780px, calc(100vw - 128px));
+      background: #ffffff;
+      border-radius: 20px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
     }
 
 
     /* ── ABOUT ───────────────────────────────────────────────────────── */
 
     .about {
-      padding: 160px 16px;
+      padding: 64px;
       display: flex;
       align-items: stretch;
       justify-content: space-between;
@@ -542,6 +551,7 @@
       font-weight: 700;
       color: #0F0F12;
       line-height: normal;
+      white-space: nowrap;
     }
 
     .closing-line2 {
@@ -551,6 +561,7 @@
       color: #0F0F12;
       line-height: 1;
       margin-top: 4px;
+      white-space: nowrap;
     }
 
     .closing-tools {
@@ -645,9 +656,11 @@
       bottom: 0;
       left: 50%;
       transform: translateX(-50%) translateY(var(--footer-offset, 100%));
-      width: 1080px;
-      background: #0F0F12;
-      border-radius: 56px 56px 0 0;
+      width: min(780px, calc(100vw - 128px));
+      background: #ffffff;
+      border-radius: 20px 20px 0 0;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-bottom: none;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -707,8 +720,9 @@
     .cards {
       display: flex;
       flex-direction: column;
+      align-items: center;
       gap: 24px;
-      margin-top: 40px;
+      width: 100%;
     }
 
     .card {
@@ -719,6 +733,7 @@
       padding: 16px;
       border-radius: 16px;
       border: 1px solid transparent;
+      width: min(780px, calc(100vw - 128px));
       will-change: transform;
       --gx: 50%;
       --gy: 50%;
@@ -825,10 +840,27 @@
     }
     .card-playground {
       border-color: #252530;
+      background: transparent;
     }
 
     .card-jarvics .tag,
     .card-cashback .tag { background-color: rgba(15, 15, 18, 0.5); }
+
+    /* ── RESPONSIVE ─────────────────────────────────────────────────── */
+
+    /* Shrink container to maintain 64px gap from screen edges.
+       Padding shrinks proportionally to keep inner content at 672px.
+       Breakpoint: 1080px container + 64px * 2 = 1208px */
+    @media (max-width: 1207px) {
+      /* individual 780px containers handle their own responsiveness via min() */
+    }
+
+    /* Mobile breakpoint: inner content reaches 32px from container edge.
+       Container = 672px + 32px * 2 = 736px → screen = 864px.
+       Mobile layout TBD. */
+    @media (max-width: 863px) {
+
+    }
 
   </style>
 </head>
@@ -954,6 +986,7 @@
   <main class="content">
 
     <!-- ABOUT -->
+    <div class="about-container">
     <section class="about">
 
       <div class="about-text">
@@ -983,6 +1016,7 @@
       </div>
 
     </section>
+    </div>
 
     <!-- CARDS -->
     <div class="cards">
@@ -1371,16 +1405,21 @@
     })();
 
     (function () {
-      var heroText      = document.querySelector('.hero-text');
-      var heroExplore   = document.querySelector('.hero-explore');
-      var heroClosing   = document.querySelector('.hero-closing');
-      var closingFooter = document.querySelector('.closing-footer');
-      var content       = document.querySelector('.content');
-      var closingPhrase = document.querySelector('.closing-phrase');
-      var closingLine1  = document.querySelector('.closing-line1');
-      var closingLine2  = document.querySelector('.closing-line2');
+      var heroText       = document.querySelector('.hero-text');
+      var heroExplore    = document.querySelector('.hero-explore');
+      var heroClosing    = document.querySelector('.hero-closing');
+      var closingFooter  = document.querySelector('.closing-footer');
+      var content        = document.querySelector('.content');
+      var closingPhrase  = document.querySelector('.closing-phrase');
+      var closingLine1   = document.querySelector('.closing-line1');
+      var closingLine2   = document.querySelector('.closing-line2');
+      var aboutContainer = document.querySelector('.about-container');
+      var playgroundCard = document.querySelector('.card-playground');
+      var closingTools   = document.querySelector('.closing-tools');
       var settled         = false;
       var closingAnimated = false;
+      var closingPhraseVis = false;
+      var closingToolsVis  = false;
 
       function splitCharsClosing(el, baseDelay, stagger, dur) {
         var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
@@ -1404,9 +1443,25 @@
       function onScroll() {
         var totalScroll = document.documentElement.scrollHeight - window.innerHeight;
         var past = window.scrollY / totalScroll >= 0.5;
-        heroText.style.visibility    = past ? 'hidden'  : '';
-        heroExplore.style.visibility = past ? 'hidden'  : '';
+
+        // Hero text: each element hides only when fully behind the about card
+        var aboutRect       = aboutContainer.getBoundingClientRect();
+        var heroTextRect    = heroText.getBoundingClientRect();
+        var heroExploreRect = heroExplore.getBoundingClientRect();
+        heroText.style.visibility    = aboutRect.top <= heroTextRect.top    ? 'hidden' : '';
+        heroExplore.style.visibility = aboutRect.top <= heroExploreRect.top ? 'hidden' : '';
+
+        // Closing section: show when past midpoint
         heroClosing.style.visibility = past ? 'visible' : 'hidden';
+
+        // Phrase + toolbox: visible when playground card top is at or above the element top.
+        // Going DOWN — card top reaches element top → element flips visible (revealed underneath).
+        // Going UP   — card top rises above element top → element flips hidden (concealed again).
+        var playgroundRect    = playgroundCard.getBoundingClientRect();
+        var closingPhraseRect = closingPhrase.getBoundingClientRect();
+        var closingToolsRect  = closingTools.getBoundingClientRect();
+        closingPhrase.style.visibility = playgroundRect.top <= closingPhraseRect.top ? '' : 'hidden';
+        closingTools.style.visibility  = playgroundRect.top <= closingToolsRect.top  ? '' : 'hidden';
 
         // Footer reveal: slides up when content bottom is ≤ 56px from viewport bottom
         var footerH    = closingFooter.offsetHeight;
@@ -1451,6 +1506,62 @@
         var top = content.getBoundingClientRect().top + window.scrollY - 64;
         window.scrollTo({ top: top, behavior: 'smooth' });
       });
+    })();
+
+    (function () {
+      var tagline  = document.querySelector('.hero-tagline');
+      var headline = document.querySelector('.hero-headline');
+      var TAG_MAX  = 58;
+      var HEAD_MAX = 100;
+      var MARGIN   = 64;
+
+      function fitHeroText() {
+        tagline.style.fontSize   = TAG_MAX  + 'px';
+        headline.style.fontSize  = HEAD_MAX + 'px';
+        headline.style.marginTop = '';
+        var avail  = Math.min(window.innerWidth - (MARGIN + 4) * 2, 760);
+        var widest = Math.max(headline.scrollWidth, tagline.scrollWidth) + 3;
+        if (widest > avail) {
+          var scale = avail / widest;
+          tagline.style.fontSize   = (TAG_MAX  * scale) + 'px';
+          headline.style.fontSize  = (HEAD_MAX * scale) + 'px';
+          headline.style.marginTop = (-48 * scale) + 'px';
+        }
+      }
+
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(fitHeroText);
+      } else {
+        window.addEventListener('load', fitHeroText);
+      }
+      window.addEventListener('resize', fitHeroText, { passive: true });
+    })();
+
+    (function () {
+      var line1  = document.querySelector('.closing-line1');
+      var line2  = document.querySelector('.closing-line2');
+      var L1_MAX = 40;
+      var L2_MAX = 80;
+      var MARGIN = 64;
+
+      function fitClosingText() {
+        line1.style.fontSize = L1_MAX + 'px';
+        line2.style.fontSize = L2_MAX + 'px';
+        var avail  = Math.min(window.innerWidth - (MARGIN + 4) * 2, 760);
+        var widest = Math.max(line1.scrollWidth, line2.scrollWidth) + 3;
+        if (widest > avail) {
+          var scale = avail / widest;
+          line1.style.fontSize = (L1_MAX * scale) + 'px';
+          line2.style.fontSize = (L2_MAX * scale) + 'px';
+        }
+      }
+
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(fitClosingText);
+      } else {
+        window.addEventListener('load', fitClosingText);
+      }
+      window.addEventListener('resize', fitClosingText, { passive: true });
     })();
   </script>
 
