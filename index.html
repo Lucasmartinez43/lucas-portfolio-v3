@@ -1935,32 +1935,6 @@
       applyTheme(saved);
     })();
 
-    (function () {
-      if (!window.matchMedia('(max-width: 863px)').matches) return;
-      var found = [];
-      document.querySelectorAll('*').forEach(function (el) {
-        var pos = window.getComputedStyle(el).position;
-        if (pos === 'fixed' || pos === 'sticky') return;
-        var node = el.parentElement;
-        while (node) {
-          if (window.getComputedStyle(node).position === 'fixed') return;
-          node = node.parentElement;
-        }
-        if (el.scrollWidth > el.clientWidth + 1) {
-          var name = el.tagName.toLowerCase() + (el.id ? '#' + el.id : '') + (el.className && typeof el.className === 'string' ? '.' + el.className.trim().split(/\s+/).join('.') : '');
-          found.push(name + ' scrollW=' + el.scrollWidth + ' clientW=' + el.clientWidth);
-        }
-      });
-      var box = document.createElement('div');
-      box.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:red;color:#fff;font-size:11px;padding:8px;z-index:99999;white-space:pre-wrap;word-break:break-all;max-height:40vh;overflow-y:auto;';
-      if (found.length) {
-        box.textContent = 'REAL OVERFLOW (non-fixed):\n' + found.join('\n');
-      } else {
-        box.style.background = 'green';
-        box.textContent = 'No real overflow detected. Scroll may be a DevTools artifact.';
-      }
-      document.body.appendChild(box);
-    })();
   </script>
 
   <script type="module">
