@@ -929,7 +929,8 @@
 
       /* ── HERO TEXT ───────────────────────────────────────────────────── */
       .hero-text {
-        top: calc(var(--hero-h, 100svh) / 2 - 107px);
+        top: calc(var(--hero-h, 100svh) / 2);
+        transform: translate(-50%, -50%);
         width: min(480px, calc(100vw - 32px));
         visibility: hidden;
       }
@@ -982,6 +983,9 @@
       /* Reorder: photo-sig → text → cta */
       .about-photo-sig {
         order: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
       }
 
       .about-text {
@@ -1012,7 +1016,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 14px;
+        gap: 0;
       }
 
       .sig-name {
@@ -1024,11 +1028,7 @@
       }
 
       .sig-title {
-        position: relative;
-        left: auto;
-        right: auto;
-        top: 0;
-        letter-spacing: 2px;
+        display: none;
       }
 
       /* ── PROJECT CARDS ───────────────────────────────────────────────── */
@@ -1106,6 +1106,12 @@
         z-index: 3 !important;
       }
 
+    }
+
+    @media (max-width: 419px) {
+      .about-bio br {
+        display: none;
+      }
     }
 
     .theme-toggle {
@@ -1266,9 +1272,9 @@
 
       <div class="about-text">
         <p class="about-bio">
-          <span class="bio-intro">I'm a Senior Product Designer with 5 and<br>a half years of experience, designing and<br>scaling end-to-end products that reach<br>tens of millions of people.</span>
-          <span class="bio-detail">Before that, 8 years were spent between<br>Mechanical Engineering studies and Visual<br>Design work, building a foundation balanced<br>by an analytical mindset and a creative eye.</span>
-          <span class="bio-detail">Below, you can explore some of my recent<br>work on <span class="bio-bold">R7.com</span> and <span class="bio-bold">RecordPlus</span>, along with<br>the <span class="bio-bold">CMS</span> behind these two products and<br>selected <span class="bio-bold">0→1 projects</span>.</span>
+          <span class="bio-intro">I'm a Senior Product Designer with 5 and <br>a half years of experience, designing and <br>scaling end-to-end products that reach <br>tens of millions of people.</span>
+          <span class="bio-detail">Before that, 8 years were spent between <br>Mechanical Engineering studies and Visual <br>Design work, building a foundation balanced <br>by an analytical mindset and a creative eye.</span>
+          <span class="bio-detail">Below, you can explore some of my recent <br>work on <span class="bio-bold">R7.com</span> and <span class="bio-bold">RecordPlus</span>, along with <br>the <span class="bio-bold">CMS</span> behind these two products and <br>selected <span class="bio-bold">0→1 projects</span>.</span>
         </p>
       </div>
 
@@ -1354,8 +1360,8 @@
       <a href="cupons.html" class="card card-cashback">
         <div class="card-body">
           <div class="card-title-group">
-            <p class="card-title">Cupos+Cashback</p>
-            <p class="card-subtitle">News and Media Portal, reaching <br>more than 70 million monthly users</p>
+            <p class="card-title">Cupons+Cashback</p>
+            <p class="card-subtitle">Savings platform offering millions of <br>Brazilians curated ways to spend <br>less across every product category</p>
           </div>
           <div class="card-tags">
             <span class="tag">R$20k weekly savings offered</span>
