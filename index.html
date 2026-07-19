@@ -1106,6 +1106,10 @@
         z-index: 3 !important;
       }
 
+      .lang-wrapper {
+        z-index: 3 !important;
+      }
+
     }
 
     @media (max-width: 419px) {
@@ -1129,6 +1133,36 @@
     }
     .theme-toggle:hover { opacity: 1; }
 
+    .lang-wrapper {
+      position: fixed; top: 16px; right: 52px; z-index: 9998;
+      display: flex; align-items: center; height: 32px;
+    }
+    .lang-toggle {
+      display: flex; align-items: center; gap: 4px;
+      background: none; border: none; padding: 6px;
+      font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 200;
+      letter-spacing: 0.08em; color: var(--pen-icon); opacity: 0.45;
+      transition: opacity 0.2s ease, color 0.3s ease;
+    }
+    .lang-toggle:hover { opacity: 1; }
+    .lang-menu {
+      position: absolute; top: calc(100% + 2px); right: 0;
+      background: var(--bg); border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px; overflow: hidden; min-width: 48px;
+      opacity: 0; pointer-events: none; transform: translateY(-4px);
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    .lang-menu.open { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    .lang-option {
+      display: block; width: 100%; padding: 7px 14px;
+      background: none; border: none;
+      font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 200;
+      letter-spacing: 0.08em; color: var(--pen-icon); text-align: center;
+      opacity: 0.5; transition: opacity 0.15s, background 0.15s;
+    }
+    .lang-option:hover { opacity: 1; background: rgba(255,255,255,0.06); }
+    .lang-option.active { opacity: 1; }
+
     body.returning .hero-headline              { animation: none; }
     body.returning .hero-explore               { animation: none; opacity: 1; }
     body.returning .hero-circle circle         { animation: none; stroke-dashoffset: 0; }
@@ -1144,9 +1178,19 @@
 
   <p class="copyright" style="position:fixed;bottom:8px;left:8px;margin:0;font-family:'Stack Sans Text',sans-serif;font-weight:300;font-size:12px;color:var(--copyright-color);pointer-events:none;z-index:9999;letter-spacing:0.02em;">Lucas Martinez &copy; 2026</p>
 
+  <div class="lang-wrapper">
+    <button class="lang-toggle" id="lang-toggle" aria-label="Language">
+      <span id="lang-current">EN</span>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <div class="lang-menu" id="lang-menu">
+      <button class="lang-option" data-lang="en">EN</button>
+      <button class="lang-option" data-lang="pt">PT</button>
+    </div>
+  </div>
   <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
-    <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
-    <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+    <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+    <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
   </button>
 
   <div class="cursor-ring"></div>
@@ -1193,8 +1237,8 @@
     <div class="hero-closing">
 
       <div class="closing-phrase">
-        <span class="closing-line1">Every project starts with a rough sketch<span class="closing-dot">.</span></span>
-        <span class="closing-line2">Let's draw something together</span>
+        <span class="closing-line1" data-i18n="closing.line1">Every project starts with a rough sketch<span class="closing-dot">.</span></span>
+        <span class="closing-line2" data-i18n="closing.line2">Let's draw something together</span>
       </div>
 
       <div class="closing-tools">
@@ -1249,12 +1293,12 @@
     </div>
 
     <div class="hero-text">
-      <span class="hero-tagline">Designing at the intersection of</span>
-      <span class="hero-headline">ART<span class="amp">&amp;</span>ENGINEERING</span>
+      <span class="hero-tagline" data-i18n="hero.tagline">Designing at the intersection of</span>
+      <span class="hero-headline" data-i18n="hero.headline">ART<span class="amp">&amp;</span>ENGINEERING</span>
     </div>
 
     <button class="hero-explore" aria-label="Explore">
-      EXPLORE
+      <span data-i18n="hero.explore">EXPLORE</span>
       <svg width="14" height="9" viewBox="0 0 14 9" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M1 1L7 7L13 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
@@ -1272,9 +1316,9 @@
 
       <div class="about-text">
         <p class="about-bio">
-          <span class="bio-intro">I'm a Senior Product Designer with 5 and <br>a half years of experience, designing and <br>scaling end-to-end products that reach <br>tens of millions of people.</span>
-          <span class="bio-detail">Before that, 8 years were spent between <br>Mechanical Engineering studies and Visual <br>Design work, building a foundation balanced <br>by an analytical mindset and a creative eye.</span>
-          <span class="bio-detail">Below, you can explore some of my recent <br>work on <span class="bio-bold">R7.com</span> and <span class="bio-bold">RecordPlus</span>, along with <br>the <span class="bio-bold">CMS</span> behind these two products and <br>selected <span class="bio-bold">0→1 projects</span>.</span>
+          <span class="bio-intro" data-i18n="bio.intro">I'm a Senior Product Designer with 5 and <br>a half years of experience, designing and <br>scaling end-to-end products that reach <br>tens of millions of people.</span>
+          <span class="bio-detail" data-i18n="bio.detail1">Before that, 8 years were spent between <br>Mechanical Engineering studies and Visual <br>Design work, building a foundation balanced <br>by an analytical mindset and a creative eye.</span>
+          <span class="bio-detail" data-i18n="bio.detail2">Below, you can explore some of my recent <br>work on <span class="bio-bold">R7.com</span> and <span class="bio-bold">RecordPlus</span>, along with <br>the <span class="bio-bold">CMS</span> behind these two products and <br>selected <span class="bio-bold">0→1 projects</span>.</span>
         </p>
       </div>
 
@@ -1285,12 +1329,12 @@
           </div>
           <div class="about-signature">
             <span class="sig-name">Lucas Martinez</span>
-            <span class="sig-title">senior product designer</span>
+            <span class="sig-title" data-i18n="sig.title">senior product designer</span>
           </div>
         </div>
         <a href="#" class="about-cta">
-          READ MORE ABOUT ME
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <span data-i18n="about.cta">READ MORE ABOUT ME</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
           </svg>
         </a>
@@ -1306,10 +1350,10 @@
         <div class="card-body">
           <div class="card-title-group">
             <p class="card-title">R7.com</p>
-            <p class="card-subtitle">News and Media Portal, <br>reaching more than <br>70 million monthly users</p>
+            <p class="card-subtitle" data-i18n="card.r7.subtitle">News and Media Portal, <br>reaching more than <br>70 million monthly users</p>
           </div>
           <div class="card-tags">
-            <span class="tag">+300k weekly interactions</span>
+            <span class="tag" data-i18n="card.r7.tag1">+300k weekly interactions</span>
           </div>
         </div>
         <div class="card-image"></div>
@@ -1319,11 +1363,11 @@
         <div class="card-body">
           <div class="card-title-group">
             <p class="card-title">RecordPlus</p>
-            <p class="card-subtitle">Streaming App for Record TV, with <br>over 13 million downloads across <br>App Store, Play Store and Smart TVs</p>
+            <p class="card-subtitle" data-i18n="card.rp.subtitle">Streaming App for Record TV, with <br>over 13 million downloads across <br>App Store, Play Store and Smart TVs</p>
           </div>
           <div class="card-tags">
-            <span class="tag">+12% NEW user</span>
-            <span class="tag">+4pp to paid plans</span>
+            <span class="tag" data-i18n="card.rp.tag1">+12% NEW user</span>
+            <span class="tag" data-i18n="card.rp.tag2">+4pp to paid plans</span>
           </div>
         </div>
         <div class="card-image"></div>
@@ -1333,11 +1377,11 @@
         <div class="card-body">
           <div class="card-title-group">
             <p class="card-title">Jarvics</p>
-            <p class="card-subtitle">Enterprise CMS behind R7 <br>publishing and RecordPlus <br>subscribers management</p>
+            <p class="card-subtitle" data-i18n="card.jv.subtitle">Enterprise CMS behind R7 <br>publishing and RecordPlus <br>subscribers management</p>
           </div>
           <div class="card-tags">
-            <span class="tag">~20% faster XP</span>
-            <span class="tag">3rd party independency</span>
+            <span class="tag" data-i18n="card.jv.tag1">~20% faster XP</span>
+            <span class="tag" data-i18n="card.jv.tag2">3rd party independency</span>
           </div>
         </div>
         <div class="card-image"></div>
@@ -1347,11 +1391,11 @@
         <div class="card-body">
           <div class="card-title-group">
             <p class="card-title">Tempo</p>
-            <p class="card-subtitle">A end-to-end weather forecast <br>platform, designed <br>for real-world constraints</p>
+            <p class="card-subtitle" data-i18n="card.tempo.subtitle">A end-to-end weather forecast <br>platform, designed <br>for real-world constraints</p>
           </div>
           <div class="card-tags">
-            <span class="tag">WCAG</span>
-            <span class="tag">a11y standards</span>
+            <span class="tag" data-i18n="card.tempo.tag1">WCAG</span>
+            <span class="tag" data-i18n="card.tempo.tag2">a11y standards</span>
           </div>
         </div>
         <div class="card-image"></div>
@@ -1361,10 +1405,10 @@
         <div class="card-body">
           <div class="card-title-group">
             <p class="card-title">Cupons+Cashback</p>
-            <p class="card-subtitle">Savings platform offering millions of <br>Brazilians curated ways to spend <br>less across every product category</p>
+            <p class="card-subtitle" data-i18n="card.cb.subtitle">Savings platform offering millions of <br>Brazilians curated ways to spend <br>less across every product category</p>
           </div>
           <div class="card-tags">
-            <span class="tag">R$20k weekly savings offered</span>
+            <span class="tag" data-i18n="card.cb.tag1">R$20k weekly savings offered</span>
           </div>
         </div>
         <div class="card-image"></div>
@@ -1374,7 +1418,7 @@
         <div class="card-body">
           <div class="card-title-group">
             <p class="card-title">Playground</p>
-            <p class="card-subtitle">This is a casual place where you will get to know <br>a little more about me through drawings, designs, <br>photography and ocasional pictures of my dog</p>
+            <p class="card-subtitle" data-i18n="card.pg.subtitle">This is a casual place where you will get to know <br>a little more about me through drawings, designs, <br>photography and ocasional pictures of my dog</p>
           </div>
         </div>
       </div>
@@ -1946,6 +1990,87 @@
       var saved = localStorage.getItem('portfolio-theme') || 'dark';
       applyTheme(saved);
     })();
+
+    // ── LANGUAGE SYSTEM ───────────────────────────────────────────────
+    var TRANSLATIONS = {
+      en: {
+        'hero.tagline':       'Designing at the intersection of',
+        'hero.headline':      'ART<span class="amp">&amp;</span>ENGINEERING',
+        'hero.explore':       'EXPLORE',
+        'closing.line1':      'Every project starts with a rough sketch<span class="closing-dot">.</span>',
+        'closing.line2':      "Let's draw something together",
+        'bio.intro':          "I'm a Senior Product Designer with 5 and <br>a half years of experience, designing and <br>scaling end-to-end products that reach <br>tens of millions of people.",
+        'bio.detail1':        'Before that, 8 years were spent between <br>Mechanical Engineering studies and Visual <br>Design work, building a foundation balanced <br>by an analytical mindset and a creative eye.',
+        'bio.detail2':        'Below, you can explore some of my recent <br>work on <span class="bio-bold">R7.com</span> and <span class="bio-bold">RecordPlus</span>, along with <br>the <span class="bio-bold">CMS</span> behind these two products and <br>selected <span class="bio-bold">0→1 projects</span>.',
+        'sig.title':          'senior product designer',
+        'about.cta':          'READ MORE ABOUT ME',
+        'card.r7.subtitle':   'News and Media Portal, <br>reaching more than <br>70 million monthly users',
+        'card.r7.tag1':       '+300k weekly interactions',
+        'card.rp.subtitle':   'Streaming App for Record TV, with <br>over 13 million downloads across <br>App Store, Play Store and Smart TVs',
+        'card.rp.tag1':       '+12% NEW user',
+        'card.rp.tag2':       '+4pp to paid plans',
+        'card.jv.subtitle':   'Enterprise CMS behind R7 <br>publishing and RecordPlus <br>subscribers management',
+        'card.jv.tag1':       '~20% faster XP',
+        'card.jv.tag2':       '3rd party independency',
+        'card.tempo.subtitle':'A end-to-end weather forecast <br>platform, designed <br>for real-world constraints',
+        'card.tempo.tag1':    'WCAG',
+        'card.tempo.tag2':    'a11y standards',
+        'card.cb.subtitle':   'Savings platform offering millions of <br>Brazilians curated ways to spend <br>less across every product category',
+        'card.cb.tag1':       'R$20k weekly savings offered',
+        'card.pg.subtitle':   'This is a casual place where you will get to know <br>a little more about me through drawings, designs, <br>photography and ocasional pictures of my dog',
+      },
+      pt: {
+        'hero.tagline':       'Design na interseção de',
+        'hero.headline':      'ARTE<span class="amp">&amp;</span>ENGENHARIA',
+        'hero.explore':       'EXPLORAR',
+        'closing.line1':      'Todo projeto começa com um rascunho<span class="closing-dot">.</span>',
+        'closing.line2':      'Vamos desenhar algo juntos',
+        'bio.intro':          'Sou um Senior Product Designer com 5 e <br>meio anos de experiência, projetando e <br>escalando produtos end-to-end que alcançam <br>dezenas de milhões de pessoas.',
+        'bio.detail1':        'Antes disso, 8 anos foram dedicados entre <br>Engenharia Mecânica e Design Visual, <br>construindo uma base equilibrada por <br>mentalidade analítica e olhar criativo.',
+        'bio.detail2':        'Abaixo, explore parte dos meus trabalhos <br>recentes no <span class="bio-bold">R7.com</span> e no <span class="bio-bold">RecordPlus</span>, junto com <br>o <span class="bio-bold">CMS</span> por trás desses produtos e projetos <br><span class="bio-bold">0→1</span> selecionados.',
+        'sig.title':          'designer de produto sênior',
+        'about.cta':          'SAIBA MAIS SOBRE MIM',
+        'card.r7.subtitle':   'Portal de Notícias e Mídia, <br>com mais de <br>70 milhões de usuários mensais',
+        'card.r7.tag1':       '+300k interações semanais',
+        'card.rp.subtitle':   'App de Streaming da Record TV, com <br>mais de 13 milhões de downloads na <br>App Store, Play Store e Smart TVs',
+        'card.rp.tag1':       '+12% NOVOS usuários',
+        'card.rp.tag2':       '+4pp em planos pagos',
+        'card.jv.subtitle':   'CMS empresarial por trás da publicação <br>do R7 e do gerenciamento de <br>assinantes do RecordPlus',
+        'card.jv.tag1':       '~20% mais rápido',
+        'card.jv.tag2':       'Independência de terceiros',
+        'card.tempo.subtitle':'Plataforma de previsão do tempo <br>end-to-end, projetada para <br>restrições do mundo real',
+        'card.tempo.tag1':    'WCAG',
+        'card.tempo.tag2':    'padrões de acessibilidade',
+        'card.cb.subtitle':   'Plataforma de economia que oferece <br>formas selecionadas de gastar menos <br>em todas as categorias de produtos',
+        'card.cb.tag1':       'R$20k em economia semanal',
+        'card.pg.subtitle':   'Um lugar descontraído para você conhecer <br>um pouco mais sobre mim através de desenhos, <br>designs, fotografias e fotos do meu cachorro',
+      }
+    };
+
+    function applyLang(lang) {
+      localStorage.setItem('portfolio-lang', lang);
+      document.querySelectorAll('[data-i18n]').forEach(function(el) {
+        var t = TRANSLATIONS[lang];
+        var key = el.getAttribute('data-i18n');
+        if (t && t[key] !== undefined) el.innerHTML = t[key];
+      });
+      var curr = document.getElementById('lang-current');
+      if (curr) curr.textContent = lang.toUpperCase();
+      document.querySelectorAll('.lang-option').forEach(function(o) { o.classList.toggle('active', o.getAttribute('data-lang') === lang); });
+      document.documentElement.setAttribute('lang', lang === 'pt' ? 'pt-BR' : 'en');
+    }
+
+    (function() {
+      var toggle = document.getElementById('lang-toggle');
+      var menu   = document.getElementById('lang-menu');
+      toggle.addEventListener('click', function(e) { e.stopPropagation(); menu.classList.toggle('open'); });
+      document.addEventListener('click', function() { menu.classList.remove('open'); });
+      document.querySelectorAll('.lang-option').forEach(function(opt) {
+        opt.addEventListener('click', function(e) { e.stopPropagation(); applyLang(opt.getAttribute('data-lang')); menu.classList.remove('open'); });
+      });
+    })();
+
+    applyLang(localStorage.getItem('portfolio-lang') || 'en');
 
   </script>
 
