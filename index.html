@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
@@ -1461,31 +1461,25 @@
       window.addEventListener('resize', updateHeroH, { passive: true });
     })();
 
-    (function () {
-      function splitChars(el, baseDelay, stagger, dur) {
-        var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
-        var nodes = [];
-        var n;
-        while ((n = walker.nextNode())) nodes.push(n);
-        var i = 0;
-        nodes.forEach(function (textNode) {
-          var parent = textNode.parentNode;
-          var frag = document.createDocumentFragment();
-          textNode.textContent.split('').forEach(function (char) {
-            var s = document.createElement('span');
+    function _splitChars(el, baseDelay, stagger, dur) {
+      var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+      var nodes = [];
+      var n;
+      while ((n = walker.nextNode())) nodes.push(n);
+      var i = 0;
+      nodes.forEach(function (textNode) {
+        var parent = textNode.parentNode;
+        var frag = document.createDocumentFragment();
+        textNode.textContent.split('').forEach(function (char) {
+          var s = document.createElement('span');
             s.textContent = char === ' ' ? ' ' : char;
-            s.style.cssText = 'display:inline-block;animation:char-reveal ' + dur + 's cubic-bezier(0.4,0.59,0.5,1) ' + (baseDelay + i * stagger).toFixed(3) + 's both';
-            i++;
-            frag.appendChild(s);
-          });
-          parent.replaceChild(frag, textNode);
+          s.style.cssText = 'display:inline-block;animation:char-reveal ' + dur + 's cubic-bezier(0.4,0.59,0.5,1) ' + (baseDelay + i * stagger).toFixed(3) + 's both';
+          i++;
+          frag.appendChild(s);
         });
-      }
-      if (!_isReturning) {
-        splitChars(document.querySelector('.hero-tagline'), 0.85, 0.022, 0.85);
-        splitChars(document.querySelector('.hero-headline'), 1.85, 0.042, 1.15);
-      }
-    })();
+        parent.replaceChild(frag, textNode);
+      });
+    }
 
     (function () {
       if (window.matchMedia('(max-width: 800px)').matches) return;
@@ -2071,6 +2065,10 @@
     })();
 
     applyLang(localStorage.getItem('portfolio-lang') || 'en');
+    if (!_isReturning) {
+      _splitChars(document.querySelector('.hero-tagline'), 0.85, 0.022, 0.85);
+      _splitChars(document.querySelector('.hero-headline'), 1.85, 0.042, 1.15);
+    }
 
   </script>
 
