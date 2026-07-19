@@ -2102,7 +2102,9 @@
       uniform vec3 inkColor;
       varying vec2 vUv;
 
+      uniform float aspect;
       float lineSegment(vec2 p, vec2 a, vec2 b, float thickness) {
+        p.x *= aspect; a.x *= aspect; b.x *= aspect;
         vec2 pa = p - a;
         vec2 ba = b - a;
         float h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);
@@ -2237,6 +2239,7 @@
             tipPosOld:      { value: new THREE.Vector2(0.5, 0.5) },
             tipPosNew:      { value: new THREE.Vector2(0.5, 0.5) },
             speed:          { value: 0.0 },
+            aspect:         { value: this.winWidth / this.winHeight },
             inkColor:       { value: (() => { var c = new THREE.Color(); c.r = (this.inkColor >> 16 & 255) / 255; c.g = (this.inkColor >> 8 & 255) / 255; c.b = (this.inkColor & 255) / 255; return c; })() },
           },
           vertexShader:   VERT,
@@ -2273,6 +2276,7 @@
           this.winWidth  = window.innerWidth;
           this.winHeight = window.innerHeight;
           this.renderer.setSize(this.winWidth, this.winHeight);
+          this.simMat.uniforms.aspect.value = this.winWidth / this.winHeight;
         });
         window.addEventListener('mousemove', (e) => {
           this.mouse.set(
@@ -2345,9 +2349,10 @@
         } else if (pen === 2) {
           // Rough brush: 6 dots in hexagonal arrangement
           const dotThick = 0.003 + this.pressure * 0.2;
+          const hexAspect = this.winWidth / this.winHeight;
           for (let i = 0; i < 6; i++) {
             const angle = (i / 6) * Math.PI * 2;
-            const ox = Math.cos(angle) * this.brushR;
+            const ox = Math.cos(angle) * this.brushR / hexAspect;
             const oy = Math.sin(angle) * this.brushR;
             this.simMat.uniforms.tipPosOld.value.set(this.tipOld.x + ox, this.tipOld.y + oy);
             this.simMat.uniforms.tipPosNew.value.set(this.tip.x    + ox, this.tip.y    + oy);
