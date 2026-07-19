@@ -79,6 +79,36 @@
       color: var(--pen-icon); opacity: 0.45; transition: opacity 0.2s, color 0.3s;
     }
     .theme-toggle:hover { opacity: 1; }
+    .lang-wrapper {
+      position: fixed; top: 16px; right: 52px; z-index: 9998;
+      display: flex; align-items: center; height: 32px;
+    }
+    .lang-toggle {
+      display: flex; align-items: center; gap: 4px;
+      background: none; border: none; padding: 6px;
+      font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 200;
+      letter-spacing: 0.08em; color: var(--pen-icon); opacity: 0.45;
+      transition: opacity 0.2s ease, color 0.3s ease;
+    }
+    .lang-toggle:hover { opacity: 1; }
+    .lang-menu {
+      position: absolute; top: calc(100% + 2px); right: 0;
+      background: var(--bg); border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px; overflow: hidden; min-width: 48px;
+      opacity: 0; pointer-events: none; transform: translateY(-4px);
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    .lang-menu.open { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    .lang-option {
+      display: block; width: 100%; padding: 7px 14px;
+      background: none; border: none;
+      font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 200;
+      letter-spacing: 0.08em; color: var(--pen-icon); text-align: center;
+      opacity: 0.5; transition: opacity 0.15s, background 0.15s;
+    }
+    .lang-option:hover { opacity: 1; background: rgba(255,255,255,0.06); }
+    .lang-option.active { opacity: 1; }
+    @media (max-width: 800px) { .lang-wrapper { display: none !important; } }
 
     .project-page {
       position: relative; z-index: 2;
@@ -282,14 +312,22 @@
     }
     .mobile-menu.open { opacity: 1; transform: translateY(0); pointer-events: auto; }
     .mobile-menu a {
-      font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500;
+      font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 200;
       letter-spacing: 0.08em; color: rgba(255,255,255,0.7); text-decoration: none;
       padding: 12px 16px; display: block;
     }
-    .mobile-menu-theme {
-      background: none; border: none; color: rgba(255,255,255,0.7);
-      display: flex; align-items: center; padding: 12px 16px;
+    .mobile-divider { height: 1px; background: rgba(255,255,255,0.2); align-self: stretch; margin: 4px 16px 4px -24px; }
+    .mobile-lang-row, .mobile-theme-row { display: flex; align-items: center; gap: 20px; padding: 10px 16px; }
+    .mobile-lang-opt {
+      background: none; border: none; padding: 0;
+      font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 200;
+      letter-spacing: 0.05em; color: rgba(255,255,255,0.3);
     }
+    .mobile-lang-opt.active { font-weight: 700; color: rgba(255,255,255,0.85); }
+    .mobile-theme-opt { background: none; border: none; padding: 0; color: rgba(255,255,255,0.3); display: flex; align-items: center; }
+    .mobile-theme-opt.active { color: rgba(255,255,255,0.85); }
+    .mobile-theme-opt svg { stroke-width: 1.5; }
+    .mobile-theme-opt.active svg { stroke-width: 2.5; }
     .mobile-menu-overlay { display: none; position: fixed; inset: 0; z-index: 998; }
     .mobile-menu-overlay.open { display: block; }
 
@@ -331,21 +369,40 @@
   </div>
 
   <div class="mobile-menu" id="mobile-menu">
-    <a href="#overview">OVERVIEW</a>
-    <a href="#challenge">THE CHALLENGE</a>
-    <a href="#solutions">SOLUTIONS</a>
-    <a href="#impact">IMPACT</a>
-    <a href="#design">DESIGN SYSTEM</a>
-    <button class="mobile-menu-theme" id="mobile-theme-btn">
-      <svg id="mobile-icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
-      <svg id="mobile-icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
-    </button>
+    <a href="#overview" data-i18n="nav.overview">OVERVIEW</a>
+    <a href="#challenge" data-i18n="nav.challenge">THE CHALLENGE</a>
+    <a href="#solutions" data-i18n="nav.solutions">SOLUTIONS</a>
+    <a href="#impact" data-i18n="nav.impact">IMPACT</a>
+    <a href="#design" data-i18n="nav.design">DESIGN SYSTEM</a>
+    <div class="mobile-divider"></div>
+    <div class="mobile-lang-row">
+      <button class="mobile-lang-opt" data-lang="pt">PT</button>
+      <button class="mobile-lang-opt" data-lang="en">EN</button>
+    </div>
+    <div class="mobile-theme-row">
+      <button class="mobile-theme-opt" data-theme="light">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+      <button class="mobile-theme-opt" data-theme="dark">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      </button>
+    </div>
   </div>
 
   <div class="mobile-menu-overlay" id="mobile-menu-overlay"></div>
 
   <div class="bg-grid"></div>
 
+  <div class="lang-wrapper">
+    <button class="lang-toggle" id="lang-toggle" aria-label="Language">
+      <span id="lang-current">EN</span>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <div class="lang-menu" id="lang-menu">
+      <button class="lang-option" data-lang="en">EN</button>
+      <button class="lang-option" data-lang="pt">PT</button>
+    </div>
+  </div>
   <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
     <svg id="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
     <svg id="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
@@ -357,56 +414,56 @@
       <h1 class="project-title">R7.com</h1>
       <a href="index.html" class="back-link">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
-        BACK
+        <span data-i18n="nav.back">BACK</span>
       </a>
     </div>
 
     <div class="project-meta">
       <div class="meta-col meta-year">
-        <span class="meta-label">YEAR</span>
+        <span class="meta-label" data-i18n="meta.year">YEAR</span>
         <span class="meta-value" style="white-space: nowrap;">2021 - 2026</span>
       </div>
       <div class="meta-col meta-scope">
-        <span class="meta-label">SCOPE</span>
-        <span class="meta-value" style="display:flex; flex-direction:column; gap:16px;"><span style="white-space: nowrap;">News Platform</span><span style="white-space: nowrap;">Feature Expansion</span><span style="white-space: nowrap;">Mobile / Desktop</span></span>
+        <span class="meta-label" data-i18n="meta.scope">SCOPE</span>
+        <span class="meta-value" style="display:flex; flex-direction:column; gap:16px;"><span style="white-space: nowrap;" data-i18n="meta.scope1">News Platform</span><span style="white-space: nowrap;" data-i18n="meta.scope2">Feature Expansion</span><span style="white-space: nowrap;" data-i18n="meta.scope3">Mobile / Desktop</span></span>
       </div>
       <div class="meta-col meta-resp">
-        <span class="meta-label">RESPONSIBILITIES</span>
-        <span class="meta-value" style="display:flex; flex-direction:column; gap:16px;"><span>• Designed several engagement<br>features including newsletter, author<br>following, and interactive quizzes</span><span>• Designed special coverage pages<br>for elections, sports championships,<br>and reality shows</span><span>• Scaled the R7 Design System</span></span>
+        <span class="meta-label" data-i18n="meta.resp">RESPONSIBILITIES</span>
+        <span class="meta-value" style="display:flex; flex-direction:column; gap:16px;"><span data-i18n="meta.resp1">• Designed several engagement<br>features including newsletter, author<br>following, and interactive quizzes</span><span data-i18n="meta.resp2">• Designed special coverage pages<br>for elections, sports championships,<br>and reality shows</span><span data-i18n="meta.resp3">• Scaled the R7 Design System</span></span>
       </div>
     </div>
 
     <nav class="project-nav">
-      <a href="#top">TOP</a>
-      <a href="#overview">OVERVIEW</a>
-      <a href="#challenge">CHALLENGE</a>
-      <a href="#solutions">SOLUTIONS</a>
-      <a href="#impact">IMPACT</a>
-      <a href="#design">DESIGN SYSTEM</a>
+      <a href="#top" data-i18n="nav.top">TOP</a>
+      <a href="#overview" data-i18n="nav.overview">OVERVIEW</a>
+      <a href="#challenge" data-i18n="nav.challenge-short">CHALLENGE</a>
+      <a href="#solutions" data-i18n="nav.solutions">SOLUTIONS</a>
+      <a href="#impact" data-i18n="nav.impact">IMPACT</a>
+      <a href="#design" data-i18n="nav.design">DESIGN SYSTEM</a>
     </nav>
 
     <!-- 01 OVERVIEW -->
     <section id="overview" class="project-section">
       <div class="section-header">
         <span class="section-num">01</span>
-        <h2 class="section-heading">OVERVIEW</h2>
+        <h2 class="section-heading" data-i18n="s1.heading">OVERVIEW</h2>
       </div>
-      <p class="section-body">R7 is one of the largest news websites in Brazil, reaching over 70 million monthly unique users according to Comscore. It covers a wide range of topics, including politics, economy, sports, health, lifestyle, and pop culture, as well as content related to Record TV programs.</p>
-      <p class="section-body">Because of this broad coverage, the platform serves a highly diverse audience with different interests, behaviors, and levels of engagement.</p>
+      <p class="section-body" data-i18n="s1.body1">R7 is one of the largest news websites in Brazil, reaching over 70 million monthly unique users according to Comscore. It covers a wide range of topics, including politics, economy, sports, health, lifestyle, and pop culture, as well as content related to Record TV programs.</p>
+      <p class="section-body" data-i18n="s1.body2">Because of this broad coverage, the platform serves a highly diverse audience with different interests, behaviors, and levels of engagement.</p>
       <div class="img-titled image-wrap">
-        <div class="image-caption-row"><span class="image-caption">Home Page</span></div>
+        <div class="image-caption-row"><span class="image-caption" data-i18n="s1.cap1">Home Page</span></div>
         <div class="image-container"><div class="image-placeholder"><img src="images/R7com/R7 01.webp" alt="Home Page"></div></div>
       </div>
       <div class="img-titled image-wrap">
-        <div class="image-caption-row"><span class="image-caption">Elections Coverage</span></div>
+        <div class="image-caption-row"><span class="image-caption" data-i18n="s1.cap2">Elections Coverage</span></div>
         <div class="image-container"><div class="image-placeholder"><img src="images/R7com/R7 08.webp" alt="Elections Coverage"></div></div>
       </div>
       <div class="img-titled image-wrap">
-        <div class="image-caption-row"><span class="image-caption">Soccer Championship Tables</span></div>
+        <div class="image-caption-row"><span class="image-caption" data-i18n="s1.cap3">Soccer Championship Tables</span></div>
         <div class="image-container"><div class="image-placeholder"><img src="images/R7com/R7 09.webp" alt="Soccer Championship Tables"></div></div>
       </div>
       <div class="img-titled image-wrap">
-        <div class="image-caption-row"><span class="image-caption">A Fazenda (The Farm) - One of the biggest Brazilian Reality Shows</span></div>
+        <div class="image-caption-row"><span class="image-caption" data-i18n="s1.cap4">A Fazenda (The Farm) - One of the biggest Brazilian Reality Shows</span></div>
         <div class="image-container"><div class="image-placeholder"><img src="images/R7com/R7 10.webp" alt="A Fazenda"></div></div>
       </div>
     </section>
@@ -415,16 +472,16 @@
     <section id="challenge" class="project-section">
       <div class="section-header">
         <span class="section-num">02</span>
-        <h2 class="section-heading">THE CHALLENGE</h2>
+        <h2 class="section-heading" data-i18n="s2.heading">THE CHALLENGE</h2>
       </div>
-      <p class="section-body">R7 presents multiple product and business challenges due to its scale and diverse audience.</p>
-      <p class="section-body">One example of this is the platform's revenue model.</p>
-      <p class="section-body">Most of the platform's revenue comes from advertising displayed across pages. This creates a strong need to keep users navigating through the website and consuming multiple pieces of content per session.</p>
+      <p class="section-body" data-i18n="s2.body1">R7 presents multiple product and business challenges due to its scale and diverse audience.</p>
+      <p class="section-body" data-i18n="s2.body2">One example of this is the platform's revenue model.</p>
+      <p class="section-body" data-i18n="s2.body3">Most of the platform's revenue comes from advertising displayed across pages. This creates a strong need to keep users navigating through the website and consuming multiple pieces of content per session.</p>
       <div class="callout-card">
         <div class="callout-icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
         </div>
-        <p class="callout-text">The challenge was to design experiences that increase engagement, encourage return visits, and extend user sessions without compromising usability or content clarity.</p>
+        <p class="callout-text" data-i18n="s2.callout">The challenge was to design experiences that increase engagement, encourage return visits, and extend user sessions without compromising usability or content clarity.</p>
       </div>
     </section>
 
@@ -432,17 +489,17 @@
     <section id="solutions" class="project-section">
       <div class="section-header">
         <span class="section-num">03</span>
-        <h2 class="section-heading">SOLUTIONS</h2>
+        <h2 class="section-heading" data-i18n="s3.heading">SOLUTIONS</h2>
       </div>
-      <p class="section-body">The product team continuously provides data on user behavior, such as clicks, time on page, and navigation flows. These insights guide design decisions focused on increasing engagement and retention. Based on this data, multiple features were designed to encourage users to stay longer and return more frequently.</p>
-      <p class="section-body"><strong>Newsletter:</strong> Topic-based newsletters allow users to subscribe to specific interests. Each newsletter curates related articles and is sent periodically via email.</p>
-      <p class="section-body">This creates a recurring entry point to the platform and brings users back independently of their usual browsing habits.</p>
+      <p class="section-body" data-i18n="s3.body1">The product team continuously provides data on user behavior, such as clicks, time on page, and navigation flows. These insights guide design decisions focused on increasing engagement and retention. Based on this data, multiple features were designed to encourage users to stay longer and return more frequently.</p>
+      <p class="section-body" data-i18n="s3.body2"><strong>Newsletter:</strong> Topic-based newsletters allow users to subscribe to specific interests. Each newsletter curates related articles and is sent periodically via email.</p>
+      <p class="section-body" data-i18n="s3.body3">This creates a recurring entry point to the platform and brings users back independently of their usual browsing habits.</p>
       <div class="img-plain image-container"><div class="image-placeholder"><img src="images/R7com/R7 02.webp" alt="Newsletter"></div></div>
-      <p class="section-body"><strong>Follow Authors:</strong> Users can follow specific authors, journalists, or bloggers. When new content is published, users are notified and encouraged to return.</p>
-      <p class="section-body">A dedicated page lists all available authors, and the follow option is also accessible directly from articles.</p>
+      <p class="section-body" data-i18n="s3.body4"><strong>Follow Authors:</strong> Users can follow specific authors, journalists, or bloggers. When new content is published, users are notified and encouraged to return.</p>
+      <p class="section-body" data-i18n="s3.body5">A dedicated page lists all available authors, and the follow option is also accessible directly from articles.</p>
       <div class="img-plain image-container"><div class="image-placeholder"><img src="images/R7com/R7 03.webp" alt="Follow Authors"></div></div>
-      <p class="section-body"><strong>Interactive Quizzes:</strong> For a Record TV quiz-based reality show, interactive quizzes were introduced within the show's page. Users can answer questions, see their ranking, and share results with others.</p>
-      <p class="section-body">New quizzes are released with each episode, encouraging repeated participation and social sharing.</p>
+      <p class="section-body" data-i18n="s3.body6"><strong>Interactive Quizzes:</strong> For a Record TV quiz-based reality show, interactive quizzes were introduced within the show's page. Users can answer questions, see their ranking, and share results with others.</p>
+      <p class="section-body" data-i18n="s3.body7">New quizzes are released with each episode, encouraging repeated participation and social sharing.</p>
       <div class="img-plain image-container"><div class="image-placeholder"><img src="images/R7com/R7 04.webp" alt="Interactive Quizzes"></div></div>
     </section>
 
@@ -450,7 +507,7 @@
     <section id="impact" class="project-section">
       <div class="section-header">
         <span class="section-num">04</span>
-        <h2 class="section-heading">IMPACT</h2>
+        <h2 class="section-heading" data-i18n="s4.heading">IMPACT</h2>
       </div>
       <div class="impact-cards">
         <div class="impact-card">
@@ -458,10 +515,10 @@
             <div class="impact-card-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
             </div>
-            <span class="impact-card-title">Engagement</span>
+            <span class="impact-card-title" data-i18n="s4.t1">Engagement</span>
           </div>
           <div class="impact-card-bottom">
-            <div class="impact-card-desc">More interactions across content and features</div>
+            <div class="impact-card-desc" data-i18n="s4.d1">More interactions across content and features</div>
           </div>
         </div>
         <div class="impact-card">
@@ -469,10 +526,10 @@
             <div class="impact-card-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
             </div>
-            <span class="impact-card-title">Session Duration</span>
+            <span class="impact-card-title" data-i18n="s4.t2">Session Duration</span>
           </div>
           <div class="impact-card-bottom">
-            <div class="impact-card-desc">Longer time spent reading and exploring content</div>
+            <div class="impact-card-desc" data-i18n="s4.d2">Longer time spent reading and exploring content</div>
           </div>
         </div>
         <div class="impact-card">
@@ -480,10 +537,10 @@
             <div class="impact-card-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
             </div>
-            <span class="impact-card-title">Retention</span>
+            <span class="impact-card-title" data-i18n="s4.t3">Retention</span>
           </div>
           <div class="impact-card-bottom">
-            <div class="impact-card-desc">Users returning more frequently via newsletters and notifications</div>
+            <div class="impact-card-desc" data-i18n="s4.d3">Users returning more frequently via newsletters and notifications</div>
           </div>
         </div>
         <div class="impact-card">
@@ -491,10 +548,10 @@
             <div class="impact-card-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
             </div>
-            <span class="impact-card-title">User Acquisition</span>
+            <span class="impact-card-title" data-i18n="s4.t4">User Acquisition</span>
           </div>
           <div class="impact-card-bottom">
-            <div class="impact-card-desc">New users entering through shared quiz challenges</div>
+            <div class="impact-card-desc" data-i18n="s4.d4">New users entering through shared quiz challenges</div>
           </div>
         </div>
       </div>
@@ -504,11 +561,11 @@
     <section id="design" class="project-section">
       <div class="section-header">
         <span class="section-num">05</span>
-        <h2 class="section-heading">DESIGN SYSTEM</h2>
+        <h2 class="section-heading" data-i18n="s5.heading">DESIGN SYSTEM</h2>
       </div>
-      <p class="section-body">R7 includes multiple sections and sub-products, each targeting different audiences, from younger users consuming entertainment content to older audiences following news and TV programs. This requires a scalable design system that maintains consistency while allowing flexibility for different contexts and user needs.</p>
-      <p class="section-body">The main focus is to balance variation and consistency, ensuring that new features and experiences align with core principles, visual language, and usability standards.</p>
-      <p class="section-body">The following screens represent a small portion of the full design system, which includes a much broader set of components and variations.</p>
+      <p class="section-body" data-i18n="s5.body1">R7 includes multiple sections and sub-products, each targeting different audiences, from younger users consuming entertainment content to older audiences following news and TV programs. This requires a scalable design system that maintains consistency while allowing flexibility for different contexts and user needs.</p>
+      <p class="section-body" data-i18n="s5.body2">The main focus is to balance variation and consistency, ensuring that new features and experiences align with core principles, visual language, and usability standards.</p>
+      <p class="section-body" data-i18n="s5.body3">The following screens represent a small portion of the full design system, which includes a much broader set of components and variations.</p>
       <div class="img-carousel">
         <div class="carousel-frame">
           <div class="carousel-clip">
@@ -540,13 +597,13 @@
     <footer class="project-footer">
       <a href="index.html" class="back-link">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
-        BACK
+        <span data-i18n="nav.back">BACK</span>
       </a>
     </footer>
 
     <a href="#top" class="mobile-back-top back-link">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(90deg)"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
-      BACK TO TOP
+      <span data-i18n="nav.back-top">BACK TO TOP</span>
     </a>
 
   </main>
@@ -629,15 +686,127 @@
         document.getElementById('icon-moon').style.display = isDark ? 'none' : '';
         document.getElementById('icon-sun').style.display  = isDark ? '' : 'none';
         localStorage.setItem('portfolio-theme', theme);
-        var mSun = document.getElementById('mobile-icon-sun');
-        var mMoon = document.getElementById('mobile-icon-moon');
-        if (mSun)  mSun.style.display  = isDark ? '' : 'none';
-        if (mMoon) mMoon.style.display = isDark ? 'none' : '';
+        document.querySelectorAll('.mobile-theme-opt').forEach(function(o) { o.classList.toggle('active', o.getAttribute('data-theme') === theme); });
       }
       document.getElementById('theme-toggle').addEventListener('click', function () {
         applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
       });
+      document.querySelectorAll('.mobile-theme-opt').forEach(function(btn) {
+        btn.addEventListener('click', function() { applyTheme(btn.getAttribute('data-theme')); });
+      });
       applyTheme(localStorage.getItem('portfolio-theme') || 'dark');
+    })();
+
+    // ── LANGUAGE SYSTEM ───────────────────────────────────────────────
+    var TRANSLATIONS = {
+      en: {
+        'nav.back':'BACK','nav.back-top':'BACK TO TOP','nav.top':'TOP',
+        'nav.overview':'OVERVIEW','nav.challenge':'THE CHALLENGE','nav.challenge-short':'CHALLENGE',
+        'nav.solutions':'SOLUTIONS','nav.impact':'IMPACT','nav.design':'DESIGN SYSTEM',
+        'meta.year':'YEAR','meta.scope':'SCOPE','meta.resp':'RESPONSIBILITIES',
+        'meta.scope1':'News Platform','meta.scope2':'Feature Expansion','meta.scope3':'Mobile / Desktop',
+        'meta.resp1':'• Designed several engagement<br>features including newsletter, author<br>following, and interactive quizzes',
+        'meta.resp2':'• Designed special coverage pages<br>for elections, sports championships,<br>and reality shows',
+        'meta.resp3':'• Scaled the R7 Design System',
+        's1.heading':'OVERVIEW',
+        's1.body1':'R7 is one of the largest news websites in Brazil, reaching over 70 million monthly unique users according to Comscore. It covers a wide range of topics, including politics, economy, sports, health, lifestyle, and pop culture, as well as content related to Record TV programs.',
+        's1.body2':'Because of this broad coverage, the platform serves a highly diverse audience with different interests, behaviors, and levels of engagement.',
+        's1.cap1':'Home Page','s1.cap2':'Elections Coverage','s1.cap3':'Soccer Championship Tables',
+        's1.cap4':'A Fazenda (The Farm) - One of the biggest Brazilian Reality Shows',
+        's2.heading':'THE CHALLENGE',
+        's2.body1':'R7 presents multiple product and business challenges due to its scale and diverse audience.',
+        's2.body2':"One example of this is the platform's revenue model.",
+        's2.body3':"Most of the platform's revenue comes from advertising displayed across pages. This creates a strong need to keep users navigating through the website and consuming multiple pieces of content per session.",
+        's2.callout':'The challenge was to design experiences that increase engagement, encourage return visits, and extend user sessions without compromising usability or content clarity.',
+        's3.heading':'SOLUTIONS',
+        's3.body1':'The product team continuously provides data on user behavior, such as clicks, time on page, and navigation flows. These insights guide design decisions focused on increasing engagement and retention. Based on this data, multiple features were designed to encourage users to stay longer and return more frequently.',
+        's3.body2':'<strong>Newsletter:</strong> Topic-based newsletters allow users to subscribe to specific interests. Each newsletter curates related articles and is sent periodically via email.',
+        's3.body3':'This creates a recurring entry point to the platform and brings users back independently of their usual browsing habits.',
+        's3.body4':'<strong>Follow Authors:</strong> Users can follow specific authors, journalists, or bloggers. When new content is published, users are notified and encouraged to return.',
+        's3.body5':'A dedicated page lists all available authors, and the follow option is also accessible directly from articles.',
+        's3.body6':'<strong>Interactive Quizzes:</strong> For a Record TV quiz-based reality show, interactive quizzes were introduced within the show\'s page. Users can answer questions, see their ranking, and share results with others.',
+        's3.body7':'New quizzes are released with each episode, encouraging repeated participation and social sharing.',
+        's4.heading':'IMPACT',
+        's4.t1':'Engagement','s4.d1':'More interactions across content and features',
+        's4.t2':'Session Duration','s4.d2':'Longer time spent reading and exploring content',
+        's4.t3':'Retention','s4.d3':'Users returning more frequently via newsletters and notifications',
+        's4.t4':'User Acquisition','s4.d4':'New users entering through shared quiz challenges',
+        's5.heading':'DESIGN SYSTEM',
+        's5.body1':'R7 includes multiple sections and sub-products, each targeting different audiences, from younger users consuming entertainment content to older audiences following news and TV programs. This requires a scalable design system that maintains consistency while allowing flexibility for different contexts and user needs.',
+        's5.body2':'The main focus is to balance variation and consistency, ensuring that new features and experiences align with core principles, visual language, and usability standards.',
+        's5.body3':'The following screens represent a small portion of the full design system, which includes a much broader set of components and variations.',
+      },
+      pt: {
+        'nav.back':'VOLTAR','nav.back-top':'VOLTAR AO TOPO','nav.top':'TOPO',
+        'nav.overview':'VISÃO GERAL','nav.challenge':'O DESAFIO','nav.challenge-short':'DESAFIO',
+        'nav.solutions':'SOLUÇÕES','nav.impact':'IMPACTO','nav.design':'DESIGN SYSTEM',
+        'meta.year':'ANO','meta.scope':'ESCOPO','meta.resp':'RESPONSABILIDADES',
+        'meta.scope1':'Plataforma de Notícias','meta.scope2':'Expansão de Funcionalidades','meta.scope3':'Mobile / Desktop',
+        'meta.resp1':'• Projetei funcionalidades de engajamento<br>incluindo newsletter, seguimento de autores<br>e quizzes interativos',
+        'meta.resp2':'• Criei páginas de cobertura especial<br>para eleições, campeonatos esportivos<br>e reality shows',
+        'meta.resp3':'• Escalei o R7 Design System',
+        's1.heading':'VISÃO GERAL',
+        's1.body1':'O R7 é um dos maiores portais de notícias do Brasil, alcançando mais de 70 milhões de usuários únicos mensais de acordo com o Comscore. Cobre uma ampla variedade de temas, incluindo política, economia, esportes, saúde, estilo de vida e cultura pop, além de conteúdos relacionados aos programas da Record TV.',
+        's1.body2':'Por conta dessa ampla cobertura, a plataforma atende a um público altamente diversificado, com diferentes interesses, comportamentos e níveis de engajamento.',
+        's1.cap1':'Página Inicial','s1.cap2':'Cobertura das Eleições','s1.cap3':'Tabelas de Campeonato de Futebol',
+        's1.cap4':'A Fazenda - Um dos maiores reality shows brasileiros',
+        's2.heading':'O DESAFIO',
+        's2.body1':'O R7 apresenta múltiplos desafios de produto e negócio devido à sua escala e público diversificado.',
+        's2.body2':'Um exemplo disso é o modelo de receita da plataforma.',
+        's2.body3':'A maior parte da receita da plataforma vem de publicidade exibida nas páginas. Isso cria uma necessidade constante de manter os usuários navegando pelo site e consumindo múltiplos conteúdos por sessão.',
+        's2.callout':'O desafio era projetar experiências que aumentassem o engajamento, incentivassem o retorno dos usuários e estendessem as sessões sem comprometer a usabilidade ou a clareza do conteúdo.',
+        's3.heading':'SOLUÇÕES',
+        's3.body1':'O time de produto fornece continuamente dados sobre o comportamento dos usuários, como cliques, tempo na página e fluxos de navegação. Esses dados orientam decisões de design focadas em aumentar o engajamento e a retenção. Com base neles, diversas funcionalidades foram projetadas para incentivar os usuários a ficarem mais tempo e voltarem com mais frequência.',
+        's3.body2':'<strong>Newsletter:</strong> Newsletters temáticas permitem que os usuários se inscrevam em assuntos de interesse. Cada newsletter reúne artigos relacionados e é enviada periodicamente por e-mail.',
+        's3.body3':'Isso cria um ponto de entrada recorrente para a plataforma e traz os usuários de volta independentemente de seus hábitos de navegação.',
+        's3.body4':'<strong>Seguir Autores:</strong> Os usuários podem seguir autores, jornalistas ou blogueiros específicos. Quando novos conteúdos são publicados, os usuários são notificados e incentivados a retornar.',
+        's3.body5':'Uma página dedicada lista todos os autores disponíveis, e a opção de seguir também está acessível diretamente nos artigos.',
+        's3.body6':'<strong>Quizzes Interativos:</strong> Para um reality show da Record TV baseado em quizzes, foram introduzidos quizzes interativos na página do programa. Os usuários podem responder perguntas, ver seu ranking e compartilhar os resultados.',
+        's3.body7':'Novos quizzes são lançados a cada episódio, incentivando a participação recorrente e o compartilhamento nas redes sociais.',
+        's4.heading':'IMPACTO',
+        's4.t1':'Engajamento','s4.d1':'Mais interações com conteúdos e funcionalidades',
+        's4.t2':'Duração das Sessões','s4.d2':'Mais tempo dedicado à leitura e exploração de conteúdos',
+        's4.t3':'Retenção','s4.d3':'Usuários retornando com mais frequência via newsletters e notificações',
+        's4.t4':'Aquisição de Usuários','s4.d4':'Novos usuários chegando por meio de quizzes compartilhados',
+        's5.heading':'DESIGN SYSTEM',
+        's5.body1':'O R7 inclui diversas seções e sub-produtos, cada um direcionado a públicos diferentes — de usuários mais jovens consumindo entretenimento a audiências mais maduras acompanhando notícias e programas de TV. Isso exige um design system escalável que mantenha consistência e ao mesmo tempo permita flexibilidade para diferentes contextos e necessidades.',
+        's5.body2':'O foco principal é equilibrar variação e consistência, garantindo que novas funcionalidades e experiências estejam alinhadas com os princípios centrais, a linguagem visual e os padrões de usabilidade.',
+        's5.body3':'As telas a seguir representam uma pequena parte do design system completo, que inclui um conjunto muito mais amplo de componentes e variações.',
+      }
+    };
+    function applyLang(lang) {
+      localStorage.setItem('portfolio-lang', lang);
+      document.querySelectorAll('[data-i18n]').forEach(function(el) {
+        var t = TRANSLATIONS[lang]; var key = el.getAttribute('data-i18n');
+        if (t && t[key] !== undefined) el.innerHTML = t[key];
+      });
+      var curr = document.getElementById('lang-current');
+      if (curr) curr.textContent = lang.toUpperCase();
+      document.querySelectorAll('.lang-option').forEach(function(o) { o.classList.toggle('active', o.getAttribute('data-lang') === lang); });
+      document.querySelectorAll('.mobile-lang-opt').forEach(function(o) { o.classList.toggle('active', o.getAttribute('data-lang') === lang); });
+      document.documentElement.setAttribute('lang', lang === 'pt' ? 'pt-BR' : 'en');
+    }
+    (function() {
+      var toggle = document.getElementById('lang-toggle');
+      var menu   = document.getElementById('lang-menu');
+      toggle.addEventListener('click', function(e) { e.stopPropagation(); menu.classList.toggle('open'); });
+      document.addEventListener('click', function() { menu.classList.remove('open'); });
+      document.querySelectorAll('.lang-option').forEach(function(opt) {
+        opt.addEventListener('click', function(e) { e.stopPropagation(); applyLang(opt.getAttribute('data-lang')); menu.classList.remove('open'); });
+      });
+      document.querySelectorAll('.mobile-lang-opt').forEach(function(btn) {
+        btn.addEventListener('click', function() { applyLang(btn.getAttribute('data-lang')); });
+      });
+    })();
+    applyLang(localStorage.getItem('portfolio-lang') || 'en');
+    (function() {
+      var mMenu = document.getElementById('mobile-menu');
+      if (!mMenu) return;
+      var saved = localStorage.getItem('portfolio-lang') || 'en';
+      applyLang('en'); var wEn = mMenu.offsetWidth;
+      applyLang('pt'); var wPt = mMenu.offsetWidth;
+      mMenu.style.minWidth = Math.max(wEn, wPt) + 'px';
+      applyLang(saved);
     })();
 
     (function () {
@@ -765,7 +934,6 @@
       var menuBtn = document.getElementById('mobile-menu-btn');
       var menu    = document.getElementById('mobile-menu');
       var overlay = document.getElementById('mobile-menu-overlay');
-      var themeBtn = document.getElementById('mobile-theme-btn');
       if (!menuBtn) return;
       function openMenu()  { menu.classList.add('open');    overlay.classList.add('open'); }
       function closeMenu() { menu.classList.remove('open'); overlay.classList.remove('open'); }
@@ -773,16 +941,6 @@
       overlay.addEventListener('click', closeMenu);
       menu.querySelectorAll('a').forEach(function (link) {
         link.addEventListener('click', function (e) { e.preventDefault(); scrollToSection(link.getAttribute('href')); closeMenu(); });
-      });
-      themeBtn.addEventListener('click', function () {
-        var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-        var isDark = next === 'dark';
-        document.documentElement.setAttribute('data-theme', next);
-        document.getElementById('icon-moon').style.display = isDark ? 'none' : '';
-        document.getElementById('icon-sun').style.display  = isDark ? '' : 'none';
-        localStorage.setItem('portfolio-theme', next);
-        document.getElementById('mobile-icon-sun').style.display  = isDark ? '' : 'none';
-        document.getElementById('mobile-icon-moon').style.display = isDark ? 'none' : '';
       });
     })();
   </script>

@@ -79,6 +79,36 @@
       color: var(--pen-icon); opacity: 0.45; transition: opacity 0.2s, color 0.3s;
     }
     .theme-toggle:hover { opacity: 1; }
+    .lang-wrapper {
+      position: fixed; top: 16px; right: 52px; z-index: 9998;
+      display: flex; align-items: center; height: 32px;
+    }
+    .lang-toggle {
+      display: flex; align-items: center; gap: 4px;
+      background: none; border: none; padding: 6px;
+      font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 200;
+      letter-spacing: 0.08em; color: var(--pen-icon); opacity: 0.45;
+      transition: opacity 0.2s ease, color 0.3s ease;
+    }
+    .lang-toggle:hover { opacity: 1; }
+    .lang-menu {
+      position: absolute; top: calc(100% + 2px); right: 0;
+      background: var(--bg); border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px; overflow: hidden; min-width: 48px;
+      opacity: 0; pointer-events: none; transform: translateY(-4px);
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    .lang-menu.open { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    .lang-option {
+      display: block; width: 100%; padding: 7px 14px;
+      background: none; border: none;
+      font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 200;
+      letter-spacing: 0.08em; color: var(--pen-icon); text-align: center;
+      opacity: 0.5; transition: opacity 0.15s, background 0.15s;
+    }
+    .lang-option:hover { opacity: 1; background: rgba(255,255,255,0.06); }
+    .lang-option.active { opacity: 1; }
+    @media (max-width: 800px) { .lang-wrapper { display: none !important; } }
 
     /* ── LAYOUT ─────────────────────────────────────────────────────── */
 
@@ -360,8 +390,19 @@
       transition: opacity 0.2s ease, transform 0.2s ease;
     }
     .mobile-menu.open { opacity: 1; transform: translateY(0); pointer-events: auto; }
-    .mobile-menu a { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500; letter-spacing: 0.08em; color: rgba(255,255,255,0.7); text-decoration: none; padding: 12px 16px; display: block; }
-    .mobile-menu-theme { background: none; border: none; color: rgba(255,255,255,0.7); display: flex; align-items: center; padding: 12px 16px; }
+    .mobile-menu a { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 200; letter-spacing: 0.08em; color: rgba(255,255,255,0.7); text-decoration: none; padding: 12px 16px; display: block; }
+    .mobile-divider { height: 1px; background: rgba(255,255,255,0.2); align-self: stretch; margin: 4px 16px 4px -24px; }
+    .mobile-lang-row, .mobile-theme-row { display: flex; align-items: center; gap: 20px; padding: 10px 16px; }
+    .mobile-lang-opt {
+      background: none; border: none; padding: 0;
+      font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 200;
+      letter-spacing: 0.05em; color: rgba(255,255,255,0.3);
+    }
+    .mobile-lang-opt.active { font-weight: 700; color: rgba(255,255,255,0.85); }
+    .mobile-theme-opt { background: none; border: none; padding: 0; color: rgba(255,255,255,0.3); display: flex; align-items: center; }
+    .mobile-theme-opt.active { color: rgba(255,255,255,0.85); }
+    .mobile-theme-opt svg { stroke-width: 1.5; }
+    .mobile-theme-opt.active svg { stroke-width: 2.5; }
     .mobile-menu-overlay { display: none; position: fixed; inset: 0; z-index: 998; }
     .mobile-menu-overlay.open { display: block; }
 
@@ -402,21 +443,40 @@
     </button>
   </div>
   <div class="mobile-menu" id="mobile-menu">
-    <a href="#overview">OVERVIEW</a>
-    <a href="#problem">PROBLEM</a>
-    <a href="#solution">SOLUTION</a>
-    <a href="#impact">IMPACT</a>
-    <a href="#flow">SUBSCRIPTION JOURNEY</a>
-    <a href="#landing">LANDING PAGE</a>
-    <button class="mobile-menu-theme" id="mobile-theme-btn">
-      <svg id="mobile-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
-      <svg id="mobile-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
-    </button>
+    <a href="#overview" data-i18n="nav.overview">OVERVIEW</a>
+    <a href="#problem" data-i18n="nav.problem">PROBLEM</a>
+    <a href="#solution" data-i18n="nav.solution">SOLUTION</a>
+    <a href="#impact" data-i18n="nav.impact">IMPACT</a>
+    <a href="#flow" data-i18n="nav.flow">SUBSCRIPTION JOURNEY</a>
+    <a href="#landing" data-i18n="nav.landing">LANDING PAGE</a>
+    <div class="mobile-divider"></div>
+    <div class="mobile-lang-row">
+      <button class="mobile-lang-opt" data-lang="pt">PT</button>
+      <button class="mobile-lang-opt" data-lang="en">EN</button>
+    </div>
+    <div class="mobile-theme-row">
+      <button class="mobile-theme-opt" data-theme="light">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+      <button class="mobile-theme-opt" data-theme="dark">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      </button>
+    </div>
   </div>
   <div class="mobile-menu-overlay" id="mobile-menu-overlay"></div>
 
   <div class="bg-grid"></div>
 
+  <div class="lang-wrapper">
+    <button class="lang-toggle" id="lang-toggle" aria-label="Language">
+      <span id="lang-current">EN</span>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <div class="lang-menu" id="lang-menu">
+      <button class="lang-option" data-lang="en">EN</button>
+      <button class="lang-option" data-lang="pt">PT</button>
+    </div>
+  </div>
   <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
     <svg id="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
       <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
@@ -434,60 +494,60 @@
       <h1 class="project-title">RecordPlus</h1>
       <a href="index.html" class="back-link">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
-        BACK
+        <span data-i18n="nav.back">BACK</span>
       </a>
     </div>
 
     <!-- Metadata -->
     <div class="project-meta">
       <div class="meta-col meta-year">
-        <span class="meta-label">YEAR</span>
+        <span class="meta-label" data-i18n="meta.year">YEAR</span>
         <span class="meta-value" style="white-space: nowrap;">2022 - 2026</span>
       </div>
       <div class="meta-col meta-scope">
-        <span class="meta-label">SCOPE</span>
-        <span class="meta-value" style="display:flex; flex-direction:column; gap:16px;"><span style="white-space: nowrap;">Streaming App</span><span>iOS</span><span>Android</span><span>Smart TVs</span></span>
+        <span class="meta-label" data-i18n="meta.scope">SCOPE</span>
+        <span class="meta-value" style="display:flex; flex-direction:column; gap:16px;"><span data-i18n="meta.scope1" style="white-space: nowrap;">Streaming App</span><span>iOS</span><span>Android</span><span data-i18n="meta.scope2">Smart TVs</span></span>
       </div>
       <div class="meta-col meta-resp">
-        <span class="meta-label">RESPONSIBILITIES</span>
-        <span class="meta-value" style="display:flex; flex-direction:column; gap:16px;"><span>• Redesigned the whole account<br>creating and subscription flows</span><span>• Created several new features<br>like live broadcast, channel<br>selection and parental controls</span><span>• Designed Smart TV versions</span><span>• Adapted the App for rebranding<br>and created a new landing page<br>with the updated visual identity</span><span>• Improved the User Experience<br>by applying WCAG</span></span>
+        <span class="meta-label" data-i18n="meta.resp">RESPONSIBILITIES</span>
+        <span class="meta-value" style="display:flex; flex-direction:column; gap:16px;"><span data-i18n="meta.resp1">• Redesigned the whole account<br>creating and subscription flows</span><span data-i18n="meta.resp2">• Created several new features<br>like live broadcast, channel<br>selection and parental controls</span><span data-i18n="meta.resp3">• Designed Smart TV versions</span><span data-i18n="meta.resp4">• Adapted the App for rebranding<br>and created a new landing page<br>with the updated visual identity</span><span data-i18n="meta.resp5">• Improved the User Experience<br>by applying WCAG</span></span>
       </div>
     </div>
 
     <!-- Nav -->
     <nav class="project-nav">
-      <a href="#top">TOP</a>
-      <a href="#overview">OVERVIEW</a>
-      <a href="#problem">PROBLEM</a>
-      <a href="#solution">SOLUTION</a>
-      <a href="#impact">IMPACT</a>
-      <a href="#flow">FLOW</a>
-      <a href="#landing">LANDING PAGE</a>
+      <a href="#top" data-i18n="nav.top">TOP</a>
+      <a href="#overview" data-i18n="nav.overview">OVERVIEW</a>
+      <a href="#problem" data-i18n="nav.problem">PROBLEM</a>
+      <a href="#solution" data-i18n="nav.solution">SOLUTION</a>
+      <a href="#impact" data-i18n="nav.impact">IMPACT</a>
+      <a href="#flow" data-i18n="nav.flow-short">FLOW</a>
+      <a href="#landing" data-i18n="nav.landing">LANDING PAGE</a>
     </nav>
 
     <!-- 01 OVERVIEW -->
     <section id="overview" class="project-section">
       <div class="section-header">
         <span class="section-num">01</span>
-        <h2 class="section-heading">OVERVIEW</h2>
+        <h2 class="section-heading" data-i18n="s1.heading">OVERVIEW</h2>
       </div>
-      <p class="section-body">RecordPlus is the streaming platform of Record TV, Brazil's second largest TV network. It is available on desktop, mobile, and smart TVs, with over 13 million downloads.</p>
-      <p class="section-body">The platform offers live broadcasts and on-demand content from Record TV, including news, reality shows, live sports, and exclusive productions. It also features religious soap operas, a format uniquely produced by Record TV, attracting a large and loyal audience.</p>
-      <p class="section-body">Originally launched as PlayPlus and developed by third-party companies, the product was later reworked to introduce improvements and address existing limitations.</p>
+      <p class="section-body" data-i18n="s1.body1">RecordPlus is the streaming platform of Record TV, Brazil's second largest TV network. It is available on desktop, mobile, and smart TVs, with over 13 million downloads.</p>
+      <p class="section-body" data-i18n="s1.body2">The platform offers live broadcasts and on-demand content from Record TV, including news, reality shows, live sports, and exclusive productions. It also features religious soap operas, a format uniquely produced by Record TV, attracting a large and loyal audience.</p>
+      <p class="section-body" data-i18n="s1.body3">Originally launched as PlayPlus and developed by third-party companies, the product was later reworked to introduce improvements and address existing limitations.</p>
       <div class="img-titled image-wrap">
-        <div class="image-caption-row"><span class="image-caption">Home Page</span></div>
+        <div class="image-caption-row"><span class="image-caption" data-i18n="s1.cap1">Home Page</span></div>
         <div class="image-container"><div class="image-placeholder"><img src="images/RecordPlus/Overview%2001.webp" alt="Overview 01"></div></div>
       </div>
       <div class="img-titled image-wrap">
-        <div class="image-caption-row"><span class="image-caption">Login and Discover</span></div>
+        <div class="image-caption-row"><span class="image-caption" data-i18n="s1.cap2">Login and Discover</span></div>
         <div class="image-container"><div class="image-placeholder"><img src="images/RecordPlus/Overview%2002.webp" alt="Overview 02"></div></div>
       </div>
       <div class="img-titled image-wrap">
-        <div class="image-caption-row"><span class="image-caption">Live Broadcast and Channel selection</span></div>
+        <div class="image-caption-row"><span class="image-caption" data-i18n="s1.cap3">Live Broadcast and Channel selection</span></div>
         <div class="image-container"><div class="image-placeholder"><img src="images/RecordPlus/Overview%2003.webp" alt="Overview 03"></div></div>
       </div>
       <div class="img-titled image-wrap">
-        <div class="image-caption-row"><span class="image-caption">Parental Control</span></div>
+        <div class="image-caption-row"><span class="image-caption" data-i18n="s1.cap4">Parental Control</span></div>
         <div class="image-container"><div class="image-placeholder"><img src="images/RecordPlus/Overview%2004.webp" alt="Overview 04"></div></div>
       </div>
     </section>
@@ -496,11 +556,11 @@
     <section id="problem" class="project-section">
       <div class="section-header">
         <span class="section-num">02</span>
-        <h2 class="section-heading">PROBLEM</h2>
+        <h2 class="section-heading" data-i18n="s2.heading">PROBLEM</h2>
       </div>
-      <p class="section-body">When first working on the product, several issues became clear due to its size and complexity.</p>
-      <p class="section-body">One key example was the free account registration flow. Users could create a free account to access limited content and live broadcasts before deciding to subscribe to a paid plan.</p>
-      <p class="section-body">The flow required extensive information, including address and ID number, alongside standard account information. This was intended to make future plan subscriptions faster, since most user data would already be registered.</p>
+      <p class="section-body" data-i18n="s2.body1">When first working on the product, several issues became clear due to its size and complexity.</p>
+      <p class="section-body" data-i18n="s2.body2">One key example was the free account registration flow. Users could create a free account to access limited content and live broadcasts before deciding to subscribe to a paid plan.</p>
+      <p class="section-body" data-i18n="s2.body3">The flow required extensive information, including address and ID number, alongside standard account information. This was intended to make future plan subscriptions faster, since most user data would already be registered.</p>
       <div class="callout-card">
         <div class="callout-icon">
           <svg width="33" height="33" viewBox="0 0 33 33" fill="none">
@@ -509,7 +569,7 @@
             <line x1="16.5" y1="17" x2="16.5" y2="27" stroke="#FF12AA" stroke-width="2" stroke-linecap="round"/>
           </svg>
         </div>
-        <p class="callout-text">However, data showed that users were dropping off during this process due to its length and complexity. Many users only wanted quick access to live content and were discouraged by the amount of required information.</p>
+        <p class="callout-text" data-i18n="s2.callout">However, data showed that users were dropping off during this process due to its length and complexity. Many users only wanted quick access to live content and were discouraged by the amount of required information.</p>
       </div>
     </section>
 
@@ -517,42 +577,42 @@
     <section id="solution" class="project-section">
       <div class="section-header">
         <span class="section-num">03</span>
-        <h2 class="section-heading">SOLUTION</h2>
+        <h2 class="section-heading" data-i18n="s3.heading">SOLUTION</h2>
       </div>
-      <p class="section-body">To address this, the flow was simplified to require only essential information at first, allowing users to access content faster. Additional data would only be requested later, when subscribing to a paid plan.</p>
-      <p class="section-body">This approach was based on two assumptions:</p>
-      <p class="section-body">Quick Access Priority: Free users want immediate access to content and may abandon long registration flows.</p>
-      <p class="section-body">High Intent Users: Users who choose to subscribe are more motivated and willing to provide additional information.</p>
+      <p class="section-body" data-i18n="s3.body1">To address this, the flow was simplified to require only essential information at first, allowing users to access content faster. Additional data would only be requested later, when subscribing to a paid plan.</p>
+      <p class="section-body" data-i18n="s3.body2">This approach was based on two assumptions:</p>
+      <p class="section-body" data-i18n="s3.body3">Quick Access Priority: Free users want immediate access to content and may abandon long registration flows.</p>
+      <p class="section-body" data-i18n="s3.body4">High Intent Users: Users who choose to subscribe are more motivated and willing to provide additional information.</p>
       <div class="img-titled image-wrap">
-        <div class="image-caption-row"><span class="image-caption">User-Flow before changes:</span></div>
+        <div class="image-caption-row"><span class="image-caption" data-i18n="s3.cap1">User-Flow before changes:</span></div>
         <div class="image-container"><div class="image-placeholder"><img src="images/RecordPlus/Solution%2001.webp" alt="Solution 01"></div></div>
       </div>
       <div class="img-titled image-wrap">
-        <div class="image-caption-row"><span class="image-caption">User-Flow after changes:</span></div>
+        <div class="image-caption-row"><span class="image-caption" data-i18n="s3.cap2">User-Flow after changes:</span></div>
         <div class="image-container"><div class="image-placeholder"><img src="images/RecordPlus/Solution%2002.webp" alt="Solution 02"></div></div>
       </div>
-      <p class="section-body">This introduced a trade-off. While it added friction to the upgrade process, it significantly reduced barriers to entry, allowing more users to experience the product before deciding to subscribe.</p>
+      <p class="section-body" data-i18n="s3.body5">This introduced a trade-off. While it added friction to the upgrade process, it significantly reduced barriers to entry, allowing more users to experience the product before deciding to subscribe.</p>
     </section>
 
     <!-- 04 IMPACT -->
     <section id="impact" class="project-section">
       <div class="section-header">
         <span class="section-num">04</span>
-        <h2 class="section-heading">IMPACT</h2>
+        <h2 class="section-heading" data-i18n="s4.heading">IMPACT</h2>
       </div>
-      <p class="section-body">The updated flow led to a higher number of free account creations, with fewer users dropping off during the process.</p>
-      <p class="section-body">With more users entering the platform, more conversions to paid plans were also observed over time, contributing to overall revenue growth.</p>
+      <p class="section-body" data-i18n="s4.body1">The updated flow led to a higher number of free account creations, with fewer users dropping off during the process.</p>
+      <p class="section-body" data-i18n="s4.body2">With more users entering the platform, more conversions to paid plans were also observed over time, contributing to overall revenue growth.</p>
       <div class="impact-cards">
         <div class="impact-card">
           <div class="impact-card-header">
             <div class="impact-card-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF12AA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
             </div>
-            <span class="impact-card-title">User Acquisition</span>
+            <span class="impact-card-title" data-i18n="s4.t1">User Acquisition</span>
           </div>
           <div class="impact-card-bottom">
-            <div class="impact-card-metric">+12% new users</div>
-            <div class="impact-card-desc">Increase in users entering the platform ecosystem</div>
+            <div class="impact-card-metric" data-i18n="s4.m1">+12% new users</div>
+            <div class="impact-card-desc" data-i18n="s4.d1">Increase in users entering the platform ecosystem</div>
           </div>
         </div>
         <div class="impact-card">
@@ -560,11 +620,11 @@
             <div class="impact-card-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF12AA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
             </div>
-            <span class="impact-card-title">Conversions</span>
+            <span class="impact-card-title" data-i18n="s4.t2">Conversions</span>
           </div>
           <div class="impact-card-bottom">
-            <div class="impact-card-metric">+4pp to paid</div>
-            <div class="impact-card-desc">More free users converted into paying subscribers over time</div>
+            <div class="impact-card-metric" data-i18n="s4.m2">+4pp to paid</div>
+            <div class="impact-card-desc" data-i18n="s4.d2">More free users converted into paying subscribers over time</div>
           </div>
         </div>
       </div>
@@ -574,11 +634,11 @@
     <section id="flow" class="project-section">
       <div class="section-header">
         <span class="section-num">05</span>
-        <h2 class="section-heading">SUBSCRIPTION JOURNEY</h2>
+        <h2 class="section-heading" data-i18n="s5.heading">SUBSCRIPTION JOURNEY</h2>
       </div>
-      <p class="section-body">While the improvements focused on optimizing the free subscription entry, the product supports multiple paths to conversion.</p>
-      <p class="section-body">The following flow illustrates the experience for users who choose to subscribe directly to a paid plan without an existing account.</p>
-      <p class="section-body">The experience was designed to reduce friction during signup, improve clarity around plan selection, and handle both success and failure scenarios during payment.</p>
+      <p class="section-body" data-i18n="s5.body1">While the improvements focused on optimizing the free subscription entry, the product supports multiple paths to conversion.</p>
+      <p class="section-body" data-i18n="s5.body2">The following flow illustrates the experience for users who choose to subscribe directly to a paid plan without an existing account.</p>
+      <p class="section-body" data-i18n="s5.body3">The experience was designed to reduce friction during signup, improve clarity around plan selection, and handle both success and failure scenarios during payment.</p>
       <div class="img-carousel" id="carousel-flow">
         <div class="carousel-frame">
           <div class="carousel-clip">
@@ -614,9 +674,9 @@
           </div>
         </div>
       </div>
-      <p class="section-body">Special attention was given to payment inputs and failure scenarios, as these are critical moments for user trust and conversion.</p>
-      <p class="section-body">The flow includes real-time validation, clear field-level error messages, and specific guidance for resolving issues such as invalid card details, expired cards, and declined payments. Instead of generic errors, messages were designed to be precise and actionable, allowing users to quickly understand the issue and recover without restarting the process.</p>
-      <p class="section-body">To support this, input behaviors and validation states were standardized within the Design System, ensuring consistent and predictable feedback across all payment interactions. The variations shown reflect how different states guide users and reduce friction during completion.</p>
+      <p class="section-body" data-i18n="s5.body4">Special attention was given to payment inputs and failure scenarios, as these are critical moments for user trust and conversion.</p>
+      <p class="section-body" data-i18n="s5.body5">The flow includes real-time validation, clear field-level error messages, and specific guidance for resolving issues such as invalid card details, expired cards, and declined payments. Instead of generic errors, messages were designed to be precise and actionable, allowing users to quickly understand the issue and recover without restarting the process.</p>
+      <p class="section-body" data-i18n="s5.body6">To support this, input behaviors and validation states were standardized within the Design System, ensuring consistent and predictable feedback across all payment interactions. The variations shown reflect how different states guide users and reduce friction during completion.</p>
       <div class="img-plain image-container"><div class="image-placeholder"><img src="images/RecordPlus/Flow%2008.webp" alt="Flow 08"></div></div>
     </section>
 
@@ -624,15 +684,15 @@
     <section id="landing" class="project-section">
       <div class="section-header">
         <span class="section-num">06</span>
-        <h2 class="section-heading">LANDING PAGE</h2>
+        <h2 class="section-heading" data-i18n="s6.heading">LANDING PAGE</h2>
       </div>
-      <p class="section-body">The landing page was redesigned as part of a broader overhaul of the streaming platform, including its visual identity and overall experience. Built from scratch to replace the previous version, it serves as a key entry point for new users, presenting the platform's value and guiding them into account creation or subscription, while highlighting live content, exclusive productions, and plan options.</p>
+      <p class="section-body" data-i18n="s6.body1">The landing page was redesigned as part of a broader overhaul of the streaming platform, including its visual identity and overall experience. Built from scratch to replace the previous version, it serves as a key entry point for new users, presenting the platform's value and guiding them into account creation or subscription, while highlighting live content, exclusive productions, and plan options.</p>
       <div class="img-titled image-wrap">
-        <div class="image-caption-row"><span class="image-caption">Benchmarking</span></div>
+        <div class="image-caption-row"><span class="image-caption" data-i18n="s6.cap1">Benchmarking</span></div>
         <div class="image-container"><div class="image-placeholder"><img src="images/RecordPlus/Landing%20Page%2001.webp" alt="Landing Page 01"></div></div>
       </div>
       <div class="img-titled image-wrap">
-        <div class="image-caption-row"><span class="image-caption">Landing Page</span></div>
+        <div class="image-caption-row"><span class="image-caption" data-i18n="s6.cap2">Landing Page</span></div>
         <div class="image-container"><div class="image-placeholder"><img src="images/RecordPlus/Landing%20Page%2002.webp" alt="Landing Page 02"></div></div>
       </div>
     </section>
@@ -641,13 +701,13 @@
     <footer class="project-footer">
       <a href="index.html" class="back-link">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
-        BACK
+        <span data-i18n="nav.back">BACK</span>
       </a>
     </footer>
 
     <a href="#top" class="mobile-back-top back-link">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(90deg)"><polyline points="15 18 9 12 15 6"/></svg>
-      BACK TO TOP
+      <span data-i18n="nav.back-top">BACK TO TOP</span>
     </a>
 
   </main>
@@ -729,13 +789,13 @@
         document.getElementById('icon-moon').style.display = isDark ? 'none' : '';
         document.getElementById('icon-sun').style.display  = isDark ? '' : 'none';
         localStorage.setItem('portfolio-theme', theme);
-        var mSun = document.getElementById('mobile-icon-sun');
-        var mMoon = document.getElementById('mobile-icon-moon');
-        if (mSun)  mSun.style.display  = isDark ? '' : 'none';
-        if (mMoon) mMoon.style.display = isDark ? 'none' : '';
+        document.querySelectorAll('.mobile-theme-opt').forEach(function(o) { o.classList.toggle('active', o.getAttribute('data-theme') === theme); });
       }
       document.getElementById('theme-toggle').addEventListener('click', function () {
         applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+      });
+      document.querySelectorAll('.mobile-theme-opt').forEach(function(btn) {
+        btn.addEventListener('click', function() { applyTheme(btn.getAttribute('data-theme')); });
       });
       applyTheme(localStorage.getItem('portfolio-theme') || 'dark');
     })();
@@ -891,7 +951,6 @@
       var menuBtn = document.getElementById('mobile-menu-btn');
       var menu    = document.getElementById('mobile-menu');
       var overlay = document.getElementById('mobile-menu-overlay');
-      var themeBtn = document.getElementById('mobile-theme-btn');
       if (!menuBtn) return;
       function openMenu()  { menu.classList.add('open');    overlay.classList.add('open'); }
       function closeMenu() { menu.classList.remove('open'); overlay.classList.remove('open'); }
@@ -900,16 +959,139 @@
       menu.querySelectorAll('a').forEach(function (link) {
         link.addEventListener('click', function (e) { e.preventDefault(); scrollToSection(link.getAttribute('href')); closeMenu(); });
       });
-      themeBtn.addEventListener('click', function () {
-        var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-        var isDark = next === 'dark';
-        document.documentElement.setAttribute('data-theme', next);
-        document.getElementById('icon-moon').style.display = isDark ? 'none' : '';
-        document.getElementById('icon-sun').style.display  = isDark ? '' : 'none';
-        localStorage.setItem('portfolio-theme', next);
-        document.getElementById('mobile-icon-sun').style.display  = isDark ? '' : 'none';
-        document.getElementById('mobile-icon-moon').style.display = isDark ? 'none' : '';
+    })();
+
+    var TRANSLATIONS = {
+      en: {
+        'nav.top': 'TOP', 'nav.overview': 'OVERVIEW', 'nav.problem': 'PROBLEM',
+        'nav.solution': 'SOLUTION', 'nav.impact': 'IMPACT',
+        'nav.flow': 'SUBSCRIPTION JOURNEY', 'nav.flow-short': 'FLOW',
+        'nav.landing': 'LANDING PAGE', 'nav.back': 'BACK', 'nav.back-top': 'BACK TO TOP',
+        'meta.year': 'YEAR', 'meta.scope': 'SCOPE', 'meta.resp': 'RESPONSIBILITIES',
+        'meta.scope1': 'Streaming App', 'meta.scope2': 'Smart TVs',
+        'meta.resp1': '• Redesigned the whole account<br>creating and subscription flows',
+        'meta.resp2': '• Created several new features<br>like live broadcast, channel<br>selection and parental controls',
+        'meta.resp3': '• Designed Smart TV versions',
+        'meta.resp4': '• Adapted the App for rebranding<br>and created a new landing page<br>with the updated visual identity',
+        'meta.resp5': '• Improved the User Experience<br>by applying WCAG',
+        's1.heading': 'OVERVIEW',
+        's1.body1': 'RecordPlus is the streaming platform of Record TV, Brazil\'s second largest TV network. It is available on desktop, mobile, and smart TVs, with over 13 million downloads.',
+        's1.body2': 'The platform offers live broadcasts and on-demand content from Record TV, including news, reality shows, live sports, and exclusive productions. It also features religious soap operas, a format uniquely produced by Record TV, attracting a large and loyal audience.',
+        's1.body3': 'Originally launched as PlayPlus and developed by third-party companies, the product was later reworked to introduce improvements and address existing limitations.',
+        's1.cap1': 'Home Page', 's1.cap2': 'Login and Discover',
+        's1.cap3': 'Live Broadcast and Channel selection', 's1.cap4': 'Parental Control',
+        's2.heading': 'PROBLEM',
+        's2.body1': 'When first working on the product, several issues became clear due to its size and complexity.',
+        's2.body2': 'One key example was the free account registration flow. Users could create a free account to access limited content and live broadcasts before deciding to subscribe to a paid plan.',
+        's2.body3': 'The flow required extensive information, including address and ID number, alongside standard account information. This was intended to make future plan subscriptions faster, since most user data would already be registered.',
+        's2.callout': 'However, data showed that users were dropping off during this process due to its length and complexity. Many users only wanted quick access to live content and were discouraged by the amount of required information.',
+        's3.heading': 'SOLUTION',
+        's3.body1': 'To address this, the flow was simplified to require only essential information at first, allowing users to access content faster. Additional data would only be requested later, when subscribing to a paid plan.',
+        's3.body2': 'This approach was based on two assumptions:',
+        's3.body3': 'Quick Access Priority: Free users want immediate access to content and may abandon long registration flows.',
+        's3.body4': 'High Intent Users: Users who choose to subscribe are more motivated and willing to provide additional information.',
+        's3.cap1': 'User-Flow before changes:', 's3.cap2': 'User-Flow after changes:',
+        's3.body5': 'This introduced a trade-off. While it added friction to the upgrade process, it significantly reduced barriers to entry, allowing more users to experience the product before deciding to subscribe.',
+        's4.heading': 'IMPACT',
+        's4.body1': 'The updated flow led to a higher number of free account creations, with fewer users dropping off during the process.',
+        's4.body2': 'With more users entering the platform, more conversions to paid plans were also observed over time, contributing to overall revenue growth.',
+        's4.t1': 'User Acquisition', 's4.m1': '+12% new users',
+        's4.d1': 'Increase in users entering the platform ecosystem',
+        's4.t2': 'Conversions', 's4.m2': '+4pp to paid',
+        's4.d2': 'More free users converted into paying subscribers over time',
+        's5.heading': 'SUBSCRIPTION JOURNEY',
+        's5.body1': 'While the improvements focused on optimizing the free subscription entry, the product supports multiple paths to conversion.',
+        's5.body2': 'The following flow illustrates the experience for users who choose to subscribe directly to a paid plan without an existing account.',
+        's5.body3': 'The experience was designed to reduce friction during signup, improve clarity around plan selection, and handle both success and failure scenarios during payment.',
+        's5.body4': 'Special attention was given to payment inputs and failure scenarios, as these are critical moments for user trust and conversion.',
+        's5.body5': 'The flow includes real-time validation, clear field-level error messages, and specific guidance for resolving issues such as invalid card details, expired cards, and declined payments. Instead of generic errors, messages were designed to be precise and actionable, allowing users to quickly understand the issue and recover without restarting the process.',
+        's5.body6': 'To support this, input behaviors and validation states were standardized within the Design System, ensuring consistent and predictable feedback across all payment interactions. The variations shown reflect how different states guide users and reduce friction during completion.',
+        's6.heading': 'LANDING PAGE',
+        's6.body1': 'The landing page was redesigned as part of a broader overhaul of the streaming platform, including its visual identity and overall experience. Built from scratch to replace the previous version, it serves as a key entry point for new users, presenting the platform\'s value and guiding them into account creation or subscription, while highlighting live content, exclusive productions, and plan options.',
+        's6.cap1': 'Benchmarking', 's6.cap2': 'Landing Page',
+      },
+      pt: {
+        'nav.top': 'TOPO', 'nav.overview': 'VISÃO GERAL', 'nav.problem': 'PROBLEMA',
+        'nav.solution': 'SOLUÇÃO', 'nav.impact': 'IMPACTO',
+        'nav.flow': 'JORNADA DE ASSINATURA', 'nav.flow-short': 'FLUXO',
+        'nav.landing': 'LANDING PAGE', 'nav.back': 'VOLTAR', 'nav.back-top': 'VOLTAR AO TOPO',
+        'meta.year': 'ANO', 'meta.scope': 'ESCOPO', 'meta.resp': 'RESPONSABILIDADES',
+        'meta.scope1': 'App de Streaming', 'meta.scope2': 'Smart TVs',
+        'meta.resp1': '• Redesenhei todo o fluxo de criação<br>de conta e de assinatura',
+        'meta.resp2': '• Criei diversas funcionalidades novas<br>como transmissão ao vivo, seleção<br>de canal e controle parental',
+        'meta.resp3': '• Desenhei as versões para Smart TV',
+        'meta.resp4': '• Adaptei o App para o rebranding<br>e criei uma nova landing page<br>com a identidade visual atualizada',
+        'meta.resp5': '• Melhorei a Experiência do Usuário<br>aplicando diretrizes WCAG',
+        's1.heading': 'VISÃO GERAL',
+        's1.body1': 'O RecordPlus é a plataforma de streaming da Record TV, segunda maior rede de televisão do Brasil. Está disponível em desktop, mobile e smart TVs, com mais de 13 milhões de downloads.',
+        's1.body2': 'A plataforma oferece transmissões ao vivo e conteúdo sob demanda da Record TV, incluindo notícias, reality shows, esportes ao vivo e produções exclusivas. Também conta com novelas religiosas, formato exclusivamente produzido pela Record TV, que atrai um público grande e fiel.',
+        's1.body3': 'Lançado originalmente como PlayPlus e desenvolvido por empresas terceirizadas, o produto foi posteriormente reformulado para introduzir melhorias e corrigir limitações existentes.',
+        's1.cap1': 'Página Inicial', 's1.cap2': 'Login e Descoberta',
+        's1.cap3': 'Transmissão ao Vivo e Seleção de Canal', 's1.cap4': 'Controle Parental',
+        's2.heading': 'PROBLEMA',
+        's2.body1': 'Ao começar a trabalhar no produto, diversos problemas ficaram evidentes devido ao seu tamanho e complexidade.',
+        's2.body2': 'Um exemplo importante era o fluxo de cadastro de conta gratuita. Os usuários podiam criar uma conta gratuita para acessar conteúdo limitado e transmissões ao vivo antes de decidir assinar um plano pago.',
+        's2.body3': 'O fluxo exigia informações extensas, incluindo endereço e número de documento, além dos dados padrão de cadastro. A intenção era agilizar futuras assinaturas de planos, já que a maioria dos dados do usuário já estaria registrada.',
+        's2.callout': 'No entanto, os dados mostraram que os usuários abandonavam o processo devido à sua extensão e complexidade. Muitos queriam apenas acesso rápido ao conteúdo ao vivo e eram desestimulados pela quantidade de informações exigidas.',
+        's3.heading': 'SOLUÇÃO',
+        's3.body1': 'Para resolver isso, o fluxo foi simplificado para solicitar apenas as informações essenciais inicialmente, permitindo que os usuários acessassem o conteúdo mais rapidamente. Os dados adicionais só seriam pedidos depois, ao assinar um plano pago.',
+        's3.body2': 'Essa abordagem se baseou em duas premissas:',
+        's3.body3': 'Acesso Rápido como Prioridade: usuários gratuitos querem acesso imediato ao conteúdo e podem abandonar fluxos de cadastro longos.',
+        's3.body4': 'Usuários de Alta Intenção: quem escolhe assinar está mais motivado e disposto a fornecer informações adicionais.',
+        's3.cap1': 'Fluxo de usuário antes das mudanças:', 's3.cap2': 'Fluxo de usuário após as mudanças:',
+        's3.body5': 'Isso gerou uma troca. Embora tenha adicionado atrito ao processo de upgrade, reduziu significativamente as barreiras de entrada, permitindo que mais usuários experimentassem o produto antes de decidir assinar.',
+        's4.heading': 'IMPACTO',
+        's4.body1': 'O fluxo atualizado resultou em um número maior de criações de conta gratuita, com menos usuários abandonando o processo.',
+        's4.body2': 'Com mais usuários ingressando na plataforma, mais conversões para planos pagos também foram observadas ao longo do tempo, contribuindo para o crescimento geral da receita.',
+        's4.t1': 'Aquisição de Usuários', 's4.m1': '+12% novos usuários',
+        's4.d1': 'Aumento de usuários entrando no ecossistema da plataforma',
+        's4.t2': 'Conversões', 's4.m2': '+4pp para pago',
+        's4.d2': 'Mais usuários gratuitos convertidos em assinantes pagantes ao longo do tempo',
+        's5.heading': 'JORNADA DE ASSINATURA',
+        's5.body1': 'Enquanto as melhorias focaram em otimizar a entrada na assinatura gratuita, o produto suporta múltiplos caminhos para conversão.',
+        's5.body2': 'O fluxo a seguir ilustra a experiência para usuários que optam por assinar diretamente um plano pago sem ter uma conta existente.',
+        's5.body3': 'A experiência foi projetada para reduzir o atrito durante o cadastro, melhorar a clareza na seleção de planos e tratar tanto os cenários de sucesso quanto de falha no pagamento.',
+        's5.body4': 'Atenção especial foi dada aos campos de pagamento e cenários de falha, pois são momentos críticos para a confiança do usuário e a conversão.',
+        's5.body5': 'O fluxo inclui validação em tempo real, mensagens de erro claras por campo e orientações específicas para resolver problemas como dados de cartão inválidos, cartões expirados e pagamentos recusados. Em vez de erros genéricos, as mensagens foram criadas para ser precisas e orientadas à ação, permitindo que os usuários entendam o problema rapidamente e o resolvam sem reiniciar o processo.',
+        's5.body6': 'Para isso, os comportamentos de entrada e estados de validação foram padronizados no Design System, garantindo feedback consistente e previsível em todas as interações de pagamento. As variações mostradas refletem como diferentes estados orientam os usuários e reduzem o atrito durante a conclusão.',
+        's6.heading': 'LANDING PAGE',
+        's6.body1': 'A landing page foi redesenhada como parte de uma reformulação mais ampla da plataforma de streaming, incluindo sua identidade visual e experiência geral. Construída do zero para substituir a versão anterior, serve como ponto de entrada principal para novos usuários, apresentando o valor da plataforma e guiando-os na criação de conta ou assinatura, ao mesmo tempo em que destaca conteúdo ao vivo, produções exclusivas e opções de planos.',
+        's6.cap1': 'Benchmarking', 's6.cap2': 'Landing Page',
+      }
+    };
+    function applyLang(lang) {
+      localStorage.setItem('portfolio-lang', lang);
+      document.querySelectorAll('[data-i18n]').forEach(function(el) {
+        var t = TRANSLATIONS[lang]; var key = el.getAttribute('data-i18n');
+        if (t && t[key] !== undefined) el.innerHTML = t[key];
       });
+      var curr = document.getElementById('lang-current');
+      if (curr) curr.textContent = lang.toUpperCase();
+      document.querySelectorAll('.lang-option').forEach(function(o) { o.classList.toggle('active', o.getAttribute('data-lang') === lang); });
+      document.querySelectorAll('.mobile-lang-opt').forEach(function(o) { o.classList.toggle('active', o.getAttribute('data-lang') === lang); });
+      document.documentElement.setAttribute('lang', lang === 'pt' ? 'pt-BR' : 'en');
+    }
+    (function() {
+      var toggle = document.getElementById('lang-toggle');
+      var menu   = document.getElementById('lang-menu');
+      toggle.addEventListener('click', function(e) { e.stopPropagation(); menu.classList.toggle('open'); });
+      document.addEventListener('click', function() { menu.classList.remove('open'); });
+      document.querySelectorAll('.lang-option').forEach(function(opt) {
+        opt.addEventListener('click', function(e) { e.stopPropagation(); applyLang(opt.getAttribute('data-lang')); menu.classList.remove('open'); });
+      });
+      document.querySelectorAll('.mobile-lang-opt').forEach(function(btn) {
+        btn.addEventListener('click', function() { applyLang(btn.getAttribute('data-lang')); });
+      });
+    })();
+    applyLang(localStorage.getItem('portfolio-lang') || 'en');
+    (function() {
+      var mMenu = document.getElementById('mobile-menu');
+      if (!mMenu) return;
+      var saved = localStorage.getItem('portfolio-lang') || 'en';
+      applyLang('en'); var wEn = mMenu.offsetWidth;
+      applyLang('pt'); var wPt = mMenu.offsetWidth;
+      mMenu.style.minWidth = Math.max(wEn, wPt) + 'px';
+      applyLang(saved);
     })();
   </script>
 
@@ -1220,7 +1402,10 @@
     document.getElementById('theme-toggle').addEventListener('click', function () {
       setTimeout(function () {
         if (window.inkEffect && window.inkEffect.simMat) {
-          window.inkEffect.simMat.uniforms.inkColor.value.set(getInkHex());
+          var _th = parseInt(getInkHex().replace('#',''), 16);
+          window.inkEffect.simMat.uniforms.inkColor.value.r = (_th >> 16 & 255) / 255;
+          window.inkEffect.simMat.uniforms.inkColor.value.g = (_th >> 8  & 255) / 255;
+          window.inkEffect.simMat.uniforms.inkColor.value.b = (_th       & 255) / 255;
         }
       }, 50);
     });

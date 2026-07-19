@@ -79,6 +79,36 @@
       color: var(--pen-icon); opacity: 0.45; transition: opacity 0.2s, color 0.3s;
     }
     .theme-toggle:hover { opacity: 1; }
+    .lang-wrapper {
+      position: fixed; top: 16px; right: 52px; z-index: 9998;
+      display: flex; align-items: center; height: 32px;
+    }
+    .lang-toggle {
+      display: flex; align-items: center; gap: 4px;
+      background: none; border: none; padding: 6px;
+      font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 200;
+      letter-spacing: 0.08em; color: var(--pen-icon); opacity: 0.45;
+      transition: opacity 0.2s ease, color 0.3s ease;
+    }
+    .lang-toggle:hover { opacity: 1; }
+    .lang-menu {
+      position: absolute; top: calc(100% + 2px); right: 0;
+      background: var(--bg); border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px; overflow: hidden; min-width: 48px;
+      opacity: 0; pointer-events: none; transform: translateY(-4px);
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    .lang-menu.open { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    .lang-option {
+      display: block; width: 100%; padding: 7px 14px;
+      background: none; border: none;
+      font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 200;
+      letter-spacing: 0.08em; color: var(--pen-icon); text-align: center;
+      opacity: 0.5; transition: opacity 0.15s, background 0.15s;
+    }
+    .lang-option:hover { opacity: 1; background: rgba(255,255,255,0.06); }
+    .lang-option.active { opacity: 1; }
+    @media (max-width: 800px) { .lang-wrapper { display: none !important; } }
 
     .project-page {
       position: relative; z-index: 2;
@@ -334,17 +364,23 @@
     }
     .mobile-menu.open { opacity: 1; transform: translateY(0); pointer-events: auto; }
     .mobile-menu a {
-      font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500;
+      font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 200;
       letter-spacing: 0.08em;
       color: rgba(255,255,255,0.7); text-decoration: none;
       padding: 12px 16px; display: block;
     }
-    .mobile-menu-theme {
-      background: none; border: none;
-      color: rgba(255,255,255,0.7);
-      display: flex; align-items: center;
-      padding: 12px 16px;
+    .mobile-divider { height: 1px; background: rgba(255,255,255,0.2); align-self: stretch; margin: 4px 16px 4px -24px; }
+    .mobile-lang-row, .mobile-theme-row { display: flex; align-items: center; gap: 20px; padding: 10px 16px; }
+    .mobile-lang-opt {
+      background: none; border: none; padding: 0;
+      font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 200;
+      letter-spacing: 0.05em; color: rgba(255,255,255,0.3);
     }
+    .mobile-lang-opt.active { font-weight: 700; color: rgba(255,255,255,0.85); }
+    .mobile-theme-opt { background: none; border: none; padding: 0; color: rgba(255,255,255,0.3); display: flex; align-items: center; }
+    .mobile-theme-opt.active { color: rgba(255,255,255,0.85); }
+    .mobile-theme-opt svg { stroke-width: 1.5; }
+    .mobile-theme-opt.active svg { stroke-width: 2.5; }
     .mobile-menu-overlay {
       display: none; position: fixed; inset: 0; z-index: 998;
     }
@@ -398,22 +434,41 @@
   </div>
 
   <div class="mobile-menu" id="mobile-menu">
-    <a href="#overview">OVERVIEW</a>
-    <a href="#challenges">CHALLENGES</a>
-    <a href="#solutions">SOLUTIONS</a>
-    <a href="#subscribers">SUBSCRIBERS</a>
-    <a href="#outcome">OUTCOME</a>
-    <a href="#design">DESIGN SYSTEM</a>
-    <button class="mobile-menu-theme" id="mobile-theme-btn">
-      <svg id="mobile-icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
-      <svg id="mobile-icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
-    </button>
+    <a href="#overview" data-i18n="nav.overview">OVERVIEW</a>
+    <a href="#challenges" data-i18n="nav.challenges">CHALLENGES</a>
+    <a href="#solutions" data-i18n="nav.solutions">SOLUTIONS</a>
+    <a href="#subscribers" data-i18n="nav.subscribers">SUBSCRIBERS</a>
+    <a href="#outcome" data-i18n="nav.outcome">OUTCOME</a>
+    <a href="#design" data-i18n="nav.design">DESIGN SYSTEM</a>
+    <div class="mobile-divider"></div>
+    <div class="mobile-lang-row">
+      <button class="mobile-lang-opt" data-lang="pt">PT</button>
+      <button class="mobile-lang-opt" data-lang="en">EN</button>
+    </div>
+    <div class="mobile-theme-row">
+      <button class="mobile-theme-opt" data-theme="light">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+      <button class="mobile-theme-opt" data-theme="dark">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      </button>
+    </div>
   </div>
 
   <div class="mobile-menu-overlay" id="mobile-menu-overlay"></div>
 
   <div class="bg-grid"></div>
 
+  <div class="lang-wrapper">
+    <button class="lang-toggle" id="lang-toggle" aria-label="Language">
+      <span id="lang-current">EN</span>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <div class="lang-menu" id="lang-menu">
+      <button class="lang-option" data-lang="en">EN</button>
+      <button class="lang-option" data-lang="pt">PT</button>
+    </div>
+  </div>
   <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
     <svg id="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
     <svg id="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
@@ -425,57 +480,57 @@
       <h1 class="project-title">Jarvics</h1>
       <a href="index.html" class="back-link">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
-        BACK
+        <span data-i18n="nav.back">BACK</span>
       </a>
     </div>
 
     <div class="project-meta">
       <div class="meta-col meta-year">
-        <span class="meta-label">YEAR</span>
+        <span class="meta-label" data-i18n="meta.year">YEAR</span>
         <span class="meta-value" style="white-space: nowrap;">2022 - 2026</span>
       </div>
       <div class="meta-col meta-scope">
-        <span class="meta-label">SCOPE</span>
-        <span class="meta-value" style="display:flex; flex-direction:column; gap:16px;"><span>Enterprise CMS</span><span>0→1</span><span>Subscribers Managing</span></span>
+        <span class="meta-label" data-i18n="meta.scope">SCOPE</span>
+        <span class="meta-value" style="display:flex; flex-direction:column; gap:16px;"><span data-i18n="meta.scope1">Enterprise CMS</span><span>0→1</span><span data-i18n="meta.scope2">Subscribers Managing</span></span>
       </div>
       <div class="meta-col meta-resp">
-        <span class="meta-label">RESPONSIBILITIES</span>
-        <span class="meta-value" style="display:flex; flex-direction:column; gap:16px;"><span>• Designed the whole visual<br>identity from scratch</span><span>• Led end-to-end design<br>process across every new tool</span><span>• Designed several content<br>publishing and managing tools</span><span>• Translated external tools<br>and workflows to Jarvics</span><span>• Created the RecordPlus<br>Subscribers management product</span></span>
+        <span class="meta-label" data-i18n="meta.resp">RESPONSIBILITIES</span>
+        <span class="meta-value" style="display:flex; flex-direction:column; gap:16px;"><span data-i18n="meta.resp1">• Designed the whole visual<br>identity from scratch</span><span data-i18n="meta.resp2">• Led end-to-end design<br>process across every new tool</span><span data-i18n="meta.resp3">• Designed several content<br>publishing and managing tools</span><span data-i18n="meta.resp4">• Translated external tools<br>and workflows to Jarvics</span><span data-i18n="meta.resp5">• Created the RecordPlus<br>Subscribers management product</span></span>
       </div>
     </div>
 
     <nav class="project-nav">
-      <a href="#top">TOP</a>
-      <a href="#overview">OVERVIEW</a>
-      <a href="#challenges">CHALLENGES</a>
-      <a href="#solutions">SOLUTIONS</a>
-      <a href="#subscribers">SUBSCRIBERS</a>
-      <a href="#outcome">OUTCOME</a>
-      <a href="#design">DESIGN SYSTEM</a>
+      <a href="#top" data-i18n="nav.top">TOP</a>
+      <a href="#overview" data-i18n="nav.overview">OVERVIEW</a>
+      <a href="#challenges" data-i18n="nav.challenges">CHALLENGES</a>
+      <a href="#solutions" data-i18n="nav.solutions">SOLUTIONS</a>
+      <a href="#subscribers" data-i18n="nav.subscribers">SUBSCRIBERS</a>
+      <a href="#outcome" data-i18n="nav.outcome">OUTCOME</a>
+      <a href="#design" data-i18n="nav.design">DESIGN SYSTEM</a>
     </nav>
 
     <!-- 01 OVERVIEW -->
     <section id="overview" class="project-section">
       <div class="section-header">
         <span class="section-num">01</span>
-        <h2 class="section-heading">OVERVIEW</h2>
+        <h2 class="section-heading" data-i18n="s1.heading">OVERVIEW</h2>
       </div>
-      <p class="section-body">Jarvics is a custom CMS developed for R7, replacing previous workflows based on WordPress. The product was built from scratch to support internal teams responsible for both content publishing and subscriber operations across the R7, Record TV, and RecordPlus ecosystems. It includes tools for content creation, editing, management, and customer support workflows at scale.</p>
-      <p class="section-body">The project involved end-to-end design, including product structure, interface design, and visual identity definition.</p>
+      <p class="section-body" data-i18n="s1.body1">Jarvics is a custom CMS developed for R7, replacing previous workflows based on WordPress. The product was built from scratch to support internal teams responsible for both content publishing and subscriber operations across the R7, Record TV, and RecordPlus ecosystems. It includes tools for content creation, editing, management, and customer support workflows at scale.</p>
+      <p class="section-body" data-i18n="s1.body2">The project involved end-to-end design, including product structure, interface design, and visual identity definition.</p>
       <div class="img-titled image-wrap">
-        <div class="image-caption-row"><span class="image-caption">Login screen</span></div>
+        <div class="image-caption-row"><span class="image-caption" data-i18n="s1.cap1">Login screen</span></div>
         <div class="image-container"><div class="image-placeholder"><img src="images/Jarvics/Overview 01.webp" alt="Login screen"></div></div>
       </div>
       <div class="img-titled image-wrap">
-        <div class="image-caption-row"><span class="image-caption">R7 Videos dashboard for managing and editing video content</span></div>
+        <div class="image-caption-row"><span class="image-caption" data-i18n="s1.cap2">R7 Videos dashboard for managing and editing video content</span></div>
         <div class="image-container"><div class="image-placeholder"><img src="images/Jarvics/Overview 02.webp" alt="R7 Videos dashboard"></div></div>
       </div>
       <div class="img-titled image-wrap">
-        <div class="image-caption-row"><span class="image-caption">Newsletter creation and content configuration</span></div>
+        <div class="image-caption-row"><span class="image-caption" data-i18n="s1.cap3">Newsletter creation and content configuration</span></div>
         <div class="image-container"><div class="image-placeholder"><img src="images/Jarvics/Overview 03.webp" alt="Newsletter creation"></div></div>
       </div>
       <div class="img-titled image-wrap">
-        <div class="image-caption-row"><span class="image-caption">Scheduling modal for articles, videos, and livestreams</span></div>
+        <div class="image-caption-row"><span class="image-caption" data-i18n="s1.cap4">Scheduling modal for articles, videos, and livestreams</span></div>
         <div class="image-container"><div class="image-placeholder"><img src="images/Jarvics/Overview 04.webp" alt="Scheduling modal"></div></div>
       </div>
     </section>
@@ -484,16 +539,16 @@
     <section id="challenges" class="project-section">
       <div class="section-header">
         <span class="section-num">02</span>
-        <h2 class="section-heading">CHALLENGES</h2>
+        <h2 class="section-heading" data-i18n="s2.heading">CHALLENGES</h2>
       </div>
-      <p class="section-body">Jarvics was developed to replace existing workflows based on WordPress, requiring the gradual migration of tools while maintaining daily operations.</p>
-      <p class="section-body">Each new feature introduced was a complex problem-solving process, involving close collaboration with front-end and back-end engineers, as well as constant feedback from journalists and support teams.</p>
-      <p class="section-body">One key challenge emerged early in the project. Most users worked in low-light environments, such as control rooms or night shifts, and existing tools did not support this context.</p>
+      <p class="section-body" data-i18n="s2.body1">Jarvics was developed to replace existing workflows based on WordPress, requiring the gradual migration of tools while maintaining daily operations.</p>
+      <p class="section-body" data-i18n="s2.body2">Each new feature introduced was a complex problem-solving process, involving close collaboration with front-end and back-end engineers, as well as constant feedback from journalists and support teams.</p>
+      <p class="section-body" data-i18n="s2.body3">One key challenge emerged early in the project. Most users worked in low-light environments, such as control rooms or night shifts, and existing tools did not support this context.</p>
       <div class="callout-card">
         <div class="callout-icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
         </div>
-        <p class="callout-text">User research revealed a strong need for a dark mode interface that could reduce visual fatigue during long working hours. This required not only redesigning existing tools but also creating a dark mode design system from scratch, something not present in the R7 ecosystem.</p>
+        <p class="callout-text" data-i18n="s2.callout">User research revealed a strong need for a dark mode interface that could reduce visual fatigue during long working hours. This required not only redesigning existing tools but also creating a dark mode design system from scratch, something not present in the R7 ecosystem.</p>
       </div>
     </section>
 
@@ -501,34 +556,34 @@
     <section id="solutions" class="project-section">
       <div class="section-header">
         <span class="section-num">03</span>
-        <h2 class="section-heading">SOLUTIONS</h2>
+        <h2 class="section-heading" data-i18n="s3.heading">SOLUTIONS</h2>
       </div>
-      <p class="section-body">Initial attempts using standard dark palettes revealed issues. The interface felt visually heavy, with tones that were too harsh and tiring over extended use.</p>
-      <p class="section-body">After deep user research and benchmarking across platforms such as YouTube and social media products, it became clear that color composition played a key role in visual comfort. These platforms were selected because they are heavily used over long periods or focused on continuous viewing, making visual fatigue a critical factor in their design.</p>
+      <p class="section-body" data-i18n="s3.body1">Initial attempts using standard dark palettes revealed issues. The interface felt visually heavy, with tones that were too harsh and tiring over extended use.</p>
+      <p class="section-body" data-i18n="s3.body2">After deep user research and benchmarking across platforms such as YouTube and social media products, it became clear that color composition played a key role in visual comfort. These platforms were selected because they are heavily used over long periods or focused on continuous viewing, making visual fatigue a critical factor in their design.</p>
       <div class="img-titled image-wrap">
-        <div class="image-caption-row"><span class="image-caption">Color adjustments graph</span></div>
+        <div class="image-caption-row"><span class="image-caption" data-i18n="s3.cap1">Color adjustments graph</span></div>
         <div class="image-container"><div class="image-placeholder"><img src="images/Jarvics/Solutions 01.webp" alt="Color adjustments graph"></div></div>
       </div>
-      <p class="section-body">Instead of relying on neutral grayscale, subtle green and blue tones were introduced into the palette to reduce visual fatigue. This adjustment created a smoother and more balanced interface, improving comfort during long usage periods.</p>
-      <p class="section-body">The final tones were also aligned with the R7 color system, using its green and blue proportions to maintain visual consistency across the ecosystem.</p>
-      <p class="section-body">The following graph illustrates how subtle adjustments to grayscale values were applied by increasing the green and blue channels. It illustrates how they are slightly increased compared to red, creating a smoother and less harsh grayscale.</p>
-      <p class="section-body">The X axis represents standard grayscale values, where R, G, and B are equal. The Y axis shows the adjusted RGB values after modification.</p>
-      <p class="section-body">The table on the right shows each step of the scale, including the added values and the resulting HEX codes.</p>
+      <p class="section-body" data-i18n="s3.body3">Instead of relying on neutral grayscale, subtle green and blue tones were introduced into the palette to reduce visual fatigue. This adjustment created a smoother and more balanced interface, improving comfort during long usage periods.</p>
+      <p class="section-body" data-i18n="s3.body4">The final tones were also aligned with the R7 color system, using its green and blue proportions to maintain visual consistency across the ecosystem.</p>
+      <p class="section-body" data-i18n="s3.body5">The following graph illustrates how subtle adjustments to grayscale values were applied by increasing the green and blue channels. It illustrates how they are slightly increased compared to red, creating a smoother and less harsh grayscale.</p>
+      <p class="section-body" data-i18n="s3.body6">The X axis represents standard grayscale values, where R, G, and B are equal. The Y axis shows the adjusted RGB values after modification.</p>
+      <p class="section-body" data-i18n="s3.body7">The table on the right shows each step of the scale, including the added values and the resulting HEX codes.</p>
       <div class="img-titled image-wrap">
-        <div class="image-caption-row"><span class="image-caption">Benchmarking for Dark Modes</span></div>
+        <div class="image-caption-row"><span class="image-caption" data-i18n="s3.cap2">Benchmarking for Dark Modes</span></div>
         <div class="image-container"><div class="image-placeholder"><img src="images/Jarvics/Solutions 02.webp" alt="Benchmarking for Dark Modes"></div></div>
       </div>
-      <p class="section-body">The final palette was refined through multiple iterations, aligning these adjustments with the existing R7 color system to maintain visual consistency while improving usability.</p>
-      <p class="section-body">The following comparison shows an early dark mode version using standard grayscale alongside the adjusted palette. Although the changes to green and blue values are minimal, their combined effect results in a noticeably smoother and more comfortable interface.</p>
+      <p class="section-body" data-i18n="s3.body8">The final palette was refined through multiple iterations, aligning these adjustments with the existing R7 color system to maintain visual consistency while improving usability.</p>
+      <p class="section-body" data-i18n="s3.body9">The following comparison shows an early dark mode version using standard grayscale alongside the adjusted palette. Although the changes to green and blue values are minimal, their combined effect results in a noticeably smoother and more comfortable interface.</p>
       <div class="img-titled image-wrap">
-        <div class="image-caption-row"><span class="image-caption">Palette comparison</span></div>
+        <div class="image-caption-row"><span class="image-caption" data-i18n="s3.cap3">Palette comparison</span></div>
         <div class="image-container"><div class="image-placeholder"><img src="images/Jarvics/Solutions 03.webp" alt="Palette comparison"></div></div>
       </div>
       <div class="callout-card">
         <div class="callout-icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
         </div>
-        <p class="callout-text">One of the most critical operational layers affected by this redesign was the internal tool used by Customer Support teams to manage RecordPlus Subscribers:</p>
+        <p class="callout-text" data-i18n="s3.callout">One of the most critical operational layers affected by this redesign was the internal tool used by Customer Support teams to manage RecordPlus Subscribers:</p>
       </div>
     </section>
 
@@ -536,21 +591,21 @@
     <section id="subscribers" class="project-section">
       <div class="section-header">
         <span class="section-num">04</span>
-        <h2 class="section-heading">RECORDPLUS SUBSCRIBER MANAGEMENT</h2>
+        <h2 class="section-heading" data-i18n="s4.heading">RECORDPLUS SUBSCRIBER MANAGEMENT</h2>
       </div>
-      <p class="section-body">The RecordPlus Subscriber Management system is one of the core operational tools within Jarvics.</p>
-      <p class="section-body">Originally built and maintained by a third-party company, it was licensed by Record TV as an external service and operated outside the Jarvics platform under a different visual and structural standard. As part of the broader unification effort, it was migrated in-house and redesigned to align with Jarvics' system foundations, both visually and operationally.</p>
-      <p class="section-body">Used daily by Customer Support teams handling millions of active accounts, the tool plays a critical role in managing subscription states, resolving account issues, and supporting key operational workflows across RecordPlus.</p>
+      <p class="section-body" data-i18n="s4.body1">The RecordPlus Subscriber Management system is one of the core operational tools within Jarvics.</p>
+      <p class="section-body" data-i18n="s4.body2">Originally built and maintained by a third-party company, it was licensed by Record TV as an external service and operated outside the Jarvics platform under a different visual and structural standard. As part of the broader unification effort, it was migrated in-house and redesigned to align with Jarvics' system foundations, both visually and operationally.</p>
+      <p class="section-body" data-i18n="s4.body3">Used daily by Customer Support teams handling millions of active accounts, the tool plays a critical role in managing subscription states, resolving account issues, and supporting key operational workflows across RecordPlus.</p>
       <div class="callout-card">
         <div class="callout-icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
         </div>
-        <p class="callout-text">The following sections include comparisons between the original legacy version provided by the third-party service and the redesigned interface implemented within Jarvics.</p>
+        <p class="callout-text" data-i18n="s4.callout">The following sections include comparisons between the original legacy version provided by the third-party service and the redesigned interface implemented within Jarvics.</p>
       </div>
 
-      <p class="section-body"><strong>Advanced Search:</strong> The advanced search was designed to help Customer Support teams quickly locate users when handling requests or live interactions.</p>
-      <p class="section-body">Since users often don't remember key subscription details such as email or phone number, multiple search methods were combined into a single interface to support flexible identification.</p>
-      <p class="section-body">In the redesigned version, the information hierarchy was reorganized based on user feedback, giving priority to the fields most frequently used and improving overall efficiency during search.</p>
+      <p class="section-body" data-i18n="s4.body4"><strong data-i18n="s4.label1">Advanced Search:</strong> The advanced search was designed to help Customer Support teams quickly locate users when handling requests or live interactions.</p>
+      <p class="section-body" data-i18n="s4.body5">Since users often don't remember key subscription details such as email or phone number, multiple search methods were combined into a single interface to support flexible identification.</p>
+      <p class="section-body" data-i18n="s4.body6">In the redesigned version, the information hierarchy was reorganized based on user feedback, giving priority to the fields most frequently used and improving overall efficiency during search.</p>
       <div class="img-plain image-container">
         <div class="proj-comparison" data-left-caption="Before" data-right-caption="After">
           <div class="proj-comp-slot"><div class="image-placeholder"><img src="images/Jarvics/Comparison 1 - after.webp" alt="Advanced Search - After"></div></div>
@@ -558,9 +613,9 @@
         </div>
       </div>
 
-      <p class="section-body"><strong>User Detail View:</strong> This view consolidates all relevant information for a selected user and serves as the main operational hub for Customer Support interactions.</p>
-      <p class="section-body">In the legacy version, information and actions were poorly structured, making the interface difficult to scan and increasing the risk of operational mistakes.</p>
-      <p class="section-body">In the redesigned version, the layout was reorganized into two clear zones: user information on the left and administrative actions on the right. This separation improves readability and decision-making flow. Critical actions, such as blocking a user, were visually emphasized in red to reinforce caution.</p>
+      <p class="section-body" data-i18n="s4.body7"><strong data-i18n="s4.label2">User Detail View:</strong> This view consolidates all relevant information for a selected user and serves as the main operational hub for Customer Support interactions.</p>
+      <p class="section-body" data-i18n="s4.body8">In the legacy version, information and actions were poorly structured, making the interface difficult to scan and increasing the risk of operational mistakes.</p>
+      <p class="section-body" data-i18n="s4.body9">In the redesigned version, the layout was reorganized into two clear zones: user information on the left and administrative actions on the right. This separation improves readability and decision-making flow. Critical actions, such as blocking a user, were visually emphasized in red to reinforce caution.</p>
       <div class="img-plain image-container">
         <div class="proj-comparison" data-left-caption="Before" data-right-caption="After">
           <div class="proj-comp-slot"><div class="image-placeholder"><img src="images/Jarvics/Comparison 2 - after.webp" alt="User Detail View - After"></div></div>
@@ -568,9 +623,9 @@
         </div>
       </div>
 
-      <p class="section-body"><strong>User Subscriptions:</strong> This view presents subscription information for a selected user, maintaining the same structural pattern used across the system by separating information (left) and actions (right).</p>
-      <p class="section-body">In the legacy version, actions were inconsistently presented, with a mix of buttons and text links, making interaction less clear. In the redesigned version, they were consolidated into a unified button system with clearer hierarchy and sizing based on usage priority, improving clarity and decision-making speed.</p>
-      <p class="section-body">The Payment History table was also reworked, as the previous layout required horizontal scrolling to access all information, reducing usability. The redesigned version improves readability and scanability by restructuring the table for easier navigation and comparison of transactions.</p>
+      <p class="section-body" data-i18n="s4.body10"><strong data-i18n="s4.label3">User Subscriptions:</strong> This view presents subscription information for a selected user, maintaining the same structural pattern used across the system by separating information (left) and actions (right).</p>
+      <p class="section-body" data-i18n="s4.body11">In the legacy version, actions were inconsistently presented, with a mix of buttons and text links, making interaction less clear. In the redesigned version, they were consolidated into a unified button system with clearer hierarchy and sizing based on usage priority, improving clarity and decision-making speed.</p>
+      <p class="section-body" data-i18n="s4.body12">The Payment History table was also reworked, as the previous layout required horizontal scrolling to access all information, reducing usability. The redesigned version improves readability and scanability by restructuring the table for easier navigation and comparison of transactions.</p>
       <div class="img-plain image-container">
         <div class="proj-comparison" data-left-caption="Before" data-right-caption="After">
           <div class="proj-comp-slot"><div class="image-placeholder"><img src="images/Jarvics/Comparison 3 - after.webp" alt="User Subscriptions - After"></div></div>
@@ -578,29 +633,29 @@
         </div>
       </div>
 
-      <p class="section-body">To support the complexity of the system, user roles and permissions were defined to ensure secure and controlled access across different levels of Customer Support operations, reducing risk while maintaining flexibility for high-frequency tasks.</p>
-      <p class="section-body">The tool was also extensively validated through user research, including direct interviews with support teams, iterative prototyping, and usability testing sessions.</p>
-      <p class="section-body">This continuous feedback loop was essential to refine the experience, since improvements in internal efficiency directly impact customer satisfaction and overall product value.</p>
+      <p class="section-body" data-i18n="s4.body13">To support the complexity of the system, user roles and permissions were defined to ensure secure and controlled access across different levels of Customer Support operations, reducing risk while maintaining flexibility for high-frequency tasks.</p>
+      <p class="section-body" data-i18n="s4.body14">The tool was also extensively validated through user research, including direct interviews with support teams, iterative prototyping, and usability testing sessions.</p>
+      <p class="section-body" data-i18n="s4.body15">This continuous feedback loop was essential to refine the experience, since improvements in internal efficiency directly impact customer satisfaction and overall product value.</p>
     </section>
 
     <!-- 05 OUTCOME -->
     <section id="outcome" class="project-section">
       <div class="section-header">
         <span class="section-num">05</span>
-        <h2 class="section-heading">OUTCOME</h2>
+        <h2 class="section-heading" data-i18n="s5.heading">OUTCOME</h2>
       </div>
-      <p class="section-body">The redesign of Jarvics and its internal tools resulted in measurable improvements across user experience and operational efficiency across multiple teams, including Customer Support, who rely heavily on one of its core operational systems.</p>
-      <p class="section-body">A key factor across the platform was visual comfort, especially in the transition from legacy third-party tools that were predominantly light-themed. This became particularly relevant in environments involving long working sessions and night shifts, where reducing visual fatigue directly impacts focus and productivity.</p>
+      <p class="section-body" data-i18n="s5.body1">The redesign of Jarvics and its internal tools resulted in measurable improvements across user experience and operational efficiency across multiple teams, including Customer Support, who rely heavily on one of its core operational systems.</p>
+      <p class="section-body" data-i18n="s5.body2">A key factor across the platform was visual comfort, especially in the transition from legacy third-party tools that were predominantly light-themed. This became particularly relevant in environments involving long working sessions and night shifts, where reducing visual fatigue directly impacts focus and productivity.</p>
       <div class="impact-cards">
         <div class="impact-card">
           <div class="impact-card-header">
             <div class="impact-card-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
             </div>
-            <span class="impact-card-title">Visual Comfort</span>
+            <span class="impact-card-title" data-i18n="s5.t1">Visual Comfort</span>
           </div>
           <div class="impact-card-bottom">
-            <div class="impact-card-desc">Smoother experience during extended work sessions and low-light environments</div>
+            <div class="impact-card-desc" data-i18n="s5.d1">Smoother experience during extended work sessions and low-light environments</div>
           </div>
         </div>
         <div class="impact-card">
@@ -608,25 +663,25 @@
             <div class="impact-card-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
             </div>
-            <span class="impact-card-title">Work Efficiency</span>
+            <span class="impact-card-title" data-i18n="s5.t2">Work Efficiency</span>
           </div>
           <div class="impact-card-bottom">
-            <div class="impact-card-desc">Improved usability for teams operating in prolonged or high-intensity workflows</div>
+            <div class="impact-card-desc" data-i18n="s5.d2">Improved usability for teams operating in prolonged or high-intensity workflows</div>
           </div>
         </div>
       </div>
-      <p class="section-body">The redesign of the RecordPlus Subscriber Management system further strengthened daily operations by reducing interface friction and improving clarity in high-frequency tasks. It also introduced structural consistency across the platform, minimizing errors and improving decision-making speed. In addition, bringing the system in-house removed dependency on a third-party provider, increasing control and reducing operational costs.</p>
+      <p class="section-body" data-i18n="s5.body3">The redesign of the RecordPlus Subscriber Management system further strengthened daily operations by reducing interface friction and improving clarity in high-frequency tasks. It also introduced structural consistency across the platform, minimizing errors and improving decision-making speed. In addition, bringing the system in-house removed dependency on a third-party provider, increasing control and reducing operational costs.</p>
       <div class="impact-cards">
         <div class="impact-card">
           <div class="impact-card-header">
             <div class="impact-card-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
             </div>
-            <span class="impact-card-title">Support Quality</span>
+            <span class="impact-card-title" data-i18n="s5.t3">Support Quality</span>
           </div>
           <div class="impact-card-bottom">
-            <div class="impact-card-metric">~20–30% faster workflows</div>
-            <div class="impact-card-desc">Reduced friction in navigation and task execution through improved structure</div>
+            <div class="impact-card-metric" data-i18n="s5.m3">~20–30% faster workflows</div>
+            <div class="impact-card-desc" data-i18n="s5.d3">Reduced friction in navigation and task execution through improved structure</div>
           </div>
         </div>
         <div class="impact-card">
@@ -634,11 +689,11 @@
             <div class="impact-card-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
             </div>
-            <span class="impact-card-title">Efficiency</span>
+            <span class="impact-card-title" data-i18n="s5.t4">Efficiency</span>
           </div>
           <div class="impact-card-bottom">
-            <div class="impact-card-metric">~10–20% less operational errors</div>
-            <div class="impact-card-desc">Clearer hierarchy and action grouping improved decision-making during user handling</div>
+            <div class="impact-card-metric" data-i18n="s5.m4">~10–20% less operational errors</div>
+            <div class="impact-card-desc" data-i18n="s5.d4">Clearer hierarchy and action grouping improved decision-making during user handling</div>
           </div>
         </div>
         <div class="impact-card" style="width: 100%;">
@@ -646,11 +701,11 @@
             <div class="impact-card-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
             </div>
-            <span class="impact-card-title">Business Impact</span>
+            <span class="impact-card-title" data-i18n="s5.t5">Business Impact</span>
           </div>
           <div class="impact-card-bottom">
-            <div class="impact-card-metric">Strategic operational independence</div>
-            <div class="impact-card-desc">Elimination of third-party dependency reduced external reliance and enabled full ownership, scalability, and long-term cost efficiency across the platform</div>
+            <div class="impact-card-metric" data-i18n="s5.m5">Strategic operational independence</div>
+            <div class="impact-card-desc" data-i18n="s5.d5">Elimination of third-party dependency reduced external reliance and enabled full ownership, scalability, and long-term cost efficiency across the platform</div>
           </div>
         </div>
       </div>
@@ -660,11 +715,11 @@
     <section id="design" class="project-section">
       <div class="section-header">
         <span class="section-num">06</span>
-        <h2 class="section-heading">DESIGN SYSTEM</h2>
+        <h2 class="section-heading" data-i18n="s6.heading">DESIGN SYSTEM</h2>
       </div>
-      <p class="section-body">A dedicated design system was created to support Jarvics, addressing needs that differ from the R7 platform. The dark interface required specific studies on color, contrast, and accessibility to ensure readability and usability.</p>
-      <p class="section-body">While some elements were aligned with the R7 Design System, many components were built from scratch, including inputs, tables, feedback states, and workflows tailored to content management tasks.</p>
-      <p class="section-body">The following screens represent a small portion of the full design system, which includes a much broader set of components and variations.</p>
+      <p class="section-body" data-i18n="s6.body1">A dedicated design system was created to support Jarvics, addressing needs that differ from the R7 platform. The dark interface required specific studies on color, contrast, and accessibility to ensure readability and usability.</p>
+      <p class="section-body" data-i18n="s6.body2">While some elements were aligned with the R7 Design System, many components were built from scratch, including inputs, tables, feedback states, and workflows tailored to content management tasks.</p>
+      <p class="section-body" data-i18n="s6.body3">The following screens represent a small portion of the full design system, which includes a much broader set of components and variations.</p>
       <div class="img-carousel">
         <div class="carousel-frame">
           <div class="carousel-clip">
@@ -695,13 +750,13 @@
 <footer class="project-footer">
       <a href="index.html" class="back-link">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
-        BACK
+        <span data-i18n="nav.back">BACK</span>
       </a>
     </footer>
 
     <a href="#top" class="mobile-back-top back-link">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(90deg)"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
-      BACK TO TOP
+      <span data-i18n="nav.back-top">BACK TO TOP</span>
     </a>
 
   </main>
@@ -869,13 +924,13 @@
         document.getElementById('icon-moon').style.display = isDark ? 'none' : '';
         document.getElementById('icon-sun').style.display  = isDark ? '' : 'none';
         localStorage.setItem('portfolio-theme', theme);
-        var mSun = document.getElementById('mobile-icon-sun');
-        var mMoon = document.getElementById('mobile-icon-moon');
-        if (mSun)  mSun.style.display  = isDark ? '' : 'none';
-        if (mMoon) mMoon.style.display = isDark ? 'none' : '';
+        document.querySelectorAll('.mobile-theme-opt').forEach(function(o) { o.classList.toggle('active', o.getAttribute('data-theme') === theme); });
       }
       document.getElementById('theme-toggle').addEventListener('click', function () {
         applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+      });
+      document.querySelectorAll('.mobile-theme-opt').forEach(function(btn) {
+        btn.addEventListener('click', function() { applyTheme(btn.getAttribute('data-theme')); });
       });
       applyTheme(localStorage.getItem('portfolio-theme') || 'dark');
     })();
@@ -958,33 +1013,13 @@
       var menuBtn = document.getElementById('mobile-menu-btn');
       var menu    = document.getElementById('mobile-menu');
       var overlay = document.getElementById('mobile-menu-overlay');
-      var themeBtn = document.getElementById('mobile-theme-btn');
       if (!menuBtn) return;
-
       function openMenu()  { menu.classList.add('open');    overlay.classList.add('open'); }
       function closeMenu() { menu.classList.remove('open'); overlay.classList.remove('open'); }
-
-      menuBtn.addEventListener('click', function () {
-        menu.classList.contains('open') ? closeMenu() : openMenu();
-      });
+      menuBtn.addEventListener('click', function () { menu.classList.contains('open') ? closeMenu() : openMenu(); });
       overlay.addEventListener('click', closeMenu);
       menu.querySelectorAll('a').forEach(function (link) {
-        link.addEventListener('click', function (e) {
-          e.preventDefault();
-          scrollToSection(link.getAttribute('href'));
-          closeMenu();
-        });
-      });
-
-      themeBtn.addEventListener('click', function () {
-        var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-        var isDark = next === 'dark';
-        document.documentElement.setAttribute('data-theme', next);
-        document.getElementById('icon-moon').style.display = isDark ? '' : 'none';
-        document.getElementById('icon-sun').style.display  = isDark ? 'none' : '';
-        localStorage.setItem('portfolio-theme', next);
-        document.getElementById('mobile-icon-sun').style.display  = isDark ? '' : 'none';
-        document.getElementById('mobile-icon-moon').style.display = isDark ? 'none' : '';
+        link.addEventListener('click', function (e) { e.preventDefault(); scrollToSection(link.getAttribute('href')); closeMenu(); });
       });
     })();
   </script>
@@ -1298,11 +1333,193 @@
     document.getElementById('theme-toggle').addEventListener('click', function () {
       setTimeout(function () {
         if (window.inkEffect && window.inkEffect.simMat) {
-          window.inkEffect.simMat.uniforms.inkColor.value.set(getInkHex());
+          var _th = parseInt(getInkHex().replace('#',''), 16);
+          window.inkEffect.simMat.uniforms.inkColor.value.r = (_th >> 16 & 255) / 255;
+          window.inkEffect.simMat.uniforms.inkColor.value.g = (_th >> 8  & 255) / 255;
+          window.inkEffect.simMat.uniforms.inkColor.value.b = (_th       & 255) / 255;
         }
       }, 50);
     });
   }); // end three.js
+  </script>
+
+  <script>
+    var TRANSLATIONS = {
+      en: {
+        'nav.top': 'TOP', 'nav.overview': 'OVERVIEW', 'nav.challenges': 'CHALLENGES',
+        'nav.solutions': 'SOLUTIONS', 'nav.subscribers': 'SUBSCRIBERS',
+        'nav.outcome': 'OUTCOME', 'nav.design': 'DESIGN SYSTEM',
+        'nav.back': 'BACK', 'nav.back-top': 'BACK TO TOP',
+        'meta.year': 'YEAR', 'meta.scope': 'SCOPE', 'meta.resp': 'RESPONSIBILITIES',
+        'meta.scope1': 'Enterprise CMS', 'meta.scope2': 'Subscribers Managing',
+        'meta.resp1': '• Designed the whole visual<br>identity from scratch',
+        'meta.resp2': '• Led end-to-end design<br>process across every new tool',
+        'meta.resp3': '• Designed several content<br>publishing and managing tools',
+        'meta.resp4': '• Translated external tools<br>and workflows to Jarvics',
+        'meta.resp5': '• Created the RecordPlus<br>Subscribers management product',
+        's1.heading': 'OVERVIEW',
+        's1.body1': 'Jarvics is a custom CMS developed for R7, replacing previous workflows based on WordPress. The product was built from scratch to support internal teams responsible for both content publishing and subscriber operations across the R7, Record TV, and RecordPlus ecosystems. It includes tools for content creation, editing, management, and customer support workflows at scale.',
+        's1.body2': 'The project involved end-to-end design, including product structure, interface design, and visual identity definition.',
+        's1.cap1': 'Login screen',
+        's1.cap2': 'R7 Videos dashboard for managing and editing video content',
+        's1.cap3': 'Newsletter creation and content configuration',
+        's1.cap4': 'Scheduling modal for articles, videos, and livestreams',
+        's2.heading': 'CHALLENGES',
+        's2.body1': 'Jarvics was developed to replace existing workflows based on WordPress, requiring the gradual migration of tools while maintaining daily operations.',
+        's2.body2': 'Each new feature introduced was a complex problem-solving process, involving close collaboration with front-end and back-end engineers, as well as constant feedback from journalists and support teams.',
+        's2.body3': 'One key challenge emerged early in the project. Most users worked in low-light environments, such as control rooms or night shifts, and existing tools did not support this context.',
+        's2.callout': 'User research revealed a strong need for a dark mode interface that could reduce visual fatigue during long working hours. This required not only redesigning existing tools but also creating a dark mode design system from scratch, something not present in the R7 ecosystem.',
+        's3.heading': 'SOLUTIONS',
+        's3.body1': 'Initial attempts using standard dark palettes revealed issues. The interface felt visually heavy, with tones that were too harsh and tiring over extended use.',
+        's3.body2': 'After deep user research and benchmarking across platforms such as YouTube and social media products, it became clear that color composition played a key role in visual comfort. These platforms were selected because they are heavily used over long periods or focused on continuous viewing, making visual fatigue a critical factor in their design.',
+        's3.cap1': 'Color adjustments graph',
+        's3.body3': 'Instead of relying on neutral grayscale, subtle green and blue tones were introduced into the palette to reduce visual fatigue. This adjustment created a smoother and more balanced interface, improving comfort during long usage periods.',
+        's3.body4': 'The final tones were also aligned with the R7 color system, using its green and blue proportions to maintain visual consistency across the ecosystem.',
+        's3.body5': 'The following graph illustrates how subtle adjustments to grayscale values were applied by increasing the green and blue channels. It illustrates how they are slightly increased compared to red, creating a smoother and less harsh grayscale.',
+        's3.body6': 'The X axis represents standard grayscale values, where R, G, and B are equal. The Y axis shows the adjusted RGB values after modification.',
+        's3.body7': 'The table on the right shows each step of the scale, including the added values and the resulting HEX codes.',
+        's3.cap2': 'Benchmarking for Dark Modes',
+        's3.body8': 'The final palette was refined through multiple iterations, aligning these adjustments with the existing R7 color system to maintain visual consistency while improving usability.',
+        's3.body9': 'The following comparison shows an early dark mode version using standard grayscale alongside the adjusted palette. Although the changes to green and blue values are minimal, their combined effect results in a noticeably smoother and more comfortable interface.',
+        's3.cap3': 'Palette comparison',
+        's3.callout': 'One of the most critical operational layers affected by this redesign was the internal tool used by Customer Support teams to manage RecordPlus Subscribers:',
+        's4.heading': 'RECORDPLUS SUBSCRIBER MANAGEMENT',
+        's4.body1': 'The RecordPlus Subscriber Management system is one of the core operational tools within Jarvics.',
+        's4.body2': "Originally built and maintained by a third-party company, it was licensed by Record TV as an external service and operated outside the Jarvics platform under a different visual and structural standard. As part of the broader unification effort, it was migrated in-house and redesigned to align with Jarvics' system foundations, both visually and operationally.",
+        's4.body3': 'Used daily by Customer Support teams handling millions of active accounts, the tool plays a critical role in managing subscription states, resolving account issues, and supporting key operational workflows across RecordPlus.',
+        's4.callout': 'The following sections include comparisons between the original legacy version provided by the third-party service and the redesigned interface implemented within Jarvics.',
+        's4.label1': 'Advanced Search:', 's4.label2': 'User Detail View:', 's4.label3': 'User Subscriptions:',
+        's4.body4': '<strong>Advanced Search:</strong> The advanced search was designed to help Customer Support teams quickly locate users when handling requests or live interactions.',
+        's4.body5': "Since users often don't remember key subscription details such as email or phone number, multiple search methods were combined into a single interface to support flexible identification.",
+        's4.body6': 'In the redesigned version, the information hierarchy was reorganized based on user feedback, giving priority to the fields most frequently used and improving overall efficiency during search.',
+        's4.body7': '<strong>User Detail View:</strong> This view consolidates all relevant information for a selected user and serves as the main operational hub for Customer Support interactions.',
+        's4.body8': 'In the legacy version, information and actions were poorly structured, making the interface difficult to scan and increasing the risk of operational mistakes.',
+        's4.body9': 'In the redesigned version, the layout was reorganized into two clear zones: user information on the left and administrative actions on the right. This separation improves readability and decision-making flow. Critical actions, such as blocking a user, were visually emphasized in red to reinforce caution.',
+        's4.body10': '<strong>User Subscriptions:</strong> This view presents subscription information for a selected user, maintaining the same structural pattern used across the system by separating information (left) and actions (right).',
+        's4.body11': 'In the legacy version, actions were inconsistently presented, with a mix of buttons and text links, making interaction less clear. In the redesigned version, they were consolidated into a unified button system with clearer hierarchy and sizing based on usage priority, improving clarity and decision-making speed.',
+        's4.body12': 'The Payment History table was also reworked, as the previous layout required horizontal scrolling to access all information, reducing usability. The redesigned version improves readability and scanability by restructuring the table for easier navigation and comparison of transactions.',
+        's4.body13': 'To support the complexity of the system, user roles and permissions were defined to ensure secure and controlled access across different levels of Customer Support operations, reducing risk while maintaining flexibility for high-frequency tasks.',
+        's4.body14': 'The tool was also extensively validated through user research, including direct interviews with support teams, iterative prototyping, and usability testing sessions.',
+        's4.body15': 'This continuous feedback loop was essential to refine the experience, since improvements in internal efficiency directly impact customer satisfaction and overall product value.',
+        's5.heading': 'OUTCOME',
+        's5.body1': 'The redesign of Jarvics and its internal tools resulted in measurable improvements across user experience and operational efficiency across multiple teams, including Customer Support, who rely heavily on one of its core operational systems.',
+        's5.body2': 'A key factor across the platform was visual comfort, especially in the transition from legacy third-party tools that were predominantly light-themed. This became particularly relevant in environments involving long working sessions and night shifts, where reducing visual fatigue directly impacts focus and productivity.',
+        's5.t1': 'Visual Comfort', 's5.d1': 'Smoother experience during extended work sessions and low-light environments',
+        's5.t2': 'Work Efficiency', 's5.d2': 'Improved usability for teams operating in prolonged or high-intensity workflows',
+        's5.body3': 'The redesign of the RecordPlus Subscriber Management system further strengthened daily operations by reducing interface friction and improving clarity in high-frequency tasks. It also introduced structural consistency across the platform, minimizing errors and improving decision-making speed. In addition, bringing the system in-house removed dependency on a third-party provider, increasing control and reducing operational costs.',
+        's5.t3': 'Support Quality', 's5.m3': '~20–30% faster workflows', 's5.d3': 'Reduced friction in navigation and task execution through improved structure',
+        's5.t4': 'Efficiency', 's5.m4': '~10–20% less operational errors', 's5.d4': 'Clearer hierarchy and action grouping improved decision-making during user handling',
+        's5.t5': 'Business Impact', 's5.m5': 'Strategic operational independence', 's5.d5': 'Elimination of third-party dependency reduced external reliance and enabled full ownership, scalability, and long-term cost efficiency across the platform',
+        's6.heading': 'DESIGN SYSTEM',
+        's6.body1': 'A dedicated design system was created to support Jarvics, addressing needs that differ from the R7 platform. The dark interface required specific studies on color, contrast, and accessibility to ensure readability and usability.',
+        's6.body2': 'While some elements were aligned with the R7 Design System, many components were built from scratch, including inputs, tables, feedback states, and workflows tailored to content management tasks.',
+        's6.body3': 'The following screens represent a small portion of the full design system, which includes a much broader set of components and variations.',
+      },
+      pt: {
+        'nav.top': 'TOPO', 'nav.overview': 'VISÃO GERAL', 'nav.challenges': 'DESAFIOS',
+        'nav.solutions': 'SOLUÇÕES', 'nav.subscribers': 'ASSINANTES',
+        'nav.outcome': 'RESULTADOS', 'nav.design': 'DESIGN SYSTEM',
+        'nav.back': 'VOLTAR', 'nav.back-top': 'VOLTAR AO TOPO',
+        'meta.year': 'ANO', 'meta.scope': 'ESCOPO', 'meta.resp': 'RESPONSABILIDADES',
+        'meta.scope1': 'CMS Empresarial', 'meta.scope2': 'Gestão de Assinantes',
+        'meta.resp1': '• Desenhei toda a identidade<br>visual do zero',
+        'meta.resp2': '• Liderei o processo de design<br>de ponta a ponta em cada ferramenta',
+        'meta.resp3': '• Desenhei diversas ferramentas<br>de publicação e gestão de conteúdo',
+        'meta.resp4': '• Traduzi ferramentas externas<br>e fluxos de trabalho para o Jarvics',
+        'meta.resp5': '• Criei o produto de gestão<br>de Assinantes do RecordPlus',
+        's1.heading': 'VISÃO GERAL',
+        's1.body1': 'O Jarvics é um CMS personalizado desenvolvido para a R7, substituindo fluxos de trabalho anteriores baseados em WordPress. O produto foi construído do zero para apoiar equipes internas responsáveis pela publicação de conteúdo e operações de assinantes nos ecossistemas R7, Record TV e RecordPlus. Inclui ferramentas para criação, edição, gestão de conteúdo e fluxos de trabalho de suporte ao cliente em escala.',
+        's1.body2': 'O projeto envolveu design de ponta a ponta, incluindo estrutura do produto, design de interface e definição de identidade visual.',
+        's1.cap1': 'Tela de login',
+        's1.cap2': 'Dashboard de Vídeos R7 para gestão e edição de conteúdo em vídeo',
+        's1.cap3': 'Criação de newsletter e configuração de conteúdo',
+        's1.cap4': 'Modal de agendamento para artigos, vídeos e transmissões ao vivo',
+        's2.heading': 'DESAFIOS',
+        's2.body1': 'O Jarvics foi desenvolvido para substituir fluxos de trabalho existentes baseados em WordPress, exigindo a migração gradual das ferramentas enquanto as operações diárias continuavam.',
+        's2.body2': 'Cada nova funcionalidade introduzida era um processo complexo de resolução de problemas, envolvendo colaboração próxima com engenheiros de front-end e back-end, além de feedback constante de jornalistas e equipes de suporte.',
+        's2.body3': 'Um desafio importante surgiu no início do projeto. A maioria dos usuários trabalhava em ambientes com pouca luz, como salas de controle ou turnos noturnos, e as ferramentas existentes não suportavam esse contexto.',
+        's2.callout': 'A pesquisa com usuários revelou uma forte necessidade de uma interface em modo escuro que pudesse reduzir a fadiga visual durante longas horas de trabalho. Isso exigiu não apenas reprojetar ferramentas existentes, mas também criar um design system em modo escuro do zero, algo inexistente no ecossistema R7.',
+        's3.heading': 'SOLUÇÕES',
+        's3.body1': 'As primeiras tentativas usando paletas escuras padrão revelaram problemas. A interface parecia visualmente pesada, com tons muito severos e cansativos durante o uso prolongado.',
+        's3.body2': 'Após pesquisa aprofundada com usuários e benchmarking em plataformas como YouTube e produtos de redes sociais, ficou claro que a composição de cores desempenhava um papel fundamental no conforto visual. Essas plataformas foram selecionadas porque são muito usadas por longos períodos ou focadas em visualização contínua, tornando a fadiga visual um fator crítico em seu design.',
+        's3.cap1': 'Gráfico de ajustes de cor',
+        's3.body3': 'Em vez de depender de escala de cinza neutra, tons sutis de verde e azul foram introduzidos na paleta para reduzir a fadiga visual. Esse ajuste criou uma interface mais suave e equilibrada, melhorando o conforto durante longos períodos de uso.',
+        's3.body4': 'Os tons finais também foram alinhados ao sistema de cores da R7, usando suas proporções de verde e azul para manter a consistência visual em todo o ecossistema.',
+        's3.body5': 'O gráfico a seguir ilustra como ajustes sutis nos valores de escala de cinza foram aplicados aumentando os canais verde e azul. Ele mostra como eles são levemente aumentados em comparação ao vermelho, criando uma escala de cinza mais suave e menos áspera.',
+        's3.body6': 'O eixo X representa valores padrão de escala de cinza, onde R, G e B são iguais. O eixo Y mostra os valores RGB ajustados após a modificação.',
+        's3.body7': 'A tabela à direita mostra cada etapa da escala, incluindo os valores adicionados e os códigos HEX resultantes.',
+        's3.cap2': 'Benchmarking de Modos Escuros',
+        's3.body8': 'A paleta final foi refinada por meio de múltiplas iterações, alinhando esses ajustes ao sistema de cores R7 existente para manter a consistência visual enquanto melhorava a usabilidade.',
+        's3.body9': 'A comparação a seguir mostra uma versão inicial do modo escuro usando escala de cinza padrão ao lado da paleta ajustada. Embora as mudanças nos valores de verde e azul sejam mínimas, seu efeito combinado resulta em uma interface visivelmente mais suave e confortável.',
+        's3.cap3': 'Comparação de paletas',
+        's3.callout': 'Uma das camadas operacionais mais críticas afetadas por esse redesign foi a ferramenta interna usada pelas equipes de Suporte ao Cliente para gerenciar os Assinantes do RecordPlus:',
+        's4.heading': 'GESTÃO DE ASSINANTES RECORDPLUS',
+        's4.body1': 'O sistema de Gestão de Assinantes do RecordPlus é uma das ferramentas operacionais centrais do Jarvics.',
+        's4.body2': 'Originalmente construído e mantido por uma empresa terceirizada, era licenciado pela Record TV como serviço externo e operava fora da plataforma Jarvics sob um padrão visual e estrutural diferente. Como parte do esforço de unificação, foi migrado internamente e redesenhado para se alinhar às fundações do sistema Jarvics, tanto visual quanto operacionalmente.',
+        's4.body3': 'Usado diariamente por equipes de Suporte ao Cliente que gerenciam milhões de contas ativas, a ferramenta desempenha um papel crítico no gerenciamento de estados de assinatura, resolução de problemas de conta e suporte a fluxos operacionais no RecordPlus.',
+        's4.callout': 'As seções a seguir incluem comparações entre a versão legada original fornecida pelo serviço terceirizado e a interface redesenhada implementada no Jarvics.',
+        's4.label1': 'Busca Avançada:', 's4.label2': 'Visão Detalhada do Usuário:', 's4.label3': 'Assinaturas do Usuário:',
+        's4.body4': '<strong>Busca Avançada:</strong> A busca avançada foi projetada para ajudar as equipes de Suporte ao Cliente a localizar usuários rapidamente ao lidar com solicitações ou interações ao vivo.',
+        's4.body5': 'Como os usuários frequentemente não lembram detalhes importantes da assinatura, como e-mail ou número de telefone, vários métodos de busca foram combinados em uma única interface para suportar identificação flexível.',
+        's4.body6': 'Na versão redesenhada, a hierarquia de informações foi reorganizada com base no feedback dos usuários, priorizando os campos mais frequentemente usados e melhorando a eficiência geral durante a busca.',
+        's4.body7': '<strong>Visão Detalhada do Usuário:</strong> Esta visão consolida todas as informações relevantes de um usuário selecionado e serve como hub operacional principal para interações de Suporte ao Cliente.',
+        's4.body8': 'Na versão legada, informações e ações eram mal estruturadas, tornando a interface difícil de escanear e aumentando o risco de erros operacionais.',
+        's4.body9': 'Na versão redesenhada, o layout foi reorganizado em duas zonas claras: informações do usuário à esquerda e ações administrativas à direita. Essa separação melhora a legibilidade e o fluxo de tomada de decisão. Ações críticas, como bloquear um usuário, foram visualmente destacadas em vermelho para reforçar a cautela.',
+        's4.body10': '<strong>Assinaturas do Usuário:</strong> Esta visão apresenta informações de assinatura de um usuário selecionado, mantendo o mesmo padrão estrutural usado em todo o sistema, separando informações (esquerda) e ações (direita).',
+        's4.body11': 'Na versão legada, as ações eram apresentadas de forma inconsistente, com uma mistura de botões e links de texto, tornando a interação menos clara. Na versão redesenhada, foram consolidadas em um sistema de botões unificado com hierarquia e tamanhos mais claros baseados na prioridade de uso.',
+        's4.body12': 'A tabela de Histórico de Pagamentos também foi reformulada, pois o layout anterior exigia rolagem horizontal para acessar todas as informações, reduzindo a usabilidade. A versão redesenhada melhora a legibilidade e a escaneabilidade ao reestruturar a tabela.',
+        's4.body13': 'Para suportar a complexidade do sistema, papéis e permissões de usuário foram definidos para garantir acesso seguro e controlado em diferentes níveis das operações de Suporte ao Cliente.',
+        's4.body14': 'A ferramenta também foi amplamente validada por meio de pesquisa com usuários, incluindo entrevistas diretas com equipes de suporte, prototipagem iterativa e sessões de teste de usabilidade.',
+        's4.body15': 'Esse ciclo contínuo de feedback foi essencial para refinar a experiência, já que melhorias na eficiência interna impactam diretamente a satisfação do cliente e o valor geral do produto.',
+        's5.heading': 'RESULTADOS',
+        's5.body1': 'O redesign do Jarvics e suas ferramentas internas resultou em melhorias mensuráveis na experiência do usuário e na eficiência operacional em múltiplas equipes, incluindo o Suporte ao Cliente.',
+        's5.body2': 'Um fator-chave em toda a plataforma foi o conforto visual, especialmente na transição de ferramentas legadas de terceiros predominantemente com tema claro. Isso se tornou particularmente relevante em ambientes com sessões longas de trabalho e turnos noturnos.',
+        's5.t1': 'Conforto Visual', 's5.d1': 'Experiência mais suave durante sessões de trabalho prolongadas e ambientes com pouca luz',
+        's5.t2': 'Eficiência no Trabalho', 's5.d2': 'Melhor usabilidade para equipes que operam em fluxos prolongados ou de alta intensidade',
+        's5.body3': 'O redesign do sistema de Gestão de Assinantes do RecordPlus fortaleceu ainda mais as operações diárias ao reduzir o atrito da interface e melhorar a clareza em tarefas de alta frequência. Também introduziu consistência estrutural na plataforma, minimizando erros e melhorando a velocidade de tomada de decisão. Além disso, trazer o sistema internamente removeu a dependência de um fornecedor terceirizado.',
+        's5.t3': 'Qualidade do Suporte', 's5.m3': '~20–30% fluxos mais rápidos', 's5.d3': 'Redução do atrito na navegação e execução de tarefas por meio de estrutura aprimorada',
+        's5.t4': 'Eficiência', 's5.m4': '~10–20% menos erros operacionais', 's5.d4': 'Hierarquia mais clara e agrupamento de ações melhoraram a tomada de decisão no atendimento ao usuário',
+        's5.t5': 'Impacto no Negócio', 's5.m5': 'Independência operacional estratégica', 's5.d5': 'A eliminação da dependência de terceiros reduziu a dependência externa e possibilitou propriedade total, escalabilidade e eficiência de custo a longo prazo',
+        's6.heading': 'DESIGN SYSTEM',
+        's6.body1': 'Um design system dedicado foi criado para suportar o Jarvics, atendendo necessidades que diferem da plataforma R7. A interface escura exigiu estudos específicos sobre cor, contraste e acessibilidade para garantir legibilidade e usabilidade.',
+        's6.body2': 'Embora alguns elementos tenham sido alinhados ao Design System da R7, muitos componentes foram construídos do zero, incluindo inputs, tabelas, estados de feedback e fluxos de trabalho adaptados às tarefas de gestão de conteúdo.',
+        's6.body3': 'As telas a seguir representam uma pequena parte do design system completo, que inclui um conjunto muito mais amplo de componentes e variações.',
+      }
+    };
+    function applyLang(lang) {
+      localStorage.setItem('portfolio-lang', lang);
+      document.querySelectorAll('[data-i18n]').forEach(function(el) {
+        var t = TRANSLATIONS[lang]; var key = el.getAttribute('data-i18n');
+        if (t && t[key] !== undefined) el.innerHTML = t[key];
+      });
+      var curr = document.getElementById('lang-current');
+      if (curr) curr.textContent = lang.toUpperCase();
+      document.querySelectorAll('.lang-option').forEach(function(o) { o.classList.toggle('active', o.getAttribute('data-lang') === lang); });
+      document.querySelectorAll('.mobile-lang-opt').forEach(function(o) { o.classList.toggle('active', o.getAttribute('data-lang') === lang); });
+      document.documentElement.setAttribute('lang', lang === 'pt' ? 'pt-BR' : 'en');
+    }
+    (function() {
+      var toggle = document.getElementById('lang-toggle');
+      var menu   = document.getElementById('lang-menu');
+      toggle.addEventListener('click', function(e) { e.stopPropagation(); menu.classList.toggle('open'); });
+      document.addEventListener('click', function() { menu.classList.remove('open'); });
+      document.querySelectorAll('.lang-option').forEach(function(opt) {
+        opt.addEventListener('click', function(e) { e.stopPropagation(); applyLang(opt.getAttribute('data-lang')); menu.classList.remove('open'); });
+      });
+      document.querySelectorAll('.mobile-lang-opt').forEach(function(btn) {
+        btn.addEventListener('click', function() { applyLang(btn.getAttribute('data-lang')); });
+      });
+    })();
+    applyLang(localStorage.getItem('portfolio-lang') || 'en');
+    (function() {
+      var mMenu = document.getElementById('mobile-menu');
+      if (!mMenu) return;
+      var saved = localStorage.getItem('portfolio-lang') || 'en';
+      applyLang('en'); var wEn = mMenu.offsetWidth;
+      applyLang('pt'); var wPt = mMenu.offsetWidth;
+      mMenu.style.minWidth = Math.max(wEn, wPt) + 'px';
+      applyLang(saved);
+    })();
   </script>
 
   <script>
