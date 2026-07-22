@@ -545,12 +545,12 @@
       <p class="section-body" data-i18n="s1.body2">The platform offers live broadcasts and on-demand content from Record TV, including news, reality shows, live sports, and exclusive productions. It also features religious soap operas, a format uniquely produced by Record TV, attracting a large and loyal audience.</p>
       <p class="section-body" data-i18n="s1.body3">Originally launched as PlayPlus and developed by third-party companies, the product was later reworked to introduce improvements and address existing limitations.</p>
       <div class="img-titled image-wrap">
-        <div class="image-caption-row"><span class="image-caption" data-i18n="s1.cap1">Home Page</span></div>
-        <div class="image-container"><div class="image-placeholder"><img src="images/RecordPlus/Overview%2001.webp" alt="Overview 01"></div></div>
-      </div>
-      <div class="img-titled image-wrap">
         <div class="image-caption-row"><span class="image-caption" data-i18n="s1.cap2">Login and Discover</span></div>
         <div class="image-container"><div class="image-placeholder"><img src="images/RecordPlus/Overview%2002.webp" alt="Overview 02"></div></div>
+      </div>
+      <div class="img-titled image-wrap">
+        <div class="image-caption-row"><span class="image-caption" data-i18n="s1.cap1">App Home Screen</span></div>
+        <div class="image-container"><div class="image-placeholder"><img src="images/RecordPlus/Overview%2001.webp" alt="Overview 01"></div></div>
       </div>
       <div class="img-titled image-wrap">
         <div class="image-caption-row"><span class="image-caption" data-i18n="s1.cap3">Live Broadcast and Channel selection</span></div>
@@ -892,6 +892,10 @@
       smoothScrollTo(el.getBoundingClientRect().top + window.pageYOffset - offset);
     }
 
+    document.querySelector('.project-footer .back-link').addEventListener('click', function (e) {
+      e.preventDefault(); smoothScrollTo(0);
+    });
+
     document.querySelector('.mobile-back-top').addEventListener('click', function (e) {
       e.preventDefault(); smoothScrollTo(0);
     });
@@ -988,7 +992,7 @@
         's1.body1': 'RecordPlus is the streaming platform of Record TV, Brazil\'s second largest TV network. It is available on desktop, mobile, and smart TVs, with over 13 million downloads.',
         's1.body2': 'The platform offers live broadcasts and on-demand content from Record TV, including news, reality shows, live sports, and exclusive productions. It also features religious soap operas, a format uniquely produced by Record TV, attracting a large and loyal audience.',
         's1.body3': 'Originally launched as PlayPlus and developed by third-party companies, the product was later reworked to introduce improvements and address existing limitations.',
-        's1.cap1': 'Home Page', 's1.cap2': 'Login and Discover',
+        's1.cap1': 'App Home Screen', 's1.cap2': 'Login and Discover',
         's1.cap3': 'Live Broadcast and Channel selection', 's1.cap4': 'Parental Control',
         's2.heading': 'PROBLEM',
         's2.body1': 'When first working on the product, several issues became clear due to its size and complexity.',
@@ -1036,7 +1040,7 @@
         's1.body1': 'O RecordPlus é a plataforma de streaming da Record TV, segunda maior rede de televisão do Brasil. Está disponível em desktop, mobile e smart TVs, com mais de 13 milhões de downloads.',
         's1.body2': 'A plataforma oferece transmissões ao vivo e conteúdo sob demanda da Record TV, incluindo notícias, reality shows, esportes ao vivo e produções exclusivas. Também conta com novelas religiosas, formato exclusivamente produzido pela Record TV, que atrai um público grande e fiel.',
         's1.body3': 'Lançado originalmente como PlayPlus e desenvolvido por empresas terceirizadas, o produto foi posteriormente reformulado para introduzir melhorias e corrigir limitações existentes.',
-        's1.cap1': 'Página Inicial', 's1.cap2': 'Login e Descoberta',
+        's1.cap1': 'App Home Screen', 's1.cap2': 'Login e Descoberta',
         's1.cap3': 'Transmissão ao Vivo e Seleção de Canal', 's1.cap4': 'Controle Parental',
         's2.heading': 'PROBLEMA',
         's2.body1': 'Ao começar a trabalhar no produto, diversos problemas ficaram evidentes devido ao seu tamanho e complexidade.',

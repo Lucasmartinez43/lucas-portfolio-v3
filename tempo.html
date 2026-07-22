@@ -652,6 +652,9 @@
       smoothScrollTo(el.getBoundingClientRect().top + window.pageYOffset - offset);
     }
 
+    var footerBack = document.querySelector('.project-footer .back-link');
+    if (footerBack) { footerBack.addEventListener('click', function (e) { e.preventDefault(); smoothScrollTo(0); }); }
+
     var backToTop = document.querySelector('.mobile-back-top');
     if (backToTop) {
       backToTop.addEventListener('click', function (e) { e.preventDefault(); smoothScrollTo(0); });
