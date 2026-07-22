@@ -15,6 +15,8 @@
   <style>
     :root {
       --bg:              #B1B1B4;
+      --section-bg:      #B1B1B4;
+      --section-border:  rgba(15,15,18,0.3);
       --grid-line:       rgba(255,255,255,0.1);
       --text-hero:       #0F0F12;
       --pen-icon:        #0F0F12;
@@ -24,6 +26,8 @@
     }
     :root[data-theme="dark"] {
       --bg:              #0F0F12;
+      --section-bg:      #0f0f12;
+      --section-border:  rgba(255,255,255,0.2);
       --grid-line:       rgba(255,255,255,0.05);
       --text-hero:       #ffffff;
       --pen-icon:        #ffffff;
@@ -144,9 +148,11 @@
     }
 
     .project-header .back-link {
-      position: absolute;
-      top: 43px;
-      left: 0;
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      z-index: 10000;
+      padding: 6px;
     }
 
     .back-icon { display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
@@ -203,11 +209,21 @@
 
     /* ── SECTIONS ─────────────────────────────────────────────────────── */
 
-    .project-section { margin-bottom: 40px; scroll-margin-top: 109px; }
+    .project-section {
+      margin-bottom: 40px; scroll-margin-top: 109px;
+    }
+    @media (min-width: 801px) {
+      .project-section {
+        background: var(--section-bg);
+        border: 1px solid var(--section-border);
+        border-radius: 16px;
+        padding: 24px;
+      }
+    }
 
     .section-header {
       display: flex; align-items: flex-start;
-      gap: 8px; padding: 0 8px; min-height: 32px;
+      gap: 8px; min-height: 32px;
       height: 32px; margin-bottom: 8px;
     }
     .section-num {
@@ -220,7 +236,6 @@
     }
 
     .section-body {
-      padding: 8px;
       font-family: 'Stack Sans Text', sans-serif; font-weight: 300; font-size: 16px;
       color: var(--text-hero); line-height: 1.6;
       margin-bottom: 0; transition: color 0.3s;
@@ -242,7 +257,7 @@
       margin-top: 16px;
       background: #0F0F12;
       border: 1px solid #FF12AA;
-      border-radius: 16px;
+      border-radius: 8px;
       min-height: 95px;
     }
     .callout-icon {
@@ -260,7 +275,7 @@
 
     .image-wrap { display: flex; flex-direction: column; gap: 8px; }
 
-    .image-caption-row { padding: 0 24px; }
+    .image-caption-row { padding: 0; }
     .image-caption {
       font-family: 'Stack Sans Text', sans-serif; font-weight: 700; font-size: 16px;
       color: var(--accent); transition: color 0.3s;
@@ -268,10 +283,6 @@
 
     .image-container {
       width: 100%;
-      background: #0f0f12;
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 16px;
-      padding: 24px;
     }
     .image-placeholder {
       width: 100%;
@@ -322,13 +333,13 @@
 
     /* ── IMPACT CARDS ─────────────────────────────────────────────────── */
 
-    .impact-cards { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 16px; margin-bottom: 16px; }
+    .impact-cards { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 16px; }
 
     .impact-card {
-      width: 382px;
+      width: calc(50% - 8px);
       background: #0F0F12;
       border: 1px solid #FF12AA;
-      border-radius: 16px;
+      border-radius: 8px;
       padding: 24px;
       display: flex; flex-direction: column;
       gap: 16px;
@@ -418,7 +429,6 @@
     .mobile-back-top { display: inline-flex; margin-top: 64px; }
     .callout-card { flex-direction: column; align-items: flex-start; gap: 12px; min-height: 0; }
     .image-placeholder { min-height: 0; }
-    .image-container { padding: 16px; }
     .carousel-frame { padding: 16px; }
     .carousel-btn:hover { color: rgba(255,255,255,0.5); }
   }
@@ -494,7 +504,7 @@
       <h1 class="project-title">RecordPlus</h1>
       <a href="index.html" class="back-link">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
-        <span data-i18n="nav.back">BACK</span>
+        <span data-i18n="nav.home">HOME</span>
       </a>
     </div>
 
@@ -699,9 +709,9 @@
 
     <!-- Footer: BACK link -->
     <footer class="project-footer">
-      <a href="index.html" class="back-link">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
-        <span data-i18n="nav.back">BACK</span>
+      <a href="#top" class="back-link">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(90deg)"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+        <span data-i18n="nav.back-top">BACK TO TOP</span>
       </a>
     </footer>
 
@@ -966,7 +976,7 @@
         'nav.top': 'TOP', 'nav.overview': 'OVERVIEW', 'nav.problem': 'PROBLEM',
         'nav.solution': 'SOLUTION', 'nav.impact': 'IMPACT',
         'nav.flow': 'SUBSCRIPTION JOURNEY', 'nav.flow-short': 'FLOW',
-        'nav.landing': 'LANDING PAGE', 'nav.back': 'BACK', 'nav.back-top': 'BACK TO TOP',
+        'nav.landing': 'LANDING PAGE', 'nav.back': 'BACK', 'nav.home': 'HOME', 'nav.back-top': 'BACK TO TOP',
         'meta.year': 'YEAR', 'meta.scope': 'SCOPE', 'meta.resp': 'RESPONSIBILITIES',
         'meta.scope1': 'Streaming App', 'meta.scope2': 'Smart TVs',
         'meta.resp1': '• Redesigned the whole account<br>creating and subscription flows',

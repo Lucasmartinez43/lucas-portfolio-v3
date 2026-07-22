@@ -22,7 +22,7 @@ const mime = {
 };
 
 http.createServer((req, res) => {
-  let filePath = path.join(ROOT, req.url === '/' ? 'index.html' : req.url);
+  let filePath = path.join(ROOT, decodeURIComponent(req.url === '/' ? 'index.html' : req.url));
   const ext = path.extname(filePath);
   const type = mime[ext] || 'application/octet-stream';
 
