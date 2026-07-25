@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
@@ -23,6 +23,9 @@
       --accent:          #946826;
       --meta-value:      #0F0F12;
       --copyright-color: #838386;
+      --card-bg:         #CDCDD1;
+      --card-text:       #0F0F12;
+      --card-text-muted: #0F0F12;
     }
     :root[data-theme="dark"] {
       --bg:              #0F0F12;
@@ -34,9 +37,13 @@
       --accent:          #FAAF40;
       --meta-value:      rgba(255,255,255,0.7);
       --copyright-color: rgba(255,255,255,0.2);
+      --card-bg:         #0F0F12;
+      --card-text:       #ffffff;
+      --card-text-muted: rgba(255,255,255,0.75);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; cursor: none !important; }
+    p { text-wrap: pretty; }
 
     .cursor-ring, .cursor-dot {
       position: fixed; border-radius: 50%; pointer-events: none;
@@ -149,6 +156,7 @@
       font-family: 'Stack Sans Text', sans-serif; font-weight: 300; font-size: 16px;
       color: var(--meta-value); line-height: 1.5; transition: color 0.3s;
     }
+    [lang="pt-BR"] .meta-resp .meta-value span { max-width: 280px; text-wrap: balance; }
 
     .project-nav {
       width: 780px; height: 53px;
@@ -167,8 +175,9 @@
       position: absolute; bottom: -2px; left: 0;
       width: 100%; height: 1px; background: currentColor; pointer-events: none;
     }
+    .back-link .cta-underline { bottom: 4px; }
 
-    .project-section { margin-bottom: 40px; scroll-margin-top: 109px; }
+    .project-section { margin-bottom: 24px; scroll-margin-top: 109px; }
     @media (min-width: 801px) {
       .project-section {
         background: var(--section-bg);
@@ -206,14 +215,14 @@
     .callout-card {
       display: flex; align-items: center;
       gap: 24px; padding: 16px 24px; margin-top: 16px;
-      background: #0F0F12;
-      border: 1px solid #FAAF40; border-radius: 8px; min-height: 95px;
+      background: var(--card-bg);
+      border: 1px solid var(--accent); border-radius: 8px; min-height: 95px;
     }
     .callout-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .callout-icon svg { width: 32px; height: 32px; }
     .callout-text {
       font-family: 'Stack Sans Text', sans-serif; font-weight: 300; font-size: 16px;
-      color: #ffffff; line-height: 1.6;
+      color: var(--card-text); line-height: 1.6;
     }
     .callout-list { padding-left: 16px; margin-top: 4px; }
     .callout-list li {
@@ -240,17 +249,19 @@
     .impact-cards { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 16px; }
     .impact-card {
       width: calc(50% - 8px);
-      background: #0F0F12;
-      border: 1px solid #FAAF40; border-radius: 8px; padding: 24px;
+      background: var(--card-bg);
+      border: 1px solid var(--accent); border-radius: 8px; padding: 24px;
       display: flex; flex-direction: column; gap: 16px;
     }
     .impact-card-header { display: flex; align-items: center; gap: 8px; }
     .impact-card-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .impact-card-icon svg { width: 32px; height: 32px; }
-    .impact-card-title { font-family: 'Stack Sans Text', sans-serif; font-weight: 300; font-size: 24px; color: #ffffff; line-height: 1; }
-    .impact-card-bottom { display: flex; flex-direction: column; gap: 8px; }
-    .impact-card-metric { font-family: 'Stack Sans Text', sans-serif; font-weight: 700; font-size: 20px; color: #ffffff; }
-    .impact-card-desc { font-family: 'Stack Sans Text', sans-serif; font-weight: 300; font-size: 16px; color: rgba(255,255,255,0.75); line-height: 1.4; }
+    .impact-card-icon svg, .callout-icon svg { stroke: var(--accent); }
+    .impact-card-title { font-family: 'Stack Sans Text', sans-serif; font-weight: 300; font-size: 24px; color: var(--card-text); line-height: 1; }
+    .impact-card-bottom { display: flex; flex-direction: column; gap: 8px; margin-top: auto; }
+    .impact-card-metric { font-family: 'Stack Sans Text', sans-serif; font-weight: 700; font-size: 20px; color: var(--card-text); }
+    .impact-card-desc { font-family: 'Stack Sans Text', sans-serif; font-weight: 300; font-size: 16px; color: var(--card-text-muted); line-height: 1.4; }
+    .impact-card-title, .impact-card-metric, .impact-card-desc { text-wrap: balance; }
 
     .project-footer { margin-top: 80px; }
 
@@ -405,12 +416,12 @@
     </div>
 
     <nav class="project-nav">
-      <a href="#top" data-i18n="nav.top">TOP</a>
-      <a href="#overview" data-i18n="nav.overview">OVERVIEW</a>
-      <a href="#challenge" data-i18n="nav.challenge-short">CHALLENGE</a>
-      <a href="#solutions" data-i18n="nav.solutions">SOLUTIONS</a>
-      <a href="#results" data-i18n="nav.results">RESULTS</a>
-      <a href="#design" data-i18n="nav.design">DESIGN SYSTEM</a>
+      <a href="#top"><span data-i18n="nav.top">TOP</span></a>
+      <a href="#overview"><span data-i18n="nav.overview">OVERVIEW</span></a>
+      <a href="#challenge"><span data-i18n="nav.challenge-short">CHALLENGE</span></a>
+      <a href="#solutions"><span data-i18n="nav.solutions">SOLUTIONS</span></a>
+      <a href="#results"><span data-i18n="nav.results">RESULTS</span></a>
+      <a href="#design"><span data-i18n="nav.design">DESIGN SYSTEM</span></a>
     </nav>
 
     <!-- 01 OVERVIEW -->
@@ -474,7 +485,7 @@
         <div class="impact-card">
           <div class="impact-card-header">
             <div class="impact-card-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FAAF40" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FAAF40" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
             </div>
             <span class="impact-card-title" data-i18n="s4.t1">Accessible</span>
           </div>
@@ -485,7 +496,7 @@
         <div class="impact-card">
           <div class="impact-card-header">
             <div class="impact-card-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FAAF40" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FAAF40" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/></svg>
             </div>
             <span class="impact-card-title" data-i18n="s4.t2">Clarity</span>
           </div>
@@ -496,7 +507,7 @@
         <div class="impact-card">
           <div class="impact-card-header">
             <div class="impact-card-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FAAF40" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FAAF40" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg>
             </div>
             <span class="impact-card-title" data-i18n="s4.t3">Performance</span>
           </div>
@@ -507,7 +518,7 @@
         <div class="impact-card">
           <div class="impact-card-header">
             <div class="impact-card-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FAAF40" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FAAF40" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
             </div>
             <span class="impact-card-title" data-i18n="s4.t4">Daily Use</span>
           </div>
@@ -738,9 +749,11 @@
       uniform float waterDiffusion;
       uniform float gravity;
       uniform vec3 inkColor;
+      uniform float aspect;
       varying vec2 vUv;
 
       float lineSegment(vec2 p, vec2 a, vec2 b, float thickness) {
+        p.x *= aspect; a.x *= aspect; b.x *= aspect;
         vec2 pa = p - a;
         vec2 ba = b - a;
         float h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);
@@ -841,6 +854,7 @@
         this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.setSize(this.winWidth, this.winHeight);
 
+
         this.orthoCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
         this.scene       = new THREE.Scene();
 
@@ -876,6 +890,7 @@
             tipPosNew:      { value: new THREE.Vector2(0.5, 0.5) },
             speed:          { value: 0.0 },
             inkColor:       { value: (() => { var c = new THREE.Color(); c.r = (this.inkColor >> 16 & 255) / 255; c.g = (this.inkColor >> 8 & 255) / 255; c.b = (this.inkColor & 255) / 255; return c; })() },
+            aspect:       { value: this.winWidth / this.winHeight },
           },
           vertexShader:   VERT,
           fragmentShader: FRAG,
@@ -911,6 +926,8 @@
           this.winWidth  = window.innerWidth;
           this.winHeight = window.innerHeight;
           this.renderer.setSize(this.winWidth, this.winHeight);
+          this.simMat.uniforms.aspect.value = this.winWidth / this.winHeight;
+
         });
         window.addEventListener('mousemove', (e) => {
           this.mouse.set(
@@ -960,7 +977,7 @@
           const inv         = 1 / Math.SQRT2;
           const nibUvDx     = -inv * NIB_HALF_PX / this.winWidth;
           const nibUvDy     = -inv * NIB_HALF_PX / this.winHeight;
-          const baseThick   = 0.001 + this.pressure * 0.05;
+          const baseThick   = (0.001 + this.pressure * 0.05) * this.winWidth / this.winHeight;
           for (let i = 0; i < NIB_COUNT; i++) {
             const t = (i / (NIB_COUNT - 1) - 0.5) * 2;
             this.simMat.uniforms.tipPosOld.value.set(this.tipOld.x + nibUvDx * t, this.tipOld.y + nibUvDy * t);
@@ -979,7 +996,8 @@
           const dotThick = 0.003 + this.pressure * 0.2;
           for (let i = 0; i < 6; i++) {
             const angle = (i / 6) * Math.PI * 2;
-            const ox = Math.cos(angle) * this.brushR;
+            const hexAspect = this.winWidth / this.winHeight;
+            const ox = Math.cos(angle) * this.brushR / hexAspect;
             const oy = Math.sin(angle) * this.brushR;
             this.simMat.uniforms.tipPosOld.value.set(this.tipOld.x + ox, this.tipOld.y + oy);
             this.simMat.uniforms.tipPosNew.value.set(this.tip.x    + ox, this.tip.y    + oy);
@@ -1079,10 +1097,10 @@
         'nav.back': 'VOLTAR', 'nav.back-top': 'VOLTAR AO TOPO',
         'meta.year': 'ANO', 'meta.scope': 'ESCOPO', 'meta.resp': 'RESPONSABILIDADES',
         'meta.scope1': 'Plataforma de Clima', 'meta.scope2': 'Mobile / Desktop',
-        'meta.resp1': '• Conduzi pesquisa com usuários e<br>benchmarking competitivo',
-        'meta.resp2': '• Desenhei o UX e UI de ponta a ponta<br>com foco em acessibilidade',
+        'meta.resp1': '• Conduzi pesquisa com usuários e benchmarking competitivo',
+        'meta.resp2': '• Desenhei o UX e UI de ponta a ponta com foco em acessibilidade',
         'meta.resp3': '• Estendi o Design System da R7',
-        'meta.resp4': '• Desenhei um widget de clima<br>para a plataforma principal da R7',
+        'meta.resp4': '• Desenhei um widget de clima para a plataforma principal da R7',
         's1.heading': 'VISÃO GERAL',
         's1.body1': 'O R7 Tempo é a plataforma de clima da R7, fornecendo informações de previsão para cidades de todo o Brasil.',
         's1.body2': 'Oferece condições atuais, atualizações por hora e previsões de vários dias em um formato simples e acessível. O produto foi projetado para entregar informações climáticas essenciais rapidamente, apoiando os usuários em suas rotinas diárias.',

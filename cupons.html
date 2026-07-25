@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
@@ -23,6 +23,9 @@
       --accent:          #124E7B;
       --meta-value:      #0F0F12;
       --copyright-color: #838386;
+      --card-bg:         #CDCDD1;
+      --card-text:       #0F0F12;
+      --card-text-muted: #0F0F12;
     }
     :root[data-theme="dark"] {
       --bg:              #0F0F12;
@@ -34,9 +37,13 @@
       --accent:          #218EE1;
       --meta-value:      rgba(255,255,255,0.7);
       --copyright-color: rgba(255,255,255,0.2);
+      --card-bg:         #0F0F12;
+      --card-text:       #ffffff;
+      --card-text-muted: rgba(255,255,255,0.75);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; cursor: none !important; }
+    p { text-wrap: pretty; }
 
     .cursor-ring, .cursor-dot {
       position: fixed; border-radius: 50%; pointer-events: none;
@@ -148,6 +155,7 @@
       font-family: 'Stack Sans Text', sans-serif; font-weight: 300; font-size: 16px;
       color: var(--meta-value); line-height: 1.5; transition: color 0.3s;
     }
+    [lang="pt-BR"] .meta-resp .meta-value span { max-width: 280px; text-wrap: balance; }
 
     .project-nav {
       width: 780px; height: 53px;
@@ -166,8 +174,9 @@
       position: absolute; bottom: -2px; left: 0;
       width: 100%; height: 1px; background: currentColor; pointer-events: none;
     }
+    .back-link .cta-underline { bottom: 4px; }
 
-    .project-section { margin-bottom: 40px; scroll-margin-top: 109px; }
+    .project-section { margin-bottom: 24px; scroll-margin-top: 109px; }
     @media (min-width: 801px) {
       .project-section {
         background: var(--section-bg);
@@ -205,14 +214,14 @@
     .callout-card {
       display: flex; align-items: center;
       gap: 24px; padding: 16px 24px; margin-top: 16px;
-      background: #0F0F12;
-      border: 1px solid #218EE1; border-radius: 8px; min-height: 95px;
+      background: var(--card-bg);
+      border: 1px solid var(--accent); border-radius: 8px; min-height: 95px;
     }
     .callout-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .callout-icon svg { width: 32px; height: 32px; }
     .callout-text {
       font-family: 'Stack Sans Text', sans-serif; font-weight: 300; font-size: 16px;
-      color: #ffffff; line-height: 1.6;
+      color: var(--card-text); line-height: 1.6;
     }
 
     .image-wrap { display: flex; flex-direction: column; gap: 8px; }
@@ -234,17 +243,19 @@
     .impact-cards { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 16px; }
     .impact-card {
       width: calc(50% - 8px);
-      background: #0F0F12;
-      border: 1px solid #218EE1; border-radius: 8px; padding: 24px;
+      background: var(--card-bg);
+      border: 1px solid var(--accent); border-radius: 8px; padding: 24px;
       display: flex; flex-direction: column; gap: 16px;
     }
     .impact-card-header { display: flex; align-items: center; gap: 8px; }
     .impact-card-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .impact-card-icon svg { width: 32px; height: 32px; }
-    .impact-card-title { font-family: 'Stack Sans Text', sans-serif; font-weight: 300; font-size: 24px; color: #ffffff; line-height: 1; }
-    .impact-card-bottom { display: flex; flex-direction: column; gap: 8px; }
-    .impact-card-metric { font-family: 'Stack Sans Text', sans-serif; font-weight: 700; font-size: 20px; color: #ffffff; }
-    .impact-card-desc { font-family: 'Stack Sans Text', sans-serif; font-weight: 300; font-size: 16px; color: rgba(255,255,255,0.75); line-height: 1.4; }
+    .impact-card-icon svg, .callout-icon svg { stroke: var(--accent); }
+    .impact-card-title { font-family: 'Stack Sans Text', sans-serif; font-weight: 300; font-size: 24px; color: var(--card-text); line-height: 1; }
+    .impact-card-bottom { display: flex; flex-direction: column; gap: 8px; margin-top: auto; }
+    .impact-card-metric { font-family: 'Stack Sans Text', sans-serif; font-weight: 700; font-size: 20px; color: var(--card-text); }
+    .impact-card-desc { font-family: 'Stack Sans Text', sans-serif; font-weight: 300; font-size: 16px; color: var(--card-text-muted); line-height: 1.4; }
+    .impact-card-title, .impact-card-metric, .impact-card-desc { text-wrap: balance; }
 
     .subsection-heading {
       font-family: 'Stack Sans Text', sans-serif; font-weight: 700; font-size: 20px;
@@ -256,15 +267,10 @@
 
     .img-carousel { margin-top: 16px; }
     .carousel-frame {
-
-      border: 1px solid #218EE1; border-bottom: none;
-      border-radius: 16px 16px 0 0; padding: 24px;
     }
     .carousel-controls {
       display: flex; flex-direction: column; gap: 16px;
-      padding: 6px 24px 12px; background: #0f0f12;
-      border: 1px solid #218EE1; border-top: none;
-      border-radius: 0 0 16px 16px;
+      padding: 6px 0 12px;
     }
     .carousel-pagination { display: flex; align-items: center; justify-content: space-between; }
     .carousel-dots { display: flex; align-items: center; gap: 6px; }
@@ -273,14 +279,18 @@
     .carousel-track .carousel-slide { display: block; flex: 0 0 100%; min-width: 100%; }
     .carousel-dot {
       width: 6px; height: 6px; border-radius: 50%;
-      background: rgba(255,255,255,0.3); transition: all 0.2s; cursor: pointer; border: none; padding: 0;
+      background: rgba(15,15,18,0.2); transition: all 0.2s; cursor: pointer; border: none; padding: 0;
     }
+    :root[data-theme="dark"] .carousel-dot { background: rgba(255,255,255,0.3); }
     .carousel-dot.active { width: 20px; border-radius: 3px; background: var(--accent); }
+    :root[data-theme="dark"] .carousel-dot.active { background: var(--accent); }
     .carousel-btn {
       background: none; border: none; padding: 0; cursor: pointer;
-      color: rgba(255,255,255,0.5); display: flex; align-items: center; transition: color 0.2s;
+      color: rgba(15,15,18,0.4); display: flex; align-items: center; transition: color 0.2s;
     }
-    .carousel-btn:hover { color: #ffffff; }
+    .carousel-btn:hover { color: #130918; }
+    :root[data-theme="dark"] .carousel-btn { color: rgba(255,255,255,0.5); }
+    :root[data-theme="dark"] .carousel-btn:hover { color: #ffffff; }
 
     .project-footer { margin-top: 80px; }
 
@@ -384,10 +394,6 @@
     .mobile-back-top { display: inline-flex; margin-top: 64px; }
     .callout-card { flex-direction: column; align-items: flex-start; gap: 12px; min-height: 0; }
     .image-placeholder { min-height: 0; }
-
-      width: 100%;
-    .carousel-frame { padding: 16px; }
-    .carousel-btn:hover { color: rgba(255,255,255,0.5); }
   }
   </style>
 </head>
@@ -476,12 +482,12 @@
     </div>
 
     <nav class="project-nav">
-      <a href="#top" data-i18n="nav.top">TOP</a>
-      <a href="#overview" data-i18n="nav.overview">OVERVIEW</a>
-      <a href="#challenge" data-i18n="nav.challenge-short">CHALLENGE</a>
-      <a href="#solution" data-i18n="nav.solution">SOLUTION</a>
-      <a href="#results" data-i18n="nav.results">RESULTS</a>
-      <a href="#design" data-i18n="nav.design-short">DESIGN</a>
+      <a href="#top"><span data-i18n="nav.top">TOP</span></a>
+      <a href="#overview"><span data-i18n="nav.overview">OVERVIEW</span></a>
+      <a href="#challenge"><span data-i18n="nav.challenge-short">CHALLENGE</span></a>
+      <a href="#solution"><span data-i18n="nav.solution">SOLUTION</span></a>
+      <a href="#results"><span data-i18n="nav.results">RESULTS</span></a>
+      <a href="#design"><span data-i18n="nav.design-short">DESIGN</span></a>
     </nav>
 
     <!-- 01 OVERVIEW -->
@@ -561,7 +567,6 @@
         <h2 class="section-heading" data-i18n="s4.heading">RESULTS</h2>
       </div>
       <p class="section-body" data-i18n="s4.body1">The experience was structured as a flexible journey, supporting different user intents while guiding users toward a seamless redemption.</p>
-      <div class="img-plain image-container"><div class="image-placeholder"></div></div>
       <div class="img-plain image-container"><div class="image-placeholder"><img src="images/Cupons/Cupons 09.webp" alt="Results"></div></div>
       <p class="section-body" data-i18n="s4.body2">Users can enter through categories, retailers, promotions, or coupons and move toward a clear decision point. From there, they can complete their purchase with minimal friction, either by accessing a product directly or applying a coupon.</p>
       <p class="section-body" data-i18n="s4.body3">To support users unfamiliar with coupons and cashback, contextual FAQ sections were introduced at key points in the flow. These help clarify how the system works, reduce uncertainty, and build trust before users proceed to redemption.</p>
@@ -569,7 +574,7 @@
         <div class="impact-card">
           <div class="impact-card-header">
             <div class="impact-card-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
             </div>
             <span class="impact-card-title" data-i18n="s4.t1">Accessibility</span>
           </div>
@@ -580,7 +585,7 @@
         <div class="impact-card">
           <div class="impact-card-header">
             <div class="impact-card-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
             </div>
             <span class="impact-card-title" data-i18n="s4.t2">Clarity</span>
           </div>
@@ -591,7 +596,7 @@
         <div class="impact-card">
           <div class="impact-card-header">
             <div class="impact-card-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
             </div>
             <span class="impact-card-title" data-i18n="s4.t3">Discoverability</span>
           </div>
@@ -602,7 +607,7 @@
         <div class="impact-card">
           <div class="impact-card-header">
             <div class="impact-card-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 5c-1.5 0-2.8 1.4-3 2-3.5-1.5-11-.3-11 5 0 1.8 0 3 2 4.5V20h4v-2h3v2h4v-4c1-.5 1.7-1 2-2h2v-4h-2c0-1-.5-1.5-1-2h0V5z"/><path d="M2 9v1a2 2 0 0 0 2 2h1"/><path d="M16 11h0"/></svg>
             </div>
             <span class="impact-card-title" data-i18n="s4.t4">User Value</span>
           </div>
@@ -925,9 +930,11 @@
       uniform float waterDiffusion;
       uniform float gravity;
       uniform vec3 inkColor;
+      uniform float aspect;
       varying vec2 vUv;
 
       float lineSegment(vec2 p, vec2 a, vec2 b, float thickness) {
+        p.x *= aspect; a.x *= aspect; b.x *= aspect;
         vec2 pa = p - a;
         vec2 ba = b - a;
         float h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);
@@ -1028,6 +1035,7 @@
         this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.setSize(this.winWidth, this.winHeight);
 
+
         this.orthoCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
         this.scene       = new THREE.Scene();
 
@@ -1063,6 +1071,7 @@
             tipPosNew:      { value: new THREE.Vector2(0.5, 0.5) },
             speed:          { value: 0.0 },
             inkColor:       { value: (() => { var c = new THREE.Color(); c.r = (this.inkColor >> 16 & 255) / 255; c.g = (this.inkColor >> 8 & 255) / 255; c.b = (this.inkColor & 255) / 255; return c; })() },
+            aspect:       { value: this.winWidth / this.winHeight },
           },
           vertexShader:   VERT,
           fragmentShader: FRAG,
@@ -1098,6 +1107,8 @@
           this.winWidth  = window.innerWidth;
           this.winHeight = window.innerHeight;
           this.renderer.setSize(this.winWidth, this.winHeight);
+          this.simMat.uniforms.aspect.value = this.winWidth / this.winHeight;
+
         });
         window.addEventListener('mousemove', (e) => {
           this.mouse.set(
@@ -1147,7 +1158,7 @@
           const inv         = 1 / Math.SQRT2;
           const nibUvDx     = -inv * NIB_HALF_PX / this.winWidth;
           const nibUvDy     = -inv * NIB_HALF_PX / this.winHeight;
-          const baseThick   = 0.001 + this.pressure * 0.05;
+          const baseThick   = (0.001 + this.pressure * 0.05) * this.winWidth / this.winHeight;
           for (let i = 0; i < NIB_COUNT; i++) {
             const t = (i / (NIB_COUNT - 1) - 0.5) * 2;
             this.simMat.uniforms.tipPosOld.value.set(this.tipOld.x + nibUvDx * t, this.tipOld.y + nibUvDy * t);
@@ -1166,7 +1177,8 @@
           const dotThick = 0.003 + this.pressure * 0.2;
           for (let i = 0; i < 6; i++) {
             const angle = (i / 6) * Math.PI * 2;
-            const ox = Math.cos(angle) * this.brushR;
+            const hexAspect = this.winWidth / this.winHeight;
+            const ox = Math.cos(angle) * this.brushR / hexAspect;
             const oy = Math.sin(angle) * this.brushR;
             this.simMat.uniforms.tipPosOld.value.set(this.tipOld.x + ox, this.tipOld.y + oy);
             this.simMat.uniforms.tipPosNew.value.set(this.tip.x    + ox, this.tip.y    + oy);
@@ -1276,7 +1288,7 @@
         'nav.back': 'VOLTAR', 'nav.back-top': 'VOLTAR AO TOPO',
         'meta.year': 'ANO', 'meta.scope': 'ESCOPO', 'meta.resp': 'RESPONSABILIDADES',
         'meta.scope1': 'Plataforma de Economia', 'meta.scope2': 'Mobile / Desktop',
-        'meta.resp1': '• Desenhei a arquitetura de informação<br>suportando múltiplas intenções de usuário',
+        'meta.resp1': '• Desenhei a arquitetura de informação suportando múltiplas intenções de usuário',
         'meta.resp2': '• Desenhei o UX e UI de ponta a ponta',
         'meta.resp3': '• Escalei o Design System da R7',
         's1.heading': 'VISÃO GERAL',

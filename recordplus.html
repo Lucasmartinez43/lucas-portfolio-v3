@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
@@ -23,6 +23,9 @@
       --accent:          #990B66;
       --meta-value:      #0F0F12;
       --copyright-color: #838386;
+      --card-bg:         #CDCDD1;
+      --card-text:       #0F0F12;
+      --card-text-muted: #0F0F12;
     }
     :root[data-theme="dark"] {
       --bg:              #0F0F12;
@@ -34,9 +37,13 @@
       --accent:          #FF12AA;
       --meta-value:      rgba(255,255,255,0.7);
       --copyright-color: rgba(255,255,255,0.2);
+      --card-bg:         #0F0F12;
+      --card-text:       #ffffff;
+      --card-text-muted: rgba(255,255,255,0.75);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; cursor: none !important; }
+    p { text-wrap: pretty; }
 
     .cursor-ring, .cursor-dot {
       position: fixed; border-radius: 50%; pointer-events: none;
@@ -173,6 +180,7 @@
       font-family: 'Stack Sans Text', sans-serif; font-weight: 300; font-size: 16px;
       color: var(--meta-value); line-height: 1.5; transition: color 0.3s;
     }
+    [lang="pt-BR"] .meta-resp .meta-value span { max-width: 280px; text-wrap: balance; }
 
     /* ── NAV BAR: gradient pill ───────────────────────────────────────── */
 
@@ -206,11 +214,12 @@
       background: currentColor;
       pointer-events: none;
     }
+    .back-link .cta-underline { bottom: 4px; }
 
     /* ── SECTIONS ─────────────────────────────────────────────────────── */
 
     .project-section {
-      margin-bottom: 40px; scroll-margin-top: 109px;
+      margin-bottom: 24px; scroll-margin-top: 109px;
     }
     @media (min-width: 801px) {
       .project-section {
@@ -236,6 +245,7 @@
     }
 
     .section-body {
+      padding: 8px;
       font-family: 'Stack Sans Text', sans-serif; font-weight: 300; font-size: 16px;
       color: var(--text-hero); line-height: 1.6;
       margin-bottom: 0; transition: color 0.3s;
@@ -255,8 +265,8 @@
       display: flex; align-items: center;
       gap: 24px; padding: 16px 24px;
       margin-top: 16px;
-      background: #0F0F12;
-      border: 1px solid #FF12AA;
+      background: var(--card-bg);
+      border: 1px solid var(--accent);
       border-radius: 8px;
       min-height: 95px;
     }
@@ -268,7 +278,7 @@
     .callout-icon svg { width: 32px; height: 32px; }
     .callout-text {
       font-family: 'Stack Sans Text', sans-serif; font-weight: 300; font-size: 16px;
-      color: #ffffff; line-height: 1.6;
+      color: var(--card-text); line-height: 1.6;
     }
 
     /* ── IMAGE WITH CAPTION ───────────────────────────────────────────── */
@@ -295,25 +305,16 @@
     .img-carousel { margin-top: 16px; }
 
     .carousel-frame {
-      width: 100%;
-      background: #0f0f12;
-      border: 1px solid #FF12AA;
-      border-bottom: none;
-      border-radius: 16px 16px 0 0;
-      padding: 24px;
     }
     .carousel-controls {
       display: flex; flex-direction: column; gap: 16px;
-      padding: 6px 24px 12px;
-      background: #0f0f12;
-      border: 1px solid #FF12AA;
-      border-top: none;
-      border-radius: 0 0 16px 16px;
+      padding: 6px 0 12px;
     }
     .carousel-subtitle {
       font-family: 'Stack Sans Text', sans-serif; font-weight: 300; font-size: 14px;
-      color: rgba(255,255,255,0.5); text-align: center; line-height: 1.5;
+      color: rgba(15,15,18,0.5); text-align: center; line-height: 1.5;
     }
+    :root[data-theme="dark"] .carousel-subtitle { color: rgba(255,255,255,0.5); }
     .carousel-pagination { display: flex; align-items: center; justify-content: space-between; }
     .carousel-dots { display: flex; align-items: center; gap: 6px; }
     .carousel-clip { overflow: hidden; width: 100%; border-radius: 8px; }
@@ -321,15 +322,19 @@
     .carousel-track .carousel-slide { display: block; flex: 0 0 100%; min-width: 100%; }
     .carousel-dot {
       width: 6px; height: 6px; border-radius: 50%;
-      background: rgba(255,255,255,0.3); transition: all 0.2s; cursor: pointer;
+      background: rgba(15,15,18,0.2); transition: all 0.2s; cursor: pointer;
     }
+    :root[data-theme="dark"] .carousel-dot { background: rgba(255,255,255,0.3); }
     .carousel-dot.active { width: 20px; border-radius: 3px; background: var(--accent); }
+    :root[data-theme="dark"] .carousel-dot.active { background: var(--accent); }
     .carousel-btn {
       background: none; border: none; padding: 0; cursor: pointer;
-      color: rgba(255,255,255,0.5); display: flex; align-items: center;
+      color: rgba(15,15,18,0.4); display: flex; align-items: center;
       transition: color 0.2s;
     }
-    .carousel-btn:hover { color: #ffffff; }
+    .carousel-btn:hover { color: #130918; }
+    :root[data-theme="dark"] .carousel-btn { color: rgba(255,255,255,0.5); }
+    :root[data-theme="dark"] .carousel-btn:hover { color: #ffffff; }
 
     /* ── IMPACT CARDS ─────────────────────────────────────────────────── */
 
@@ -337,8 +342,8 @@
 
     .impact-card {
       width: calc(50% - 8px);
-      background: #0F0F12;
-      border: 1px solid #FF12AA;
+      background: var(--card-bg);
+      border: 1px solid var(--accent);
       border-radius: 8px;
       padding: 24px;
       display: flex; flex-direction: column;
@@ -350,19 +355,21 @@
       display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
     .impact-card-icon svg { width: 32px; height: 32px; }
+    .impact-card-icon svg, .callout-icon svg { stroke: var(--accent); }
     .impact-card-title {
       font-family: 'Stack Sans Text', sans-serif; font-weight: 300; font-size: 24px;
-      color: #ffffff; line-height: 1;
+      color: var(--card-text); line-height: 1;
     }
-    .impact-card-bottom { display: flex; flex-direction: column; gap: 8px; }
+    .impact-card-bottom { display: flex; flex-direction: column; gap: 8px; margin-top: auto; }
     .impact-card-metric {
       font-family: 'Stack Sans Text', sans-serif; font-weight: 700; font-size: 20px;
-      color: #ffffff;
+      color: var(--card-text);
     }
     .impact-card-desc {
       font-family: 'Stack Sans Text', sans-serif; font-weight: 300; font-size: 16px;
-      color: rgba(255,255,255,0.75); line-height: 1.4;
+      color: var(--card-text-muted); line-height: 1.4;
     }
+    .impact-card-title, .impact-card-metric, .impact-card-desc { text-wrap: balance; }
 
     /* ── FOOTER ───────────────────────────────────────────────────────── */
 
@@ -429,8 +436,6 @@
     .mobile-back-top { display: inline-flex; margin-top: 64px; }
     .callout-card { flex-direction: column; align-items: flex-start; gap: 12px; min-height: 0; }
     .image-placeholder { min-height: 0; }
-    .carousel-frame { padding: 16px; }
-    .carousel-btn:hover { color: rgba(255,255,255,0.5); }
   }
   </style>
 </head>
@@ -526,13 +531,13 @@
 
     <!-- Nav -->
     <nav class="project-nav">
-      <a href="#top" data-i18n="nav.top">TOP</a>
-      <a href="#overview" data-i18n="nav.overview">OVERVIEW</a>
-      <a href="#problem" data-i18n="nav.problem">PROBLEM</a>
-      <a href="#solution" data-i18n="nav.solution">SOLUTION</a>
-      <a href="#impact" data-i18n="nav.impact">IMPACT</a>
-      <a href="#flow" data-i18n="nav.flow-short">FLOW</a>
-      <a href="#landing" data-i18n="nav.landing">LANDING PAGE</a>
+      <a href="#top"><span data-i18n="nav.top">TOP</span></a>
+      <a href="#overview"><span data-i18n="nav.overview">OVERVIEW</span></a>
+      <a href="#problem"><span data-i18n="nav.problem">PROBLEM</span></a>
+      <a href="#solution"><span data-i18n="nav.solution">SOLUTION</span></a>
+      <a href="#impact"><span data-i18n="nav.impact">IMPACT</span></a>
+      <a href="#flow"><span data-i18n="nav.flow-short">FLOW</span></a>
+      <a href="#landing"><span data-i18n="nav.landing">LANDING PAGE</span></a>
     </nav>
 
     <!-- 01 OVERVIEW -->
@@ -616,7 +621,7 @@
         <div class="impact-card">
           <div class="impact-card-header">
             <div class="impact-card-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF12AA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF12AA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
             </div>
             <span class="impact-card-title" data-i18n="s4.t1">User Acquisition</span>
           </div>
@@ -628,7 +633,7 @@
         <div class="impact-card">
           <div class="impact-card-header">
             <div class="impact-card-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF12AA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF12AA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
             </div>
             <span class="impact-card-title" data-i18n="s4.t2">Conversions</span>
           </div>
@@ -1031,11 +1036,11 @@
         'nav.landing': 'LANDING PAGE', 'nav.back': 'VOLTAR', 'nav.back-top': 'VOLTAR AO TOPO',
         'meta.year': 'ANO', 'meta.scope': 'ESCOPO', 'meta.resp': 'RESPONSABILIDADES',
         'meta.scope1': 'App de Streaming', 'meta.scope2': 'Smart TVs',
-        'meta.resp1': '• Redesenhei todo o fluxo de criação<br>de conta e de assinatura',
-        'meta.resp2': '• Criei diversas funcionalidades novas<br>como transmissão ao vivo, seleção<br>de canal e controle parental',
+        'meta.resp1': '• Redesenhei todo o fluxo de criação de conta e de assinatura',
+        'meta.resp2': '• Criei diversas funcionalidades novas como transmissão ao vivo, seleção de canal e controle parental',
         'meta.resp3': '• Desenhei as versões para Smart TV',
-        'meta.resp4': '• Adaptei o App para o rebranding<br>e criei uma nova landing page<br>com a identidade visual atualizada',
-        'meta.resp5': '• Melhorei a Experiência do Usuário<br>aplicando diretrizes WCAG',
+        'meta.resp4': '• Adaptei o App para o rebranding e criei uma nova landing page com a identidade visual atualizada',
+        'meta.resp5': '• Melhorei a Experiência do Usuário aplicando diretrizes WCAG',
         's1.heading': 'VISÃO GERAL',
         's1.body1': 'O RecordPlus é a plataforma de streaming da Record TV, segunda maior rede de televisão do Brasil. Está disponível em desktop, mobile e smart TVs, com mais de 13 milhões de downloads.',
         's1.body2': 'A plataforma oferece transmissões ao vivo e conteúdo sob demanda da Record TV, incluindo notícias, reality shows, esportes ao vivo e produções exclusivas. Também conta com novelas religiosas, formato exclusivamente produzido pela Record TV, que atrai um público grande e fiel.',
@@ -1135,9 +1140,11 @@
       uniform float waterDiffusion;
       uniform float gravity;
       uniform vec3 inkColor;
+      uniform float aspect;
       varying vec2 vUv;
 
       float lineSegment(vec2 p, vec2 a, vec2 b, float thickness) {
+        p.x *= aspect; a.x *= aspect; b.x *= aspect;
         vec2 pa = p - a;
         vec2 ba = b - a;
         float h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);
@@ -1273,6 +1280,7 @@
             tipPosNew:      { value: new THREE.Vector2(0.5, 0.5) },
             speed:          { value: 0.0 },
             inkColor:       { value: (() => { var c = new THREE.Color(); c.r = (this.inkColor >> 16 & 255) / 255; c.g = (this.inkColor >> 8 & 255) / 255; c.b = (this.inkColor & 255) / 255; return c; })() },
+            aspect:       { value: this.winWidth / this.winHeight },
           },
           vertexShader:   VERT,
           fragmentShader: FRAG,
@@ -1308,6 +1316,7 @@
           this.winWidth  = window.innerWidth;
           this.winHeight = window.innerHeight;
           this.renderer.setSize(this.winWidth, this.winHeight);
+          this.simMat.uniforms.aspect.value = this.winWidth / this.winHeight;
         });
         window.addEventListener('mousemove', (e) => {
           this.mouse.set(
@@ -1357,7 +1366,7 @@
           const inv         = 1 / Math.SQRT2;
           const nibUvDx     = -inv * NIB_HALF_PX / this.winWidth;
           const nibUvDy     = -inv * NIB_HALF_PX / this.winHeight;
-          const baseThick   = 0.001 + this.pressure * 0.05;
+          const baseThick   = (0.001 + this.pressure * 0.05) * this.winWidth / this.winHeight;
           for (let i = 0; i < NIB_COUNT; i++) {
             const t = (i / (NIB_COUNT - 1) - 0.5) * 2;
             this.simMat.uniforms.tipPosOld.value.set(this.tipOld.x + nibUvDx * t, this.tipOld.y + nibUvDy * t);
@@ -1376,7 +1385,8 @@
           const dotThick = 0.003 + this.pressure * 0.2;
           for (let i = 0; i < 6; i++) {
             const angle = (i / 6) * Math.PI * 2;
-            const ox = Math.cos(angle) * this.brushR;
+            const hexAspect = this.winWidth / this.winHeight;
+            const ox = Math.cos(angle) * this.brushR / hexAspect;
             const oy = Math.sin(angle) * this.brushR;
             this.simMat.uniforms.tipPosOld.value.set(this.tipOld.x + ox, this.tipOld.y + oy);
             this.simMat.uniforms.tipPosNew.value.set(this.tip.x    + ox, this.tip.y    + oy);

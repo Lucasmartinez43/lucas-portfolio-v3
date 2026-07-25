@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
@@ -23,6 +23,9 @@
       --accent:          #124E7B;
       --meta-value:      #0F0F12;
       --copyright-color: #838386;
+      --card-bg:         #CDCDD1;
+      --card-text:       #0F0F12;
+      --card-text-muted: #0F0F12;
     }
     :root[data-theme="dark"] {
       --bg:              #0F0F12;
@@ -34,9 +37,13 @@
       --accent:          #218EE1;
       --meta-value:      rgba(255,255,255,0.7);
       --copyright-color: rgba(255,255,255,0.2);
+      --card-bg:         #0F0F12;
+      --card-text:       #ffffff;
+      --card-text-muted: rgba(255,255,255,0.75);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; cursor: none !important; }
+    p { text-wrap: pretty; }
 
     .cursor-ring, .cursor-dot {
       position: fixed; border-radius: 50%; pointer-events: none;
@@ -148,6 +155,7 @@
       font-family: 'Stack Sans Text', sans-serif; font-weight: 300; font-size: 16px;
       color: var(--meta-value); line-height: 1.5; transition: color 0.3s;
     }
+    [lang="pt-BR"] .meta-resp .meta-value span { max-width: 280px; text-wrap: balance; }
 
     .project-nav {
       width: 780px; height: 53px;
@@ -166,8 +174,9 @@
       position: absolute; bottom: -2px; left: 0;
       width: 100%; height: 1px; background: currentColor; pointer-events: none;
     }
+    .back-link .cta-underline { bottom: 4px; }
 
-    .project-section { margin-bottom: 40px; scroll-margin-top: 109px; }
+    .project-section { margin-bottom: 24px; scroll-margin-top: 109px; }
     @media (min-width: 801px) {
       .project-section {
         background: var(--section-bg);
@@ -205,14 +214,14 @@
     .callout-card {
       display: flex; align-items: center;
       gap: 24px; padding: 16px 24px; margin-top: 16px;
-      background: #0F0F12;
-      border: 1px solid #218EE1; border-radius: 8px; min-height: 95px;
+      background: var(--card-bg);
+      border: 1px solid var(--accent); border-radius: 8px; min-height: 95px;
     }
     .callout-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .callout-icon svg { width: 32px; height: 32px; }
     .callout-text {
       font-family: 'Stack Sans Text', sans-serif; font-weight: 300; font-size: 16px;
-      color: #ffffff; line-height: 1.6;
+      color: var(--card-text); line-height: 1.6;
     }
 
     .image-wrap { display: flex; flex-direction: column; gap: 8px; }
@@ -234,50 +243,54 @@
     .impact-cards { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 16px; }
     .impact-card {
       width: calc(50% - 8px);
-      background: #0F0F12;
-      border: 1px solid #218EE1; border-radius: 8px; padding: 24px;
+      background: var(--card-bg);
+      border: 1px solid var(--accent); border-radius: 8px; padding: 24px;
       display: flex; flex-direction: column; gap: 16px;
     }
     .impact-card-header { display: flex; align-items: center; gap: 8px; }
     .impact-card-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .impact-card-icon svg { width: 32px; height: 32px; }
-    .impact-card-title { font-family: 'Stack Sans Text', sans-serif; font-weight: 300; font-size: 24px; color: #ffffff; line-height: 1; }
-    .impact-card-bottom { display: flex; flex-direction: column; gap: 8px; }
-    .impact-card-metric { font-family: 'Stack Sans Text', sans-serif; font-weight: 700; font-size: 20px; color: #ffffff; }
-    .impact-card-desc { font-family: 'Stack Sans Text', sans-serif; font-weight: 300; font-size: 16px; color: rgba(255,255,255,0.75); line-height: 1.4; }
+    .impact-card-icon svg, .callout-icon svg { stroke: var(--accent); }
+    .impact-card-title { font-family: 'Stack Sans Text', sans-serif; font-weight: 300; font-size: 24px; color: var(--card-text); line-height: 1; }
+    .impact-card-bottom { display: flex; flex-direction: column; gap: 8px; margin-top: auto; }
+    .impact-card-metric { font-family: 'Stack Sans Text', sans-serif; font-weight: 700; font-size: 20px; color: var(--card-text); }
+    .impact-card-desc { font-family: 'Stack Sans Text', sans-serif; font-weight: 300; font-size: 16px; color: var(--card-text-muted); line-height: 1.4; }
+    .impact-card-title, .impact-card-metric, .impact-card-desc { text-wrap: balance; }
 
     .img-carousel { margin-top: 16px; }
     .carousel-frame {
-
-      border: 1px solid #218EE1; border-bottom: none;
-      border-radius: 16px 16px 0 0; padding: 24px;
     }
     .carousel-controls {
       display: flex; flex-direction: column; gap: 16px;
-      padding: 6px 24px 12px; background: #0f0f12;
-      border: 1px solid #218EE1; border-top: none;
-      border-radius: 0 0 16px 16px;
+      padding: 6px 0 12px;
     }
     .carousel-subtitle {
       font-family: 'Stack Sans Text', sans-serif; font-weight: 300; font-size: 14px;
-      color: rgba(255,255,255,0.5); text-align: center; line-height: 1.5;
+      color: rgba(15,15,18,0.5); text-align: center; line-height: 1.5;
     }
+    :root[data-theme="dark"] .carousel-subtitle { color: rgba(255,255,255,0.5); }
     .carousel-pagination { display: flex; align-items: center; justify-content: space-between; }
     .carousel-clip { overflow: hidden; width: 100%; border-radius: 8px; }
     .carousel-track { display: flex; transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94); will-change: transform; }
     .carousel-track .carousel-slide { display: block; flex: 0 0 100%; min-width: 100%; }
     .carousel-dot {
       width: 6px; height: 6px; border-radius: 50%;
-      background: rgba(255,255,255,0.3); transition: all 0.2s; cursor: pointer;
+      background: rgba(15,15,18,0.2); transition: all 0.2s; cursor: pointer;
     }
+    :root[data-theme="dark"] .carousel-dot { background: rgba(255,255,255,0.3); }
     .carousel-dot.active { width: 20px; border-radius: 3px; background: var(--accent); }
+    :root[data-theme="dark"] .carousel-dot.active { background: var(--accent); }
     .carousel-dots { display: flex; gap: 6px; align-items: center; }
     .carousel-arrows { display: flex; gap: 8px; }
     .carousel-prev, .carousel-next {
-      background: none; border: none; color: rgba(255,255,255,0.5);
+      background: none; border: none; color: rgba(15,15,18,0.4);
       padding: 4px; display: flex; align-items: center; justify-content: center;
     }
-    .carousel-prev:hover, .carousel-next:hover { color: #ffffff; }
+    .carousel-prev:hover, .carousel-next:hover { color: #130918; }
+    :root[data-theme="dark"] .carousel-prev,
+    :root[data-theme="dark"] .carousel-next { color: rgba(255,255,255,0.5); }
+    :root[data-theme="dark"] .carousel-prev:hover,
+    :root[data-theme="dark"] .carousel-next:hover { color: #ffffff; }
 
     .project-footer { margin-top: 80px; }
 
@@ -355,10 +368,6 @@
     .mobile-back-top { display: inline-flex; margin-top: 64px; }
     .callout-card { flex-direction: column; align-items: flex-start; gap: 12px; min-height: 0; }
     .image-placeholder { min-height: 0; }
-
-      width: 100%;
-    .carousel-frame { padding: 16px; }
-    .carousel-btn:hover { color: rgba(255,255,255,0.5); }
   }
   </style>
 </head>
@@ -526,7 +535,7 @@
         <div class="impact-card">
           <div class="impact-card-header">
             <div class="impact-card-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 9 5 12 1.774-5.226L21 14 9 9z"/><path d="m16.071 16.071 4.243 4.243"/><path d="m7.188 2.239.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656-2.12 2.122"/></svg>
             </div>
             <span class="impact-card-title" data-i18n="s4.t1">Engagement</span>
           </div>
@@ -537,7 +546,7 @@
         <div class="impact-card">
           <div class="impact-card-header">
             <div class="impact-card-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
             </div>
             <span class="impact-card-title" data-i18n="s4.t2">Session Duration</span>
           </div>
@@ -548,7 +557,7 @@
         <div class="impact-card">
           <div class="impact-card-header">
             <div class="impact-card-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m17 2 4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
             </div>
             <span class="impact-card-title" data-i18n="s4.t3">Retention</span>
           </div>
@@ -559,7 +568,7 @@
         <div class="impact-card">
           <div class="impact-card-header">
             <div class="impact-card-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
             </div>
             <span class="impact-card-title" data-i18n="s4.t4">User Acquisition</span>
           </div>
@@ -755,8 +764,8 @@
         'nav.solutions':'SOLUÇÕES','nav.impact':'IMPACTO','nav.design':'DESIGN SYSTEM',
         'meta.year':'ANO','meta.scope':'ESCOPO','meta.resp':'RESPONSABILIDADES',
         'meta.scope1':'Plataforma de Notícias','meta.scope2':'Expansão de Funcionalidades','meta.scope3':'Mobile / Desktop',
-        'meta.resp1':'• Projetei funcionalidades de engajamento<br>incluindo newsletter, seguimento de autores<br>e quizzes interativos',
-        'meta.resp2':'• Criei páginas de cobertura especial<br>para eleições, campeonatos esportivos<br>e reality shows',
+        'meta.resp1':'• Projetei funcionalidades de engajamento incluindo newsletter, seguimento de autores e quizzes interativos',
+        'meta.resp2':'• Criei páginas de cobertura especial para eleições, campeonatos esportivos e reality shows',
         'meta.resp3':'• Escalei o R7 Design System',
         's1.heading':'VISÃO GERAL',
         's1.body1':'O R7 é um dos maiores portais de notícias do Brasil, alcançando mais de 70 milhões de usuários únicos mensais de acordo com o Comscore. Cobre uma ampla variedade de temas, incluindo política, economia, esportes, saúde, estilo de vida e cultura pop, além de conteúdos relacionados aos programas da Record TV.',
@@ -987,9 +996,11 @@
       uniform float waterDiffusion;
       uniform float gravity;
       uniform vec3 inkColor;
+      uniform float aspect;
       varying vec2 vUv;
 
       float lineSegment(vec2 p, vec2 a, vec2 b, float thickness) {
+        p.x *= aspect; a.x *= aspect; b.x *= aspect;
         vec2 pa = p - a;
         vec2 ba = b - a;
         float h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);
@@ -1090,6 +1101,7 @@
         this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.setSize(this.winWidth, this.winHeight);
 
+
         this.orthoCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
         this.scene       = new THREE.Scene();
 
@@ -1125,6 +1137,7 @@
             tipPosNew:      { value: new THREE.Vector2(0.5, 0.5) },
             speed:          { value: 0.0 },
             inkColor:       { value: (() => { var c = new THREE.Color(); c.r = (this.inkColor >> 16 & 255) / 255; c.g = (this.inkColor >> 8 & 255) / 255; c.b = (this.inkColor & 255) / 255; return c; })() },
+            aspect:       { value: this.winWidth / this.winHeight },
           },
           vertexShader:   VERT,
           fragmentShader: FRAG,
@@ -1160,6 +1173,8 @@
           this.winWidth  = window.innerWidth;
           this.winHeight = window.innerHeight;
           this.renderer.setSize(this.winWidth, this.winHeight);
+          this.simMat.uniforms.aspect.value = this.winWidth / this.winHeight;
+
         });
         window.addEventListener('mousemove', (e) => {
           this.mouse.set(
@@ -1209,7 +1224,7 @@
           const inv         = 1 / Math.SQRT2;
           const nibUvDx     = -inv * NIB_HALF_PX / this.winWidth;
           const nibUvDy     = -inv * NIB_HALF_PX / this.winHeight;
-          const baseThick   = 0.001 + this.pressure * 0.05;
+          const baseThick   = (0.001 + this.pressure * 0.05) * this.winWidth / this.winHeight;
           for (let i = 0; i < NIB_COUNT; i++) {
             const t = (i / (NIB_COUNT - 1) - 0.5) * 2;
             this.simMat.uniforms.tipPosOld.value.set(this.tipOld.x + nibUvDx * t, this.tipOld.y + nibUvDy * t);
@@ -1228,7 +1243,8 @@
           const dotThick = 0.003 + this.pressure * 0.2;
           for (let i = 0; i < 6; i++) {
             const angle = (i / 6) * Math.PI * 2;
-            const ox = Math.cos(angle) * this.brushR;
+            const hexAspect = this.winWidth / this.winHeight;
+            const ox = Math.cos(angle) * this.brushR / hexAspect;
             const oy = Math.sin(angle) * this.brushR;
             this.simMat.uniforms.tipPosOld.value.set(this.tipOld.x + ox, this.tipOld.y + oy);
             this.simMat.uniforms.tipPosNew.value.set(this.tip.x    + ox, this.tip.y    + oy);
