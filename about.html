@@ -1,0 +1,1196 @@
+﻿<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — Lucas Martinez</title>
+  <style>
+    @font-face { font-family: 'JetBrains Mono'; font-style: normal; font-weight: 100 800; font-display: swap; src: url('assets/jetbrains-mono-latin-ext.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+    @font-face { font-family: 'JetBrains Mono'; font-style: normal; font-weight: 100 800; font-display: swap; src: url('assets/jetbrains-mono-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+    @font-face { font-family: 'Stack Sans Notch'; font-style: normal; font-weight: 700; font-display: block; src: url('assets/stack-sans-notch-700-latin-ext.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+    @font-face { font-family: 'Stack Sans Notch'; font-style: normal; font-weight: 700; font-display: block; src: url('assets/stack-sans-notch-700-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+    @font-face { font-family: 'Stack Sans Text'; font-style: normal; font-weight: 200 700; font-display: swap; src: url('assets/stack-sans-text-latin-ext.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+    @font-face { font-family: 'Stack Sans Text'; font-style: normal; font-weight: 200 700; font-display: swap; src: url('assets/stack-sans-text-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+    @font-face { font-family: 'Antro Vectra'; src: url('assets/Antro_Vectra.otf') format('opentype'); font-weight: normal; font-style: normal; font-display: block; }
+  </style>
+  <style>
+    :root {
+      --bg:              #CDCDD1;
+      --section-bg:      #CDCDD1;
+      --section-border:  rgba(15,15,18,0.3);
+      --grid-line:       rgba(255,255,255,0.1);
+      --text-hero:       #0F0F12;
+      --pen-icon:        #0F0F12;
+      --accent:          #990B66;
+      --copyright-color: #838386;
+    }
+    :root[data-theme="dark"] {
+      --bg:              #0F0F12;
+      --section-bg:      #0f0f12;
+      --section-border:  rgba(255,255,255,0.2);
+      --grid-line:       rgba(255,255,255,0.05);
+      --text-hero:       #ffffff;
+      --pen-icon:        #ffffff;
+      --accent:          #FF12AA;
+      --copyright-color: rgba(255,255,255,0.2);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; cursor: none !important; }
+
+    .cursor-ring, .cursor-dot {
+      position: fixed; border-radius: 50%; pointer-events: none;
+      z-index: 9999; transform: translate(-50%,-50%); left: -100px; top: -100px;
+    }
+    .cursor-ring { width: 24px; height: 24px; border: 1.5px solid #ffffff; transition: border-color 0.3s ease, border-width 0.2s ease; }
+    .cursor-dot  { width: 8px; height: 8px; background: #ffffff; transition: background 0.3s, width 0.2s, height 0.2s, opacity 0.2s; }
+    .cursor-dot.is-hovering { width: 24px; height: 24px; opacity: 0.3; background: #ffffff; }
+    .cursor-ring.over-content  { border-color: #ffffff; }
+    .cursor-ring.is-hovering   { border-color: #ffffff; border-width: 2px; }
+    .cursor-dot.over-content   { background: #ffffff; }
+    .cursor-dot-nib {
+      position: fixed; pointer-events: none; z-index: 9999;
+      width: 5px; height: 2px; background: #ffffff;
+      border-radius: 1px;
+      transform: translate(-50%, -50%) rotate(135deg);
+      transition: background 0.3s, width 0.12s ease; display: none;
+    }
+    .cursor-dot-nib.over-content { background: #ffffff; }
+    .cursor-dot-nib.is-pressing  { width: 14px; }
+    .cursor-brush { position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); display: none; }
+    body.pen-1 .cursor-dot               { display: none; }
+    body.pen-1 .cursor-dot-nib           { display: block; }
+    body.pen-1 .cursor-dot.is-hovering   { display: block; }
+    body.pen-1 .cursor-dot-nib.is-hovering { display: none; }
+    body.pen-2 .cursor-dot               { display: none; }
+    body.pen-2 .cursor-brush             { display: block; }
+    body.pen-2 .cursor-dot.is-hovering   { display: block; }
+    body.pen-2 .cursor-brush.is-hovering { display: none; }
+    .ink-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 2; }
+
+    body { background: var(--bg); color: var(--text-hero); font-family: 'Stack Sans Text', sans-serif; transition: background 0.3s, color 0.3s; }
+
+    .bg-grid {
+      position: fixed; inset: 0; z-index: 1; pointer-events: none;
+      background-image: linear-gradient(to right, var(--grid-line) 1px, transparent 1px), linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+      background-size: 39px 39px;
+      background-position: calc(50% + 19.5px) calc(50% + 19.5px);
+    }
+
+    .theme-toggle {
+      position: fixed; top: 16px; right: 16px; z-index: 9999;
+      background: none; border: none; padding: 6px;
+      color: var(--pen-icon); opacity: 0.45; transition: opacity 0.2s, color 0.3s;
+    }
+    .theme-toggle:hover { opacity: 1; }
+    .lang-wrapper {
+      position: fixed; top: 16px; right: 52px; z-index: 9998;
+      display: flex; align-items: center; height: 32px;
+    }
+    .lang-toggle {
+      display: flex; align-items: center; gap: 4px;
+      background: none; border: none; padding: 6px;
+      font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 200;
+      letter-spacing: 0.08em; color: var(--pen-icon); opacity: 0.45;
+      transition: opacity 0.2s ease, color 0.3s ease;
+    }
+    .lang-toggle:hover { opacity: 1; }
+    .lang-menu {
+      position: absolute; top: calc(100% + 2px); right: 0;
+      background: var(--bg); border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px; overflow: hidden; min-width: 48px;
+      opacity: 0; pointer-events: none; transform: translateY(-4px);
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    .lang-menu.open { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    .lang-option {
+      display: block; width: 100%; padding: 7px 14px;
+      background: none; border: none;
+      font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 200;
+      letter-spacing: 0.08em; color: var(--pen-icon); text-align: center;
+      opacity: 0.5; transition: opacity 0.15s, background 0.15s;
+    }
+    .lang-option:hover { opacity: 1; background: rgba(255,255,255,0.06); }
+    .lang-option.active { opacity: 1; }
+    @media (max-width: 800px) { .lang-wrapper { display: none !important; } }
+
+    /* ── LAYOUT ─────────────────────────────────────────────────────── */
+
+    .project-page {
+      position: relative; z-index: 2;
+      max-width: 780px; margin: 0 auto;
+      padding-top: 140px; padding-bottom: 80px;
+    }
+
+    /* ── HEADER ──────────────────────────────────────────────────────── */
+
+    .project-header {
+      position: relative;
+      height: auto;
+      margin-bottom: 140px;
+      text-align: center;
+    }
+
+    .about-title-line1 {
+      display: block;
+      font-family: 'Stack Sans Notch', sans-serif;
+      font-weight: 700;
+      font-size: 32px;
+      line-height: 1.15;
+      color: var(--text-hero);
+      transition: color 0.3s;
+    }
+    .about-title-line2 {
+      display: block;
+      font-family: 'Antro Vectra', cursive;
+      font-weight: normal;
+      font-size: 64px;
+      line-height: 1.2;
+      color: var(--text-hero);
+      transition: color 0.3s;
+    }
+    .title-accent { color: #CD3D23; }
+
+    .back-link {
+      position: relative;
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 400;
+      color: var(--text-hero); text-decoration: none;
+    }
+    .project-header .back-link {
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      z-index: 10000;
+      padding: 6px;
+    }
+    .back-icon { display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+    /* ── SECTIONS ─────────────────────────────────────────────────────── */
+
+    .project-section {
+      margin-bottom: 24px;
+    }
+    .about-photo-col {
+      position: relative;
+      flex-shrink: 0;
+      width: 220px;
+    }
+    .about-photo-col img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .about-text-col {
+      flex: 1;
+      min-width: 0;
+    }
+
+    @media (min-width: 801px) {
+      .project-section {
+        background: #0F0F12;
+        border: 1px solid var(--section-border);
+        border-radius: 16px;
+        padding: 64px;
+      }
+      .about-content {
+        display: flex;
+        align-items: stretch;
+        gap: 32px;
+      }
+      .skills-body {
+        display: flex;
+        gap: 0;
+        align-items: stretch;
+      }
+      .skills-list { flex-shrink: 0; width: 260px; }
+      .skills-desc  { flex: 1; min-width: 0; position: relative; }
+      .skills-desc-text { position: absolute; left: 0; right: 0; }
+    }
+
+    .section-body {
+      padding: 8px;
+      font-family: 'Stack Sans Text', sans-serif; font-weight: 300; font-size: 16px;
+      color: var(--text-hero); line-height: 1.6;
+      margin-bottom: 0; transition: color 0.3s;
+      text-wrap: pretty;
+    }
+    :root[data-theme="dark"] .section-body { color: rgba(255,255,255,0.7); }
+    .about-content .section-body + .section-body { margin-top: 20px; }
+
+    /* ── FOOTER ───────────────────────────────────────────────────────── */
+
+    .project-footer { margin-top: 80px; }
+
+    .cta-underline {
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 100%; height: 1px;
+      background: currentColor;
+      pointer-events: none;
+    }
+    .back-link .cta-underline { bottom: 4px; }
+
+    .skill-label {
+      position: relative;
+      display: inline-block;
+    }
+    .skill-btn .cta-underline { bottom: 8px; }
+    .skill-btn.active .cta-underline { background: #CD3D23; }
+
+    /* ── SKILLS ──────────────────────────────────────────────────────── */
+
+    .project-section .section-body { color: rgba(255, 255, 255, 0.7); }
+    .about-bold { font-weight: 700; color: #ffffff; }
+
+    .skills-section { margin-top: 24px; }
+
+    .skills-heading {
+      font-family: 'Stack Sans Text', sans-serif; font-weight: 700; font-size: 24px;
+      color: #ffffff; margin-bottom: 40px;
+    }
+
+    .skills-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+
+    .skill-btn {
+      position: relative;
+      display: block; width: 100%; text-align: left;
+      font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 500;
+      color: var(--text-hero);
+      background: none; border: none;
+      padding: 10px 0; white-space: nowrap;
+    }
+    .skill-btn.active { color: #CD3D23; }
+
+    .skills-desc-text {
+      font-family: 'Stack Sans Text', sans-serif; font-weight: 300; font-size: 16px;
+      color: rgba(255, 255, 255, 0.7); line-height: 1.6;
+      opacity: 0; transition: opacity 0.25s ease;
+      border-left: 1px solid #CD3D23; padding-left: 24px;
+    }
+    .skills-desc-text.visible { opacity: 1; }
+
+    /* ── Mobile ──────────────────────────────────────────────────────── */
+    .mobile-topbar       { display: none; }
+    .mobile-back-top     { display: none; }
+    .mobile-menu         { display: none; }
+    .mobile-menu-overlay { display: none; }
+
+    @media (max-width: 800px) {
+      *, *::before, *::after { cursor: auto !important; }
+      .cursor-ring, .cursor-dot, .cursor-dot-nib,
+      .cursor-brush, .ink-canvas, .theme-toggle     { display: none !important; }
+      .project-header, .project-footer { display: none; }
+
+      .mobile-topbar {
+        display: flex; align-items: center; justify-content: space-between;
+        position: fixed; top: 16px; left: 16px; right: 16px; z-index: 1000;
+        height: 60px; padding: 0 16px;
+        background: linear-gradient(to right, #990B66 0%, #FF12AA 100%);
+        border: 1px solid #FF12AA; border-radius: 16px;
+      }
+      .mobile-topbar-left { display: flex; align-items: center; gap: 8px; }
+      .mobile-back { color: #ffffff; display: flex; align-items: center; text-decoration: none; flex-shrink: 0; }
+      .mobile-topbar-title { font-family: 'Stack Sans Notch', sans-serif; font-weight: 700; font-size: 32px; color: #ffffff; line-height: 1; }
+      .mobile-menu-btn { background: none; border: none; padding: 0; color: #ffffff; display: flex; align-items: center; justify-content: center; }
+      .mobile-menu {
+        display: flex; flex-direction: column; align-items: flex-end;
+        position: fixed; top: calc(16px + 60px + 8px);
+        right: 16px; width: fit-content; z-index: 999;
+        background: #0F0F12; border: 1px solid rgba(255,255,255,0.2); border-radius: 16px;
+        padding: 8px 0 8px 40px;
+        opacity: 0; transform: translateY(-8px); pointer-events: none;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+      }
+      .mobile-menu.open { opacity: 1; transform: translateY(0); pointer-events: auto; }
+      .mobile-divider { height: 1px; background: rgba(255,255,255,0.2); align-self: stretch; margin: 4px 16px 4px -24px; }
+      .mobile-lang-row, .mobile-theme-row { display: flex; align-items: center; gap: 20px; padding: 10px 16px; }
+      .mobile-lang-opt {
+        background: none; border: none; padding: 0;
+        font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 200;
+        letter-spacing: 0.05em; color: rgba(255,255,255,0.3);
+      }
+      .mobile-lang-opt.active { font-weight: 700; color: rgba(255,255,255,0.85); }
+      .mobile-theme-opt { background: none; border: none; padding: 0; color: rgba(255,255,255,0.3); display: flex; align-items: center; }
+      .mobile-theme-opt.active { color: rgba(255,255,255,0.85); }
+      .mobile-theme-opt svg { stroke-width: 1.5; }
+      .mobile-theme-opt.active svg { stroke-width: 2.5; }
+      .mobile-menu-overlay { display: none; position: fixed; inset: 0; z-index: 998; }
+      .mobile-menu-overlay.open { display: block; }
+
+      .project-page { max-width: 100%; padding: 120px 16px 64px; }
+      .mobile-back-top { display: inline-flex; margin-top: 64px; }
+    }
+
+    /* ── CONTACT SECTION ─────────────────────────────────────────────── */
+    .contact-section-body { margin-bottom: 40px; }
+    .about-contacts { display: flex; align-items: center; gap: 64px; }
+    .contact-link {
+      position: relative;
+      display: inline-flex; align-items: center;
+      font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 400;
+      color: #CD3D23; text-decoration: none; line-height: normal;
+    }
+    .contact-icon { flex-shrink: 0; }
+    .email-clip-wrap { overflow: hidden; display: inline-flex; align-items: center; }
+    .email-inner { display: flex; align-items: center; gap: 10px; }
+    .icon-check { display: none; }
+    @keyframes about-slide-out { from { transform: translateY(0); } to { transform: translateY(-130%); } }
+    @keyframes about-slide-in  { from { transform: translateY(130%); } to { transform: translateY(0); } }
+    .email-inner.slide-out { animation: about-slide-out 0.18s ease forwards; }
+    .email-inner.slide-in  { animation: about-slide-in  0.18s ease forwards; }
+
+  </style>
+</head>
+<body>
+  <div class="cursor-ring" id="cursor-ring"></div>
+  <div class="cursor-dot"  id="cursor-dot"></div>
+  <div class="cursor-dot-nib"></div>
+  <canvas class="cursor-brush" width="60" height="60"></canvas>
+  <canvas class="ink-canvas"></canvas>
+
+  <div class="mobile-topbar">
+    <div class="mobile-topbar-left">
+      <a href="index.html" class="mobile-back" aria-label="Home">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </a>
+      <span class="mobile-topbar-title" data-i18n="mobile.title">ABOUT ME</span>
+    </div>
+    <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobile-menu">
+    <div class="mobile-lang-row">
+      <button class="mobile-lang-opt" data-lang="pt">PT</button>
+      <button class="mobile-lang-opt" data-lang="en">EN</button>
+    </div>
+    <div class="mobile-divider"></div>
+    <div class="mobile-theme-row">
+      <button class="mobile-theme-opt" data-theme="light">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+      <button class="mobile-theme-opt" data-theme="dark">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="mobile-menu-overlay" id="mobile-menu-overlay"></div>
+
+  <div class="bg-grid"></div>
+
+  <div class="lang-wrapper">
+    <button class="lang-toggle" id="lang-toggle" aria-label="Language">
+      <span id="lang-current">EN</span>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <div class="lang-menu" id="lang-menu">
+      <button class="lang-option" data-lang="en">EN</button>
+      <button class="lang-option" data-lang="pt">PT</button>
+    </div>
+  </div>
+  <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+    <svg id="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+    </svg>
+    <svg id="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+      <circle cx="12" cy="12" r="4"/>
+      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+    </svg>
+  </button>
+
+  <main class="project-page" id="top">
+
+    <div class="project-header">
+      <h1>
+        <span class="about-title-line1" data-i18n="about.line1">Solving problems like an Engineer<span class="title-accent">.</span></span>
+        <span class="about-title-line2" data-i18n="about.line2">Designing like an Artist</span>
+      </h1>
+      <a href="index.html" class="back-link">
+        <span class="back-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+        </span>
+        <span data-i18n="nav.home">HOME</span>
+      </a>
+    </div>
+
+    <section class="project-section about-content">
+      <div class="about-photo-col">
+        <img src="images/About/About%20Image%20Final.webp" alt="Lucas Martinez" />
+      </div>
+      <div class="about-text-col">
+        <p class="section-body" data-i18n="about.p1"><span class="about-bold">This story started somewhere between numbers and drawings.</span> As a kid, I was always in this middle ground, solving problems and trying to understand how things worked, while also spending hours drawing and creating. For a long time, those felt like separate interests, and as I grew up, Engineering seemed like the obvious path. Design was always there, just not as a career yet.</p>
+        <p class="section-body" data-i18n="about.p2"><span class="about-bold">I went on to study Engineering at a renowned university, where I spent four years building a strong analytical foundation.</span> Over time, I started to notice where my attention naturally went: I was more interested in sketching ideas than working through equations. That shift pushed me in a different direction, where <span class="about-bold">I graduated in Graphic Design and built a creative side to match my analytical one.</span></p>
+        <p class="section-body" data-i18n="about.p3"><span class="about-bold">Since then, I've been combining both in my work. I use structure and logic to break down problems, and visual thinking to turn them into solutions that are clear, usable, and hold up in real scenarios. It's a balance I've been refining over time, and it still shapes how I approach every&nbsp;project.</span></p>
+      </div>
+    </section>
+
+    <section class="project-section skills-section">
+      <h2 class="skills-heading">Things I'm good at<span style="color:#CD3D23">:</span></h2>
+      <div class="skills-body">
+        <ul class="skills-list" id="skills-list">
+          <li><button class="skill-btn active" data-skill="ai"><span class="skill-label">AI-ASSISTED DESIGN</span></button></li>
+          <li><button class="skill-btn" data-skill="discovery"><span class="skill-label">PRODUCT DISCOVERY</span></button></li>
+          <li><button class="skill-btn" data-skill="research"><span class="skill-label">USER RESEARCH</span></button></li>
+          <li><button class="skill-btn" data-skill="benchmarking"><span class="skill-label">BENCHMARKING</span></button></li>
+          <li><button class="skill-btn" data-skill="ia"><span class="skill-label">INFORMATION ARCHITECTURE</span></button></li>
+          <li><button class="skill-btn" data-skill="wireframing"><span class="skill-label">WIREFRAMING</span></button></li>
+          <li><button class="skill-btn" data-skill="interaction"><span class="skill-label">INTERACTION DESIGN</span></button></li>
+          <li><button class="skill-btn" data-skill="prototyping"><span class="skill-label">PROTOTYPING</span></button></li>
+          <li><button class="skill-btn" data-skill="usability"><span class="skill-label">USABILITY TESTING</span></button></li>
+          <li><button class="skill-btn" data-skill="data"><span class="skill-label">DATA-DRIVEN DECISIONS</span></button></li>
+          <li><button class="skill-btn" data-skill="typography"><span class="skill-label">TYPOGRAPHY</span></button></li>
+          <li><button class="skill-btn" data-skill="color"><span class="skill-label">COLOR THEORY</span></button></li>
+          <li><button class="skill-btn" data-skill="hifi"><span class="skill-label">HIGH-FIDELITY DESIGN</span></button></li>
+          <li><button class="skill-btn" data-skill="systems"><span class="skill-label">DESIGN SYSTEMS</span></button></li>
+          <li><button class="skill-btn" data-skill="accessibility"><span class="skill-label">ACCESSIBILITY</span></button></li>
+          <li><button class="skill-btn" data-skill="handoff"><span class="skill-label">PIXEL-PERFECT HAND-OFF</span></button></li>
+          <li><button class="skill-btn" data-skill="collab"><span class="skill-label">CROSS-COLLABORATION</span></button></li>
+        </ul>
+        <div class="skills-desc" id="skills-desc">
+          <p class="skills-desc-text" id="skills-desc-text"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="project-section contact-section">
+      <h2 class="skills-heading">Some stories can't be fully told in<br>just a few screens or paragraphs<span style="color:#CD3D23">...</span></h2>
+      <p class="section-body contact-section-body">If you'd like to know more about my journey,<br>or create a new one together, you can reach out below:</p>
+      <div class="about-contacts">
+        <a href="#" class="contact-link">RESUME</a>
+        <a href="https://linkedin.com/in/lucasmartinez43" class="contact-link" target="_blank" rel="noopener">LINKEDIN</a>
+        <a href="#" class="contact-link contact-email-about">
+          <span class="email-clip-wrap">
+            <span class="email-inner">
+              <svg class="contact-icon icon-copy" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              <svg class="contact-icon icon-check" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              <span class="email-text">LUCASMARTINEZ43@GMAIL.COM</span>
+            </span>
+          </span>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    (function () {
+      var savedPen = parseInt(localStorage.getItem('portfolio-pen') || '0', 10);
+      if (savedPen === 1) document.body.classList.add('pen-1');
+      if (savedPen === 2) document.body.classList.add('pen-2');
+    })();
+
+    (function () {
+      function applyTheme(theme) {
+        var isDark = theme === 'dark';
+        document.documentElement.setAttribute('data-theme', theme);
+        document.getElementById('icon-moon').style.display = isDark ? 'none' : '';
+        document.getElementById('icon-sun').style.display  = isDark ? '' : 'none';
+        localStorage.setItem('portfolio-theme', theme);
+        document.querySelectorAll('.mobile-theme-opt').forEach(function(o) { o.classList.toggle('active', o.getAttribute('data-theme') === theme); });
+      }
+      document.getElementById('theme-toggle').addEventListener('click', function () {
+        applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+      });
+      document.querySelectorAll('.mobile-theme-opt').forEach(function(btn) {
+        btn.addEventListener('click', function() { applyTheme(btn.getAttribute('data-theme')); });
+      });
+      applyTheme(localStorage.getItem('portfolio-theme') || 'dark');
+    })();
+
+    (function () {
+      function attachUnderline(el, trigger) {
+        trigger = trigger || el;
+        var u = document.createElement('span');
+        u.className = 'cta-underline';
+        trigger.appendChild(u);
+        var head = 0, tail = 0, phase = 'idle', queued = null;
+        var raf = null, extRaf = null, t0 = null, fH, fT, outOffset, MAX;
+        var DUR = 256;
+        function ease(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
+        function textRatio() { return (el === trigger || !trigger.offsetWidth) ? 1 : el.offsetWidth / trigger.offsetWidth; }
+        function paint() {
+          if (trigger.classList.contains('active')) return;
+          u.style.clipPath = 'inset(0 '+((1-head)*100).toFixed(2)+'% 0 '+(tail*100).toFixed(2)+'%)';
+        }
+        function tick(now) {
+          if (!t0) t0 = now;
+          var e = ease(Math.min((now - t0) / DUR, 1));
+          if (phase === 'in') { head = fH + (MAX - fH) * e; tail = fT + (0 - fT) * e; }
+          else { var offset = e * outOffset; tail = fT + offset; head = Math.min(fH + offset, MAX); }
+          paint();
+          if (now - t0 < DUR) { raf = requestAnimationFrame(tick); }
+          else {
+            if (phase === 'out') { head = 0; tail = 0; paint(); }
+            phase = 'idle'; raf = null;
+            if (queued) { var q = queued; queued = null; go(q); }
+          }
+        }
+        function go(p) {
+          if (raf) cancelAnimationFrame(raf);
+          if (extRaf) { cancelAnimationFrame(extRaf); extRaf = null; }
+          phase = p; fH = head; fT = tail;
+          MAX = textRatio();
+          if (p === 'out') outOffset = MAX - tail;
+          t0 = null; raf = requestAnimationFrame(tick);
+        }
+        trigger.addEventListener('mouseenter', function () {
+          if (trigger.classList.contains('active') || trigger.classList.contains('underline-disabled')) return;
+          if (phase === 'out') { queued = 'in'; } else { queued = null; go('in'); }
+        });
+        trigger.addEventListener('mouseleave', function () {
+          if (trigger.classList.contains('active') || trigger.classList.contains('underline-disabled')) return;
+          queued = null; if (phase !== 'out') go('out');
+        });
+        paint();
+        trigger._underline = {
+          extendToFull: function(cb) {
+            if (raf) { cancelAnimationFrame(raf); raf = null; }
+            if (extRaf) { cancelAnimationFrame(extRaf); extRaf = null; }
+            var sh = head, st = tail, startTime = null;
+            function extTick(now) {
+              if (!startTime) startTime = now;
+              var e = ease(Math.min((now - startTime) / DUR, 1));
+              head = sh + (1 - sh) * e; tail = st * (1 - e);
+              u.style.clipPath = 'inset(0 '+((1-head)*100).toFixed(2)+'% 0 '+(tail*100).toFixed(2)+'%)';
+              if (now - startTime < DUR) { extRaf = requestAnimationFrame(extTick); }
+              else { head = 1; tail = 0; u.style.clipPath = 'inset(0 0% 0 0%)'; extRaf = null; if (cb) cb(); }
+            }
+            extRaf = requestAnimationFrame(extTick);
+          },
+          reset: function() {
+            if (raf) { cancelAnimationFrame(raf); raf = null; }
+            if (extRaf) { cancelAnimationFrame(extRaf); extRaf = null; }
+            head = 0; tail = 0; phase = 'idle';
+          }
+        };
+      }
+      document.querySelectorAll('.back-link').forEach(function(el) { attachUnderline(el); });
+      document.querySelectorAll('.skill-btn').forEach(function(btn) {
+        var label = btn.querySelector('.skill-label');
+        if (label) attachUnderline(label, btn);
+      });
+      document.querySelectorAll('.about-contacts .contact-link').forEach(function(el) { attachUnderline(el); });
+    })();
+
+    (function () {
+      var emailLink = document.querySelector('.contact-email-about');
+      if (!emailLink) return;
+      var emailInner = emailLink.querySelector('.email-inner');
+      var iconCopy   = emailLink.querySelector('.icon-copy');
+      var iconCheck  = emailLink.querySelector('.icon-check');
+      var emailText  = emailLink.querySelector('.email-text');
+      var timer = null, copied = false;
+      document.fonts.ready.then(function () {
+        emailLink.style.minWidth = emailLink.getBoundingClientRect().width + 'px';
+      });
+      function slideTransition(swapFn) {
+        emailInner.classList.remove('slide-in');
+        emailInner.classList.add('slide-out');
+        setTimeout(function () {
+          swapFn();
+          emailInner.classList.remove('slide-out');
+          emailInner.classList.add('slide-in');
+          function onEnd() { emailInner.classList.remove('slide-in'); emailInner.removeEventListener('animationend', onEnd); }
+          emailInner.addEventListener('animationend', onEnd);
+        }, 180);
+      }
+      emailLink.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (copied) return;
+        navigator.clipboard.writeText('lucas.martinez43@gmail.com').then(function () {
+          copied = true;
+          emailLink.dispatchEvent(new MouseEvent('mouseleave', { bubbles: true }));
+          emailLink.classList.add('underline-disabled');
+          slideTransition(function () {
+            iconCopy.style.display  = 'none';
+            iconCheck.style.display = 'inline';
+            emailText.textContent   = 'EMAIL COPIED!';
+          });
+          if (timer) clearTimeout(timer);
+          timer = setTimeout(function () {
+            slideTransition(function () {
+              iconCopy.style.display  = '';
+              iconCheck.style.display = 'none';
+              emailText.textContent   = 'LUCASMARTINEZ43@GMAIL.COM';
+            });
+            emailLink.classList.remove('underline-disabled');
+            copied = false; timer = null;
+          }, 2500);
+        });
+      });
+    })();
+
+    document.querySelectorAll('.back-link').forEach(function (el) {
+      el.addEventListener('click', function () { sessionStorage.setItem('portfolio-back', '1'); });
+    });
+    window.addEventListener('pagehide', function () { sessionStorage.setItem('portfolio-back', '1'); });
+
+    var footerBack = document.querySelector('.project-footer .back-link');
+    if (footerBack) footerBack.addEventListener('click', function (e) {
+      e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    var mobileBackTop = document.querySelector('.mobile-back-top');
+    if (mobileBackTop) mobileBackTop.addEventListener('click', function (e) {
+      e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    (function () {
+      var menuBtn = document.getElementById('mobile-menu-btn');
+      var menu    = document.getElementById('mobile-menu');
+      var overlay = document.getElementById('mobile-menu-overlay');
+      if (!menuBtn) return;
+      function openMenu()  { menu.classList.add('open');    overlay.classList.add('open'); }
+      function closeMenu() { menu.classList.remove('open'); overlay.classList.remove('open'); }
+      menuBtn.addEventListener('click', function () { menu.classList.contains('open') ? closeMenu() : openMenu(); });
+      overlay.addEventListener('click', closeMenu);
+    })();
+
+    (function () {
+      var SKILLS = {
+        ai:           'AI is part of the process at every stage, used to accelerate work and raise the quality of the output. From structure and execution to ideation and visual exploration, tools like Relume, UX Pilot, Figma Make, ChatGPT, Gemini, Kling, NanoBanana, and Claude Code have all been part of that experimentation.',
+        discovery:    'Figuring out what the actual problem is before anything gets designed. This means talking to stakeholders, digging into goals and constraints, and making sure there\'s a real need behind whatever is being built.',
+        research:     'Getting close to the people who will use the product. Through interviews, surveys, and observation, the goal is to understand how they think and behave, and where current experiences cause friction.',
+        benchmarking: 'Looking at what already exists in the market before starting to design. Useful for spotting patterns, understanding expectations, and finding gaps worth exploring.',
+        ia:           'Deciding how content and navigation should be structured so people can find what they need without having to think too hard about it. Covers hierarchy, labeling, and flow.',
+        wireframing:  'Drawing out screens in low fidelity before any visual decisions are made. The point is to test whether the structure and layout make sense, without getting distracted by colors or type.',
+        interaction:  'Defining how the product responds to user actions. This includes states, transitions, feedback, and the small details that make something feel smooth and deliberate to use.',
+        prototyping:  'Making something clickable and testable before development begins. Depending on the stage, this can range from a rough flow to a realistic simulation of the final product.',
+        usability:    'Sitting with real users and watching them try to complete tasks. The goal is to catch confusion and friction early, before they become expensive to fix.',
+        data:         'Using analytics, heatmaps, and funnel data alongside research findings to understand what is and isn\'t working. Helps prioritise what to improve and why.',
+        typography:   'Working with type at a foundational level, across brand, product, and editorial contexts. An area of deep practice that shapes how hierarchy, tone, and readability come together in everything else.',
+        color:        'Building palettes that reflect brand, guide attention, and communicate state. An area of deep practice, applied across brand identity, product design, and design systems with accessibility built in.',
+        hifi:         'Producing final, detailed screens where every spacing decision, type choice, and component state is fully resolved. The stage where all earlier decisions come together into something ready to build.',
+        systems:      'Building component libraries and guidelines from scratch, and scaling existing ones as products grow. Reduces repeated decisions, keeps the experience consistent, and gives teams a shared language to work from.',
+        accessibility:'Making sure the product works for people with different needs and abilities. Covers contrast ratios and touch target sizes from the start, not as an afterthought.',
+        handoff:      'Preparing design files and documentation so developers have everything they need to build it accurately. Includes specs, edge cases, and staying available to answer questions during implementation.',
+        collab:       'Working across disciplines throughout the process. Regular sync with product managers, developers, and researchers, making sure design decisions are understood and agreed on by the people building the product.',
+      };
+
+      var descText  = document.getElementById('skills-desc-text');
+      var skillsDesc = document.getElementById('skills-desc');
+      var btns      = document.querySelectorAll('.skill-btn');
+
+      var revealRaf = null;
+      function ease(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
+
+      function setUnderline(btn, full) {
+        var u = btn.querySelector('.cta-underline');
+        if (u) u.style.clipPath = full ? 'inset(0 0% 0 0%)' : 'inset(0 100% 0 0%)';
+        if (!full && btn._underline) btn._underline.reset();
+      }
+
+      function positionDesc(btn) {
+        if (!skillsDesc || window.innerWidth < 801) return;
+        var descRect  = skillsDesc.getBoundingClientRect();
+        var btnRect   = btn.getBoundingClientRect();
+        var btnCenter = btnRect.top - descRect.top + btnRect.height / 2;
+        var textH     = descText.offsetHeight;
+        var maxTop    = skillsDesc.offsetHeight - textH;
+        var top       = btnCenter - textH / 2;
+        descText.style.top = Math.max(0, Math.min(top, maxTop)) + 'px';
+      }
+
+      function revealDescription(btn) {
+        if (revealRaf) { cancelAnimationFrame(revealRaf); revealRaf = null; }
+        descText.textContent = SKILLS[btn.dataset.skill] || '';
+        positionDesc(btn);
+        descText.style.opacity = '1';
+        var blurPct = 80, range = 100 + blurPct;
+        var initMask = 'linear-gradient(to right, black 0%, transparent 0%)';
+        descText.style.maskImage = initMask;
+        descText.style.webkitMaskImage = initMask;
+        var startTime = null;
+        function tick(now) {
+          if (!startTime) startTime = now;
+          var e = ease(Math.min((now - startTime) / 256, 1));
+          var pos = e * range - blurPct;
+          var s  = Math.max(0, pos).toFixed(2);
+          var en = Math.min(pos + blurPct, 100).toFixed(2);
+          var mask = 'linear-gradient(to right, black ' + s + '%, transparent ' + en + '%)';
+          descText.style.maskImage = mask;
+          descText.style.webkitMaskImage = mask;
+          if (now - startTime < 256) { revealRaf = requestAnimationFrame(tick); }
+          else {
+            descText.style.maskImage = '';
+            descText.style.webkitMaskImage = '';
+            descText.style.opacity = '';
+            descText.classList.add('visible');
+            revealRaf = null;
+          }
+        }
+        revealRaf = requestAnimationFrame(tick);
+      }
+
+      function selectSkill(btn) {
+        if (revealRaf) { cancelAnimationFrame(revealRaf); revealRaf = null; }
+        btns.forEach(function (b) { b.classList.remove('active'); setUnderline(b, false); });
+        descText.classList.remove('visible');
+        btn.classList.add('active');
+        if (btn._underline) {
+          btn._underline.extendToFull(function() { revealDescription(btn); });
+        } else {
+          setUnderline(btn, true);
+          revealDescription(btn);
+        }
+      }
+
+      if (btns.length) {
+        btns[0].classList.add('active');
+        setUnderline(btns[0], true);
+        descText.textContent = SKILLS[btns[0].dataset.skill] || '';
+        descText.classList.add('visible');
+        requestAnimationFrame(function () { positionDesc(btns[0]); });
+      }
+
+      btns.forEach(function (btn) {
+        btn.addEventListener('click', function () { selectSkill(btn); });
+      });
+    })();
+
+    var TRANSLATIONS = {
+      en: {
+        'mobile.title':  'ABOUT ME',
+        'nav.home':      'HOME',
+        'nav.back-top':  'BACK TO TOP',
+        'about.line1':   'Solving problems like an Engineer<span class="title-accent">.</span>',
+        'about.line2':   'Designing like an Artist',
+        'about.p1': '<span class="about-bold">This story started somewhere between numbers and drawings.</span> As a kid, I was always in this middle ground, solving problems and trying to understand how things worked, while also spending hours drawing and creating. For a long time, those felt like separate interests, and as I grew up, Engineering seemed like the obvious path. Design was always there, just not as a career yet.',
+        'about.p2': '<span class="about-bold">I went on to study Engineering at a renowned university, where I spent four years building a strong analytical foundation.</span> Over time, I started to notice where my attention naturally went: I was more interested in sketching ideas than working through equations. That shift pushed me in a different direction, where <span class="about-bold">I graduated in Graphic Design and built a creative side to match my analytical one.</span>',
+        'about.p3': '<span class="about-bold">Since then, I\'ve been combining both in my work. I use structure and logic to break down problems, and visual thinking to turn them into solutions that are clear, usable, and hold up in real scenarios. It\'s a balance I\'ve been refining over time, and it still shapes how I approach every&nbsp;project.</span>',
+      },
+      pt: {
+        'mobile.title':  'SOBRE MIM',
+        'nav.home':      'INÍCIO',
+        'nav.back-top':  'VOLTAR AO TOPO',
+        'about.line1':   'Solving problems like an Engineer<span class="title-accent">.</span>',
+        'about.line2':   'Designing like an Artist',
+        'about.p1': '<span class="about-bold">This story started somewhere between numbers and drawings.</span> As a kid, I was always in this middle ground, solving problems and trying to understand how things worked, while also spending hours drawing and creating. For a long time, those felt like separate interests, and as I grew up, Engineering seemed like the obvious path. Design was always there, just not as a career yet.',
+        'about.p2': '<span class="about-bold">I went on to study Engineering at a renowned university, where I spent four years building a strong analytical foundation.</span> Over time, I started to notice where my attention naturally went: I was more interested in sketching ideas than working through equations. That shift pushed me in a different direction, where <span class="about-bold">I graduated in Graphic Design and built a creative side to match my analytical one.</span>',
+        'about.p3': '<span class="about-bold">Since then, I\'ve been combining both in my work. I use structure and logic to break down problems, and visual thinking to turn them into solutions that are clear, usable, and hold up in real scenarios. It\'s a balance I\'ve been refining over time, and it still shapes how I approach every&nbsp;project.</span>',
+      }
+    };
+    function applyLang(lang) {
+      localStorage.setItem('portfolio-lang', lang);
+      document.querySelectorAll('[data-i18n]').forEach(function(el) {
+        var t = TRANSLATIONS[lang]; var key = el.getAttribute('data-i18n');
+        if (t && t[key] !== undefined) el.innerHTML = t[key];
+      });
+      var curr = document.getElementById('lang-current');
+      if (curr) curr.textContent = lang.toUpperCase();
+      document.querySelectorAll('.lang-option').forEach(function(o) { o.classList.toggle('active', o.getAttribute('data-lang') === lang); });
+      document.querySelectorAll('.mobile-lang-opt').forEach(function(o) { o.classList.toggle('active', o.getAttribute('data-lang') === lang); });
+      document.documentElement.setAttribute('lang', lang === 'pt' ? 'pt-BR' : 'en');
+    }
+    (function() {
+      var toggle = document.getElementById('lang-toggle');
+      var menu   = document.getElementById('lang-menu');
+      toggle.addEventListener('click', function(e) { e.stopPropagation(); menu.classList.toggle('open'); });
+      document.addEventListener('click', function() { menu.classList.remove('open'); });
+      document.querySelectorAll('.lang-option').forEach(function(opt) {
+        opt.addEventListener('click', function(e) { e.stopPropagation(); applyLang(opt.getAttribute('data-lang')); menu.classList.remove('open'); });
+      });
+      document.querySelectorAll('.mobile-lang-opt').forEach(function(btn) {
+        btn.addEventListener('click', function() { applyLang(btn.getAttribute('data-lang')); });
+      });
+    })();
+    applyLang(localStorage.getItem('portfolio-lang') || 'en');
+    (function() {
+      var mMenu = document.getElementById('mobile-menu');
+      if (!mMenu) return;
+      var saved = localStorage.getItem('portfolio-lang') || 'en';
+      applyLang('en'); var wEn = mMenu.offsetWidth;
+      applyLang('pt'); var wPt = mMenu.offsetWidth;
+      mMenu.style.minWidth = Math.max(wEn, wPt) + 'px';
+      applyLang(saved);
+    })();
+  </script>
+
+  <script type="module">
+    if (!window.matchMedia('(max-width: 800px)').matches) import('https://esm.sh/three@0.156.1').then(function(THREE) {
+
+    const VERT = `
+      precision highp float;
+      uniform float time;
+      varying vec2 vUv;
+      void main() {
+        vUv = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `;
+
+    const FRAG = `
+      uniform sampler2D inputTexture;
+      uniform sampler2D noiseTexture;
+      uniform vec2 tipPosOld;
+      uniform vec2 tipPosNew;
+      uniform float speed;
+      uniform float persistence;
+      uniform float thickness;
+      uniform float time;
+      uniform float waterQuantity;
+      uniform float waterDiffusion;
+      uniform float gravity;
+      uniform vec3 inkColor;
+      uniform float aspect;
+      varying vec2 vUv;
+
+      float lineSegment(vec2 p, vec2 a, vec2 b, float thickness) {
+        p.x *= aspect; a.x *= aspect; b.x *= aspect;
+        vec2 pa = p - a;
+        vec2 ba = b - a;
+        float h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);
+        float d = length(pa - ba * h);
+        return smoothstep(thickness, thickness * 0.5, d);
+      }
+
+      vec4 blur(sampler2D image, vec2 uv, vec2 resolution, vec2 direction) {
+        vec4 color = vec4(0.0);
+        vec2 off1 = vec2(0.013846153846) * direction;
+        vec2 off2 = vec2(0.032307692308) * direction;
+        color += texture2D(image, uv) * 0.2270270270;
+        color += texture2D(image, uv + vec2(off1 * resolution)) * 0.3162162162;
+        color += texture2D(image, uv - vec2(off1 * resolution)) * 0.3162162162;
+        color += texture2D(image, uv + vec2(off2 * resolution)) * 0.0702702703;
+        color += texture2D(image, uv - vec2(off2 * resolution)) * 0.0702702703;
+        return color;
+      }
+
+      void main() {
+        vec4 noise1 = texture2D(noiseTexture, vUv * 4.0  + vec2(time * 0.1, 0.0));
+        vec4 noise2 = texture2D(noiseTexture, vUv * 8.0  + vec2(0.0, time * 0.1) + noise1.rg * 0.5);
+        vec4 noise3 = texture2D(noiseTexture, vUv * 16.0 + vec2(-time * 0.05, 0.0) + noise2.rg * 0.5);
+        vec4 noise  = (noise1 + noise2 * 0.5 + noise3 * 0.25) / 1.75;
+        float dirX  = (-0.5 + noise.g) * noise.r * 10.0;
+        float dirY  = (-0.5 + noise.b) * noise.r * 10.0;
+
+        vec4  oldTexture = texture2D(inputTexture, vUv);
+        float br  = 1.0 - oldTexture.a;
+        vec4  col = oldTexture * (1.0 - waterDiffusion);
+        float p2  = waterDiffusion / 4.0;
+        vec2  stretchUv = vUv * vec2(1.0, 1.0 + gravity);
+        col += blur(inputTexture, stretchUv, vec2(waterQuantity * br), vec2( dirX,  dirY)) * p2;
+        col += blur(inputTexture, stretchUv, vec2(waterQuantity * br), vec2( dirY,  dirX)) * p2;
+        col += blur(inputTexture, stretchUv, vec2(waterQuantity * br), vec2(-dirX, -dirY)) * p2;
+        col += blur(inputTexture, stretchUv, vec2(waterQuantity * br), vec2(-dirY, -dirX)) * p2;
+        col.rgb *= persistence;
+        col.a   *= persistence;
+
+        if (speed > 0.0) {
+          float th = clamp(thickness, 0.0001, 0.1);
+          float lineValue = lineSegment(vUv, tipPosOld, tipPosNew, th);
+          col.rgb = mix(col.rgb, inkColor, lineValue);
+          col.a   = mix(col.a, 1.0, lineValue);
+          col.rgb = clamp(col.rgb, vec3(0.0), vec3(1.0));
+          col.a   = clamp(col.a, 0.0, 1.0);
+        }
+
+        gl_FragColor = vec4(col);
+      }
+    `;
+
+    class BufferSim {
+      constructor(renderer, width, height, shader) {
+        this.renderer = renderer;
+        this.shader   = shader;
+        this.orthoScene  = new THREE.Scene();
+        this.orthoCamera = new THREE.OrthographicCamera(
+          width / -2, width / 2, height / 2, height / -2, 0.00001, 1000
+        );
+        const opts = {
+          wrapS: THREE.ClampToEdgeWrapping, wrapT: THREE.ClampToEdgeWrapping,
+          minFilter: THREE.LinearFilter,    magFilter: THREE.LinearFilter,
+          format: THREE.RGBAFormat,         type: THREE.FloatType,
+          stencilBuffer: false,             depthBuffer: false,
+        };
+        const fbo = new THREE.WebGLRenderTarget(width, height, opts);
+        fbo.texture.generateMipmaps = false;
+        this.fbos    = [fbo, fbo.clone()];
+        this.current = 0;
+        this.output  = this.fbos[0];
+        this.orthoScene.add(new THREE.Mesh(new THREE.PlaneGeometry(width, height), this.shader));
+      }
+      render() {
+        this.shader.uniforms.inputTexture.value = this.fbos[this.current].texture;
+        this.current = 1 - this.current;
+        this.output  = this.fbos[this.current];
+        this.renderer.setRenderTarget(this.output);
+        this.renderer.render(this.orthoScene, this.orthoCamera);
+      }
+    }
+
+    class InkEffect {
+      constructor({ canvas, inkColor = 0x130918 }) {
+        this.inkColor  = inkColor;
+        this.winWidth  = window.innerWidth;
+        this.winHeight = window.innerHeight;
+        new THREE.TextureLoader().load('https://assets.codepen.io/264161/noise_1.jpg', (tex) => {
+          this.noiseTexture = tex;
+          this.noiseTexture.wrapS = THREE.RepeatWrapping;
+          this.noiseTexture.wrapT = THREE.RepeatWrapping;
+          this.init(canvas);
+        });
+      }
+
+      init(canvas) {
+        this.renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+        this.renderer.setPixelRatio(window.devicePixelRatio);
+        this.renderer.setSize(this.winWidth, this.winHeight);
+
+        this.orthoCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+        this.scene       = new THREE.Scene();
+
+        this.mouse   = new THREE.Vector2(-1, -1);
+        this.tip     = new THREE.Vector2(-1, -1);
+        this.tipOld  = new THREE.Vector2(-1, -1);
+        this.thickness = 0.002;
+        this.pressure  = 0;
+        this.brushR    = 0.012;
+        this.mouseDown = false;
+        this.persistence = 0.980;
+        this.clock = new THREE.Clock();
+        this.time  = 0;
+
+        this.createSim();
+        this.createQuad();
+        this.createListeners();
+        this.draw();
+      }
+
+      createSim() {
+        this.simMat = new THREE.ShaderMaterial({
+          uniforms: {
+            inputTexture:   { value: null },
+            noiseTexture:   { value: this.noiseTexture },
+            persistence:    { value: this.persistence },
+            thickness:      { value: this.thickness },
+            waterDiffusion: { value: 0.1 },
+            waterQuantity:  { value: 0.3 },
+            gravity:        { value: 0.0 },
+            time:           { value: 0 },
+            tipPosOld:      { value: new THREE.Vector2(0.5, 0.5) },
+            tipPosNew:      { value: new THREE.Vector2(0.5, 0.5) },
+            speed:          { value: 0.0 },
+            inkColor:       { value: (() => { var c = new THREE.Color(); c.r = (this.inkColor >> 16 & 255) / 255; c.g = (this.inkColor >> 8 & 255) / 255; c.b = (this.inkColor & 255) / 255; return c; })() },
+            aspect:         { value: this.winWidth / this.winHeight },
+          },
+          vertexShader:   VERT,
+          fragmentShader: FRAG,
+        });
+        this.bufferSim = new BufferSim(this.renderer, 1024, 1024, this.simMat);
+      }
+
+      createQuad() {
+        const mat = new THREE.ShaderMaterial({
+          transparent: true,
+          uniforms: { tSim: { value: null } },
+          vertexShader: `
+            varying vec2 vUv;
+            void main() { vUv = uv; gl_Position = vec4(position, 1.0); }
+          `,
+          fragmentShader: `
+            uniform sampler2D tSim;
+            varying vec2 vUv;
+            void main() {
+              vec4 tex = texture2D(tSim, vUv);
+              gl_FragColor = vec4(tex.rgb, tex.a);
+            }
+          `,
+        });
+        this.quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), mat);
+        this.scene.add(this.quad);
+      }
+
+      createListeners() {
+        window.addEventListener('resize', () => {
+          this.winWidth  = window.innerWidth;
+          this.winHeight = window.innerHeight;
+          this.renderer.setSize(this.winWidth, this.winHeight);
+          this.simMat.uniforms.aspect.value = this.winWidth / this.winHeight;
+        });
+        window.addEventListener('mousemove', (e) => {
+          this.mouse.set(
+            e.clientX / this.winWidth,
+            1.0 - e.clientY / this.winHeight
+          );
+        });
+        window.addEventListener('mousedown', () => {
+          this.mouseDown = true;
+          document.body.style.userSelect = 'none';
+        });
+        window.addEventListener('mouseup', () => {
+          this.mouseDown = false;
+          document.body.style.userSelect = '';
+        });
+      }
+
+      draw() {
+        requestAnimationFrame(this.draw.bind(this));
+        const dt   = this.clock.getDelta();
+        this.time += dt;
+
+        this.tipOld.copy(this.tip);
+        this.tip.x += (this.mouse.x - this.tip.x) * 0.08;
+        this.tip.y += (this.mouse.y - this.tip.y) * 0.08;
+        const speed = this.tipOld.distanceTo(this.tip);
+
+        if (this.mouseDown && this.pressure < 0.015) {
+          this.pressure += dt * 0.05;
+        } else if (!this.mouseDown) {
+          this.pressure *= Math.pow(0.9, dt * 30);
+        }
+
+        const targetBrushR = this.mouseDown ? 0.016 : 0.010;
+        this.brushR += (targetBrushR - this.brushR) * Math.min(dt * 8, 1);
+
+        const persistence = Math.pow(this.persistence, dt * 10);
+        this.simMat.uniforms.speed.value       = speed * 10;
+        this.simMat.uniforms.time.value        = this.time;
+        this.simMat.uniforms.persistence.value = persistence;
+
+        const pen = window.currentPen || 0;
+
+        if (pen === 1) {
+          const NIB_COUNT   = 9;
+          const NIB_HALF_PX = 7 + this.pressure * 1000;
+          const inv         = 1 / Math.SQRT2;
+          const nibUvDx     = -inv * NIB_HALF_PX / this.winWidth;
+          const nibUvDy     = -inv * NIB_HALF_PX / this.winHeight;
+          const baseThick   = (0.001 + this.pressure * 0.05) * this.winWidth / this.winHeight;
+          for (let i = 0; i < NIB_COUNT; i++) {
+            const t = (i / (NIB_COUNT - 1) - 0.5) * 2;
+            this.simMat.uniforms.tipPosOld.value.set(this.tipOld.x + nibUvDx * t, this.tipOld.y + nibUvDy * t);
+            this.simMat.uniforms.tipPosNew.value.set(this.tip.x    + nibUvDx * t, this.tip.y    + nibUvDy * t);
+            this.simMat.uniforms.thickness.value = baseThick;
+            if (i > 0) {
+              this.simMat.uniforms.waterDiffusion.value = 0.0;
+              this.simMat.uniforms.persistence.value    = 1.0;
+            }
+            this.bufferSim.render();
+          }
+          this.simMat.uniforms.waterDiffusion.value = 0.1;
+          this.simMat.uniforms.persistence.value    = persistence;
+
+        } else if (pen === 2) {
+          const dotThick = 0.003 + this.pressure * 0.2;
+          for (let i = 0; i < 6; i++) {
+            const angle = (i / 6) * Math.PI * 2;
+            const hexAspect = this.winWidth / this.winHeight;
+            const ox = Math.cos(angle) * this.brushR / hexAspect;
+            const oy = Math.sin(angle) * this.brushR;
+            this.simMat.uniforms.tipPosOld.value.set(this.tipOld.x + ox, this.tipOld.y + oy);
+            this.simMat.uniforms.tipPosNew.value.set(this.tip.x    + ox, this.tip.y    + oy);
+            this.simMat.uniforms.thickness.value = dotThick;
+            if (i > 0) {
+              this.simMat.uniforms.waterDiffusion.value = 0.0;
+              this.simMat.uniforms.persistence.value    = 1.0;
+            }
+            this.bufferSim.render();
+          }
+          this.simMat.uniforms.waterDiffusion.value = 0.1;
+          this.simMat.uniforms.persistence.value    = persistence;
+
+        } else {
+          this.simMat.uniforms.tipPosOld.value.copy(this.tipOld);
+          this.simMat.uniforms.tipPosNew.value.copy(this.tip);
+          this.simMat.uniforms.thickness.value   = this.thickness + this.pressure;
+          this.bufferSim.render();
+        }
+
+        this.quad.material.uniforms.tSim.value = this.bufferSim.output.texture;
+        this.renderer.setRenderTarget(null);
+        this.renderer.render(this.scene, this.orthoCamera);
+      }
+    }
+
+    function getInkHex() {
+      return document.documentElement.getAttribute('data-theme') === 'dark' ? '#D8D8E0' : '#130918';
+    }
+
+    window.currentPen = parseInt(localStorage.getItem('portfolio-pen') || '0', 10);
+
+    window.inkEffect = new InkEffect({
+      canvas:   document.querySelector('.ink-canvas'),
+      inkColor: parseInt(getInkHex().replace('#', ''), 16),
+    });
+
+    document.getElementById('theme-toggle').addEventListener('click', function () {
+      setTimeout(function () {
+        if (window.inkEffect && window.inkEffect.simMat) {
+          var _th = parseInt(getInkHex().replace('#',''), 16);
+          window.inkEffect.simMat.uniforms.inkColor.value.r = (_th >> 16 & 255) / 255;
+          window.inkEffect.simMat.uniforms.inkColor.value.g = (_th >> 8  & 255) / 255;
+          window.inkEffect.simMat.uniforms.inkColor.value.b = (_th       & 255) / 255;
+        }
+      }, 50);
+    });
+
+    }); // end three.js
+  </script>
+
+  <script>
+    (function () {
+      var ring  = document.getElementById('cursor-ring');
+      var dot   = document.getElementById('cursor-dot');
+      var nib   = document.querySelector('.cursor-dot-nib');
+      var brush = document.querySelector('.cursor-brush');
+      var brushCtx = brush ? brush.getContext('2d') : null;
+      var rx = -100, ry = -100, mx = -100, my = -100;
+      var brushDown = false, brushR = 5;
+
+      function drawBrush(r) {
+        if (!brushCtx) return;
+        var W = brush.width, H = brush.height;
+        brushCtx.clearRect(0, 0, W, H);
+        for (var i = 0; i < 6; i++) {
+          var angle = (i / 6) * Math.PI * 2 - Math.PI / 2;
+          brushCtx.beginPath();
+          brushCtx.arc(W / 2 + Math.cos(angle) * r, H / 2 + Math.sin(angle) * r, 2, 0, Math.PI * 2);
+          brushCtx.fillStyle = '#ffffff';
+          brushCtx.fill();
+        }
+      }
+
+      document.addEventListener('mousemove', function (e) {
+        mx = e.clientX; my = e.clientY;
+        ring.style.visibility = ''; dot.style.visibility = '';
+        if (nib)   nib.style.visibility   = '';
+        if (brush) brush.style.visibility = '';
+        dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+        if (nib)   { nib.style.left   = mx + 'px'; nib.style.top   = my + 'px'; }
+        if (brush) { brush.style.left = mx + 'px'; brush.style.top = my + 'px'; }
+        var hovering = !!e.target.closest('a, button');
+        dot.classList.toggle('is-hovering', hovering);
+        if (nib)   nib.classList.toggle('is-hovering', hovering);
+        ring.classList.toggle('is-hovering', hovering);
+        if (brush) brush.classList.toggle('is-hovering', hovering);
+      });
+
+      window.addEventListener('mousedown', function () { brushDown = true;  if (nib) nib.classList.add('is-pressing'); });
+      window.addEventListener('mouseup',   function () { brushDown = false; if (nib) nib.classList.remove('is-pressing'); });
+
+      (function loop() {
+        rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+        ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+        var targetR = brushDown ? 10 : 5;
+        brushR += (targetR - brushR) * 0.18;
+        drawBrush(brushR);
+        requestAnimationFrame(loop);
+      })();
+
+      document.addEventListener('mouseleave', function (e) {
+        if (!e.isTrusted) return;
+        ring.style.visibility = 'hidden'; dot.style.visibility = 'hidden';
+        if (nib)   nib.style.visibility   = 'hidden';
+        if (brush) brush.style.visibility = 'hidden';
+      });
+      document.addEventListener('mouseenter', function () {
+        ring.style.visibility = ''; dot.style.visibility = '';
+        if (nib)   nib.style.visibility   = '';
+        if (brush) brush.style.visibility = '';
+      });
+    })();
+  </script>
+</body>
+</html>

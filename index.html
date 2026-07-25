@@ -18,7 +18,7 @@
       --cursor-ink: #130918;
       --bg:               #CDCDD1;
       --grid-line:        rgba(255, 255, 255, 0.1);
-      --decor-opacity:    0.1;
+      --decor-opacity:    0.15;
       --circle-stroke:    #8E8E96;
       --explore-color:    #8E8E96;
       --text-hero:        #0F0F12;
@@ -37,7 +37,7 @@
       --cursor-ink: #E8E8F0;
       --bg:               #0F0F12;
       --grid-line:        rgba(255, 255, 255, 0.05);
-      --decor-opacity:    0.3;
+      --decor-opacity:    0.15;
       --circle-stroke:    rgba(255, 255, 255, 0.15);
       --explore-color:    rgba(255, 255, 255, 0.28);
       --text-hero:        #ffffff;
@@ -66,6 +66,7 @@
       padding: 0;
       cursor: none !important;
     }
+    p { text-wrap: pretty; }
 
     .cursor-ring,
     .cursor-dot {
@@ -232,7 +233,12 @@
       display: block;
       width: 100%;
       height: 100%;
+      image-rendering: high-quality;
     }
+
+    .hero-decor img.theme-dark { display: none; }
+    [data-theme="dark"] .hero-decor img.theme-light { display: none; }
+    [data-theme="dark"] .hero-decor img.theme-dark   { display: block; }
 
     /* Non-spinning wrapper that holds the conic reveal mask */
     .hero-decor-wrap {
@@ -285,11 +291,15 @@
     .hero-colorwheel {
       opacity: var(--decor-opacity);
       animation: spin-decor 120s linear infinite;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
     }
 
     .hero-protractor {
       opacity: var(--decor-opacity);
       animation: spin-decor 120s linear infinite;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
     }
 
     /* SVG circles fill their side container */
@@ -831,6 +841,7 @@
       font-size: 16px;
       font-weight: 200;
       color: rgba(255, 255, 255, 0.7);
+      text-wrap: balance;
       line-height: normal;
     }
 
@@ -1212,7 +1223,8 @@
       <div class="hero-side hero-side-left">
         <div class="hero-decor-wrap hero-decor-wrap-left">
           <div class="hero-decor hero-colorwheel">
-            <img src="assets/color-wheel.webp" alt="" />
+            <img class="theme-light" src="assets/color-wheel-white-mode.webp" alt="" />
+            <img class="theme-dark"  src="assets/color-wheel-dark-mode.webp"  alt="" />
           </div>
         </div>
         <svg class="hero-circle" viewBox="0 0 808 808" xmlns="http://www.w3.org/2000/svg">
@@ -1223,7 +1235,8 @@
       <div class="hero-side hero-side-right">
         <div class="hero-decor-wrap hero-decor-wrap-right">
           <div class="hero-decor hero-protractor">
-            <img src="assets/Protractor.svg" alt="" />
+            <img class="theme-light" src="assets/Protractor%20White%20Mode.svg" alt="" />
+            <img class="theme-dark"  src="assets/Protractor%20Dark%20Mode.svg"  alt="" />
           </div>
         </div>
         <svg class="hero-circle" viewBox="0 0 808 808" xmlns="http://www.w3.org/2000/svg">
@@ -1333,7 +1346,7 @@
             <span class="sig-title" data-i18n="sig.title">senior product designer</span>
           </div>
         </div>
-        <a href="#" class="about-cta">
+        <a href="about.html" class="about-cta">
           <span data-i18n="about.cta">READ MORE ABOUT ME</span>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
@@ -1360,7 +1373,7 @@
         <div class="card-image"></div>
       </a>
 
-      <a href="project.html" class="card card-recordplus">
+      <a href="recordplus.html" class="card card-recordplus">
         <div class="card-body">
           <div class="card-title-group">
             <p class="card-title">RecordPlus</p>
@@ -1392,7 +1405,7 @@
         <div class="card-body">
           <div class="card-title-group">
             <p class="card-title">Tempo</p>
-            <p class="card-subtitle" data-i18n="card.tempo.subtitle">A end-to-end weather forecast <br>platform, designed <br>for real-world constraints</p>
+            <p class="card-subtitle" data-i18n="card.tempo.subtitle">A 0&#x2192;1 weather forecast <br>platform, designed <br>for real-world constraints</p>
           </div>
           <div class="card-tags">
             <span class="tag" data-i18n="card.tempo.tag1">WCAG</span>
@@ -1415,14 +1428,14 @@
         <div class="card-image"></div>
       </a>
 
-      <div class="card card-playground">
+      <a href="playground.html" class="card card-playground">
         <div class="card-body">
           <div class="card-title-group">
             <p class="card-title">Playground</p>
             <p class="card-subtitle" data-i18n="card.pg.subtitle">This is a casual place where you will get to know <br>a little more about me through drawings, designs, <br>photography and ocasional pictures of my dog</p>
           </div>
         </div>
-      </div>
+      </a>
 
     </div>
   </main>
@@ -1531,7 +1544,8 @@
       window.addEventListener('mousedown', function () { brushDown = true;  nib.classList.add('is-pressing');    });
       window.addEventListener('mouseup',   function () { brushDown = false; nib.classList.remove('is-pressing'); });
 
-      document.addEventListener('mouseleave', function () {
+      document.addEventListener('mouseleave', function (e) {
+        if (!e.isTrusted) return;
         ring.style.visibility  = 'hidden';
         dot.style.visibility   = 'hidden';
         nib.style.visibility   = 'hidden';
@@ -1807,6 +1821,7 @@
         var aboutRect       = aboutContainer.getBoundingClientRect();
         var heroTextRect    = heroText.getBoundingClientRect();
         var heroExploreRect = heroExplore.getBoundingClientRect();
+        heroText.style.opacity       = '';
         heroText.style.visibility    = aboutRect.top <= heroTextRect.top    ? 'hidden' : 'visible';
         heroExplore.style.visibility = aboutRect.top <= heroExploreRect.top ? 'hidden' : '';
 
@@ -2007,7 +2022,7 @@
         'card.jv.subtitle':   'Enterprise CMS behind R7 <br>publishing and RecordPlus <br>subscribers management',
         'card.jv.tag1':       '~20% faster XP',
         'card.jv.tag2':       '3rd party independency',
-        'card.tempo.subtitle':'A end-to-end weather forecast <br>platform, designed <br>for real-world constraints',
+        'card.tempo.subtitle':'A 0&#x2192;1 weather forecast <br>platform, designed <br>for real-world constraints',
         'card.tempo.tag1':    'WCAG',
         'card.tempo.tag2':    'a11y standards',
         'card.cb.subtitle':   'Savings platform offering millions of <br>Brazilians curated ways to spend <br>less across every product category',
@@ -2015,30 +2030,30 @@
         'card.pg.subtitle':   'This is a casual place where you will get to know <br>a little more about me through drawings, designs, <br>photography and ocasional pictures of my dog',
       },
       pt: {
-        'hero.tagline':       'Design na interseção de',
+        'hero.tagline':       'Desenhando na interseção entre',
         'hero.headline':      'ARTE<span class="amp">&amp;</span>ENGENHARIA',
         'hero.explore':       'EXPLORAR',
         'closing.line1':      'Todo projeto começa com um rascunho<span class="closing-dot">.</span>',
         'closing.line2':      'Vamos desenhar algo juntos',
-        'bio.intro':          'Sou um Senior Product Designer com 5 e <br>meio anos de experiência, projetando e <br>escalando produtos end-to-end que alcançam <br>dezenas de milhões de pessoas.',
-        'bio.detail1':        'Antes disso, 8 anos foram dedicados entre <br>Engenharia Mecânica e Design Visual, <br>construindo uma base equilibrada por <br>mentalidade analítica e olhar criativo.',
-        'bio.detail2':        'Abaixo, explore parte dos meus trabalhos <br>recentes no <span class="bio-bold">R7.com</span> e no <span class="bio-bold">RecordPlus</span>, junto com <br>o <span class="bio-bold">CMS</span> por trás desses produtos e projetos <br><span class="bio-bold">0→1</span> selecionados.',
-        'sig.title':          'designer de produto sênior',
-        'about.cta':          'SAIBA MAIS SOBRE MIM',
-        'card.r7.subtitle':   'Portal de Notícias e Mídia, <br>com mais de <br>70 milhões de usuários mensais',
+        'bio.intro':          'Sou um Senior Product Designer com 5 anos e meio de experiência, desenhando e escalando produtos end-to-end que alcançam dezenas de milhões de pessoas.',
+        'bio.detail1':        'Antes disso, 8 anos foram dedicados entre Engenharia Mecânica e Design Visual, construindo uma base equilibrada entre uma mente analítica e o olhar criativo.',
+        'bio.detail2':        'Abaixo, você encontra parte dos meus trabalhos recentes no <span class="bio-bold">R7.com</span>, <span class="bio-bold">RecordPlus</span> e também no <span class="bio-bold">CMS</span> por trás desses dois produtos, além de projetos <span class="bio-bold">0&#x2192;1</span>.',
+        'sig.title':          'senior product designer',
+        'about.cta':          'LEIA MAIS',
+        'card.r7.subtitle':   'Portal de Notícias e Mídia, <br>com mais de 70 milhões de <br>acessos únicos mensais.',
         'card.r7.tag1':       '+300k interações semanais',
-        'card.rp.subtitle':   'App de Streaming da Record TV, com <br>mais de 13 milhões de downloads na <br>App Store, Play Store e Smart TVs',
+        'card.rp.subtitle':   'App de Streaming da Record TV, com mais de 13 milhões de downloads na App Store, Play Store e Smart TVs',
         'card.rp.tag1':       '+12% NOVOS usuários',
         'card.rp.tag2':       '+4pp em planos pagos',
-        'card.jv.subtitle':   'CMS empresarial por trás da publicação <br>do R7 e do gerenciamento de <br>assinantes do RecordPlus',
+        'card.jv.subtitle':   'CMS empresarial por trás das <br>publicações do R7 e do gerenciamento <br>de assinantes do RecordPlus',
         'card.jv.tag1':       '~20% mais rápido',
         'card.jv.tag2':       'Independência de terceiros',
-        'card.tempo.subtitle':'Plataforma de previsão do tempo <br>end-to-end, projetada para <br>restrições do mundo real',
+        'card.tempo.subtitle':'Plataforma de previsão do <br>tempo 0&#x2192;1, projetada para <br>restrições do mundo real',
         'card.tempo.tag1':    'WCAG',
         'card.tempo.tag2':    'padrões de acessibilidade',
-        'card.cb.subtitle':   'Plataforma de economia que oferece <br>formas selecionadas de gastar menos <br>em todas as categorias de produtos',
+        'card.cb.subtitle':   'Plataforma de economia que oferece formas selecionadas de gastar menos em todas as categorias de produtos',
         'card.cb.tag1':       'R$20k em economia semanal',
-        'card.pg.subtitle':   'Um lugar descontraído para você conhecer <br>um pouco mais sobre mim através de desenhos, <br>designs, fotografias e fotos do meu cachorro',
+        'card.pg.subtitle':   'Um lugar descontraído para você conhecer um <br>pouco mais sobre mim através de desenhos, <br>designs, fotografias e imagens do meu cachorro',
       }
     };
 
@@ -2330,7 +2345,7 @@
           const inv         = 1 / Math.SQRT2;
           const nibUvDx     = -inv * NIB_HALF_PX / this.winWidth;
           const nibUvDy     = -inv * NIB_HALF_PX / this.winHeight;
-          const baseThick   = 0.001 + this.pressure * 0.05;
+          const baseThick   = (0.001 + this.pressure * 0.05) * this.winWidth / this.winHeight;
           for (let i = 0; i < NIB_COUNT; i++) {
             const t = (i / (NIB_COUNT - 1) - 0.5) * 2;
             this.simMat.uniforms.tipPosOld.value.set(this.tipOld.x + nibUvDx * t, this.tipOld.y + nibUvDy * t);
