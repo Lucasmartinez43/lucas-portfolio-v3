@@ -171,15 +171,12 @@
       margin-bottom: 24px;
     }
     .about-photo-col {
-      flex-shrink: 0;
-      width: 220px;
       background-image: url('images/About/About%20Image%20Final.webp');
       background-size: cover;
       background-position: center calc(50% + 40px);
       background-repeat: no-repeat;
     }
     .about-text-col {
-      flex: 1;
       min-width: 0;
     }
 
@@ -194,8 +191,8 @@
         background: #CDCDD1;
       }
       .about-content {
-        display: flex;
-        align-items: stretch;
+        display: grid;
+        grid-template-columns: 220px 1fr;
         gap: 64px;
       }
       .skills-body {
