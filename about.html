@@ -171,17 +171,12 @@
       margin-bottom: 24px;
     }
     .about-photo-col {
-      position: relative;
       flex-shrink: 0;
       width: 220px;
-    }
-    .about-photo-col img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center calc(50% + 40px);
+      background-image: url('images/About/About%20Image%20Final.webp');
+      background-size: cover;
+      background-position: center calc(50% + 40px);
+      background-repeat: no-repeat;
     }
     .about-text-col {
       flex: 1;
@@ -423,9 +418,7 @@
     </div>
 
     <section class="project-section about-content">
-      <div class="about-photo-col">
-        <img src="images/About/About%20Image%20Final.webp" alt="Lucas Martinez" />
-      </div>
+      <div class="about-photo-col"></div>
       <div class="about-text-col">
         <p class="section-body" data-i18n="about.p1"><span class="about-bold">This story started somewhere between numbers and drawings.</span> As a kid, I was always in this middle ground, solving problems and trying to understand how things worked, while also spending hours drawing and creating. For a long time, those felt like separate interests, and as I grew up, Engineering seemed like the obvious path. Design was always there, just not as a career yet.</p>
         <p class="section-body" data-i18n="about.p2"><span class="about-bold">I went on to study Engineering at a renowned university, where I spent four years building a strong analytical foundation.</span> Over time, I started to notice where my attention naturally went: I was more interested in sketching ideas than working through equations. That shift pushed me in a different direction, where <span class="about-bold">I graduated in Graphic Design and built a creative side to match my analytical one.</span></p>
