@@ -263,16 +263,62 @@
     .lb-close:hover { color: rgba(255, 255, 255, 0.9); }
 
     /* ── Mobile ─────────────────────────────────────────── */
+    .mobile-topbar       { display: none; }
+    .mobile-menu         { display: none; }
+    .mobile-menu-overlay { display: none; }
+
     @media (max-width: 800px) {
       *, *::before, *::after { cursor: auto !important; }
-      .cursor-ring, .cursor-dot, .theme-toggle { display: none !important; }
-      .back-link { position: fixed; }
-      .pg-page { padding-top: 96px; padding-bottom: 48px; padding-left: 16px; padding-right: 16px; }
-      .project-header { height: auto; margin-bottom: 40px; }
-      .project-title { font-size: 48px; }
-      .filter-nav { gap: 12px; padding: 0 16px; overflow-x: auto; justify-content: flex-start; }
-      .filter-btn { font-size: 13px; }
-      .pg-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .cursor-ring, .cursor-dot, .cursor-dot-nib, .cursor-brush, .ink-canvas, .theme-toggle, .lang-wrapper { display: none !important; }
+      .back-link { display: none; }
+      .filter-nav { display: none; }
+
+      .pg-page { padding: 96px 16px 48px; align-items: flex-start; }
+      .project-header { width: 100%; margin-bottom: 32px; align-items: flex-start; }
+      .project-title { display: none; }
+      .pg-subtitle { text-align: left; }
+      .pg-grid { width: 100%; grid-template-columns: repeat(3, 1fr); gap: 8px; min-height: 0; }
+
+      /* ── Mobile topbar ──────────────────────────────────── */
+      .mobile-topbar {
+        display: flex; align-items: center; justify-content: space-between;
+        position: fixed; top: 16px; left: 16px; right: 16px; z-index: 1000;
+        height: 60px; padding: 0 16px;
+        background: var(--bg);
+        border: 1px solid var(--bar-border); border-radius: 16px;
+      }
+      .mobile-topbar-left { display: flex; align-items: center; gap: 8px; }
+      .mobile-back { color: var(--text-hero); display: flex; align-items: center; text-decoration: none; flex-shrink: 0; }
+      .mobile-topbar-title { font-family: 'Stack Sans Notch', sans-serif; font-weight: 700; font-size: 32px; color: var(--text-hero); line-height: 1; }
+      .mobile-menu-btn { background: none; border: none; padding: 0; color: var(--text-hero); display: flex; align-items: center; justify-content: center; }
+
+      /* ── Mobile menu ────────────────────────────────────── */
+      .mobile-menu {
+        display: flex; flex-direction: column; align-items: flex-end;
+        position: fixed; top: calc(16px + 60px + 8px); right: 16px; width: fit-content; z-index: 999;
+        background: #0F0F12; border: 1px solid rgba(255,255,255,0.2); border-radius: 16px;
+        padding: 8px 0 8px 40px;
+        opacity: 0; transform: translateY(-8px); pointer-events: none;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+      }
+      .mobile-menu.open { opacity: 1; transform: translateY(0); pointer-events: auto; }
+      .mobile-nav-link {
+        display: block; padding: 12px 16px; text-align: right;
+        background: none; border: none; width: 100%;
+        font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 200;
+        letter-spacing: 0.08em; color: rgba(255,255,255,0.7);
+      }
+      .mobile-nav-link.active { color: #CD3D23; }
+      .mobile-divider { height: 1px; background: rgba(255,255,255,0.2); align-self: stretch; margin: 16px 16px 16px -24px; }
+      .mobile-lang-row, .mobile-theme-row { display: flex; align-items: center; gap: 20px; padding: 10px 16px; }
+      .mobile-lang-opt { background: none; border: none; padding: 0; font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 200; letter-spacing: 0.05em; color: rgba(255,255,255,0.3); }
+      .mobile-lang-opt.active { font-weight: 700; color: rgba(255,255,255,0.85); }
+      .mobile-theme-opt { background: none; border: none; padding: 0; color: rgba(255,255,255,0.3); display: flex; align-items: center; }
+      .mobile-theme-opt.active { color: rgba(255,255,255,0.85); }
+      .mobile-theme-opt svg { stroke-width: 1.5; }
+      .mobile-theme-opt.active svg { stroke-width: 2.5; }
+      .mobile-menu-overlay { display: none; position: fixed; inset: 0; z-index: 998; }
+      .mobile-menu-overlay.open { display: block; }
     }
   </style>
 </head>
@@ -305,7 +351,7 @@
 
     <div class="project-header">
       <h1 class="project-title">Playground</h1>
-      <p class="pg-subtitle">This is a casual place where you will get to know a little more about me through drawings, designs, photography and ocasional pictures of my dog</p>
+      <p class="pg-subtitle" data-i18n="pg.subtitle">This is a casual place where you will get to know a little more about me through drawings, designs, photography and ocasional pictures of my dog</p>
       <a href="index.html" class="back-link">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
         HOME
@@ -313,10 +359,10 @@
     </div>
 
     <nav class="filter-nav">
-      <button class="filter-btn active" data-filter="all">ALL</button>
-      <button class="filter-btn" data-filter="drawings">DRAWINGS</button>
+      <button class="filter-btn active" data-filter="all" data-i18n="filter.all">ALL</button>
+      <button class="filter-btn" data-filter="drawings" data-i18n="filter.drawings">DRAWINGS</button>
       <button class="filter-btn" data-filter="design">DESIGN</button>
-      <button class="filter-btn" data-filter="photography">PHOTOGRAPHY</button>
+      <button class="filter-btn" data-filter="photography" data-i18n="filter.photography">PHOTOGRAPHY</button>
       <button class="filter-btn" data-filter="arthas">ARTHAS</button>
     </nav>
 
@@ -365,6 +411,40 @@
 
   </main>
 
+  <!-- Mobile nav -->
+  <div class="mobile-topbar" id="mobile-topbar">
+    <div class="mobile-topbar-left">
+      <a href="index.html" class="mobile-back" aria-label="Back to home">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+      </a>
+      <span class="mobile-topbar-title">Playground</span>
+    </div>
+    <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="mobile-menu-overlay" id="mobile-menu-overlay"></div>
+  <div class="mobile-menu" id="mobile-menu">
+    <button class="mobile-nav-link active" data-mob-filter="all" data-i18n="filter.all">ALL</button>
+    <button class="mobile-nav-link" data-mob-filter="drawings" data-i18n="filter.drawings">DRAWINGS</button>
+    <button class="mobile-nav-link" data-mob-filter="design">DESIGN</button>
+    <button class="mobile-nav-link" data-mob-filter="photography" data-i18n="filter.photography">PHOTOGRAPHY</button>
+    <button class="mobile-nav-link" data-mob-filter="arthas">ARTHAS</button>
+    <div class="mobile-divider"></div>
+    <div class="mobile-lang-row">
+      <button class="mobile-lang-opt active" data-lang="en">EN</button>
+      <button class="mobile-lang-opt" data-lang="pt">PT</button>
+    </div>
+    <div class="mobile-theme-row">
+      <button class="mobile-theme-opt" data-theme-val="light" aria-label="Light theme">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+      <button class="mobile-theme-opt" data-theme-val="dark" aria-label="Dark theme">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      </button>
+    </div>
+  </div>
+
   <!-- Lightbox -->
   <div class="lb-overlay" id="lb-overlay" aria-modal="true" role="dialog">
     <button class="lb-close" id="lb-close" aria-label="Close">&#x2715;</button>
@@ -392,6 +472,34 @@
       applyTheme(localStorage.getItem('portfolio-theme') || 'dark');
     })();
 
+    /* ── i18n ───────────────────────────────────────────── */
+    var PG_TRANSLATIONS = {
+      en: {
+        'pg.subtitle':      'This is a casual place where you will get to know a little more about me through drawings, designs, photography and ocasional pictures of my dog',
+        'filter.all':       'ALL',
+        'filter.drawings':  'DRAWINGS',
+        'filter.photography':'PHOTOGRAPHY',
+      },
+      pt: {
+        'pg.subtitle':      'Este é um lugar descontraído onde você vai me conhecer um pouco mais através de desenhos, designs, fotografias e fotos eventuais do meu cachorro',
+        'filter.all':       'TODOS',
+        'filter.drawings':  'DESENHOS',
+        'filter.photography':'FOTOGRAFIA',
+      }
+    };
+    function applyLang(lang) {
+      localStorage.setItem('portfolio-lang', lang);
+      document.querySelectorAll('[data-i18n]').forEach(function(el) {
+        var t = PG_TRANSLATIONS[lang]; var key = el.getAttribute('data-i18n');
+        if (t && t[key] !== undefined) el.innerHTML = t[key];
+      });
+      var curr = document.getElementById('lang-current');
+      if (curr) curr.textContent = lang.toUpperCase();
+      document.querySelectorAll('.lang-option').forEach(function(o) { o.classList.toggle('active', o.getAttribute('data-lang') === lang); });
+      document.querySelectorAll('.mobile-lang-opt').forEach(function(o) { o.classList.toggle('active', o.getAttribute('data-lang') === lang); });
+      document.documentElement.setAttribute('lang', lang === 'pt' ? 'pt-BR' : 'en');
+    }
+
     /* ── Lang toggle ────────────────────────────────────── */
     (function () {
       var toggle = document.getElementById('lang-toggle');
@@ -399,7 +507,11 @@
       if (!toggle || !menu) return;
       toggle.addEventListener('click', function (e) { e.stopPropagation(); menu.classList.toggle('open'); });
       document.addEventListener('click', function () { menu.classList.remove('open'); });
+      document.querySelectorAll('.lang-option').forEach(function(opt) {
+        opt.addEventListener('click', function(e) { e.stopPropagation(); applyLang(opt.getAttribute('data-lang')); menu.classList.remove('open'); });
+      });
     })();
+    applyLang(localStorage.getItem('portfolio-lang') || 'en');
 
     /* ── Cursor ─────────────────────────────────────────── */
     (function () {
@@ -642,6 +754,69 @@
       }
 
       document.querySelectorAll('.filter-btn, .back-link').forEach(attachUnderline);
+    })();
+
+    /* ── Mobile nav ─────────────────────────────────────── */
+    (function () {
+      if (!window.matchMedia('(max-width: 800px)').matches) return;
+      var menuBtn = document.getElementById('mobile-menu-btn');
+      var menu    = document.getElementById('mobile-menu');
+      var overlay = document.getElementById('mobile-menu-overlay');
+
+      function openMenu()  { menu.classList.add('open'); overlay.classList.add('open'); }
+      function closeMenu() { menu.classList.remove('open'); overlay.classList.remove('open'); }
+
+      menuBtn.addEventListener('click', function () {
+        menu.classList.contains('open') ? closeMenu() : openMenu();
+      });
+      overlay.addEventListener('click', closeMenu);
+
+      // Filter buttons
+      var mobFilters = document.querySelectorAll('[data-mob-filter]');
+      var items = document.querySelectorAll('.pg-item');
+      mobFilters.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          mobFilters.forEach(function (b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          var filter = btn.dataset.mobFilter;
+          // Sync desktop filter btns
+          document.querySelectorAll('.filter-btn').forEach(function (b) {
+            b.classList.toggle('active', b.dataset.filter === filter);
+          });
+          items.forEach(function (item) {
+            item.classList.toggle('hidden', filter !== 'all' && item.dataset.tag !== filter);
+          });
+          closeMenu();
+        });
+      });
+
+      // Language buttons
+      var langOpts = document.querySelectorAll('.mobile-lang-opt');
+      langOpts.forEach(function (btn) {
+        btn.addEventListener('click', function () { applyLang(btn.dataset.lang); });
+      });
+
+      // Theme buttons
+      var themeOpts = document.querySelectorAll('.mobile-theme-opt');
+      function syncThemeBtns() {
+        var cur = document.documentElement.getAttribute('data-theme');
+        themeOpts.forEach(function (btn) {
+          btn.classList.toggle('active', btn.dataset.themeVal === cur);
+        });
+      }
+      themeOpts.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var theme = btn.dataset.themeVal;
+          document.documentElement.setAttribute('data-theme', theme);
+          localStorage.setItem('portfolio-theme', theme);
+          var iconMoon = document.getElementById('icon-moon');
+          var iconSun  = document.getElementById('icon-sun');
+          if (iconMoon) iconMoon.style.display = theme === 'dark' ? 'none' : '';
+          if (iconSun)  iconSun.style.display  = theme === 'dark' ? '' : 'none';
+          syncThemeBtns();
+        });
+      });
+      syncThemeBtns();
     })();
 
     /* ── Back link session marker ───────────────────────── */

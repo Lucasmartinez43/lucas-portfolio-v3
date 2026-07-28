@@ -171,12 +171,16 @@
       margin-bottom: 24px;
     }
     .about-photo-col {
-      background-image: url('images/About/About%20Image%20Final.webp');
-      background-size: 100% auto;
-      background-position: top center;
-      background-repeat: no-repeat;
+      flex-shrink: 0;
+      height: 501px;
+    }
+    .about-photo-col img {
+      display: block;
+      height: 100%;
+      width: auto;
     }
     .about-text-col {
+      flex: 1;
       min-width: 0;
     }
 
@@ -191,9 +195,9 @@
         background: #CDCDD1;
       }
       .about-content {
-        display: grid;
-        grid-template-columns: 220px 1fr;
-        gap: 64px;
+        display: flex;
+        align-items: center;
+        gap: 56px;
       }
       .skills-body {
         display: flex;
@@ -244,7 +248,7 @@
 
     .skills-heading {
       font-family: 'Stack Sans Text', sans-serif; font-weight: 700; font-size: 24px;
-      color: var(--text-hero); margin-bottom: 40px;
+      color: var(--text-hero); margin-bottom: 40px; text-wrap: balance;
     }
 
     .skills-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
@@ -280,19 +284,73 @@
       *, *::before, *::after { cursor: auto !important; }
       .cursor-ring, .cursor-dot, .cursor-dot-nib,
       .cursor-brush, .ink-canvas, .theme-toggle     { display: none !important; }
-      .project-header, .project-footer { display: none; }
+      .project-footer { display: none; }
+
+      /* ── Heading ──────────────────────────────────────────────── */
+      .project-header { display: block; text-align: left; margin-bottom: 40px; }
+      .project-header .back-link { display: none; }
+      .about-title-line1, .about-title-line2 {
+        font-family: 'Stack Sans Notch', sans-serif;
+        font-weight: 700; font-size: 32px; line-height: 1.2; text-align: left;
+        text-wrap: balance;
+      }
+
+      /* ── About ────────────────────────────────────────────────── */
+      .about-photo-col { display: none; }
+
+      /* ── Skills accordion ─────────────────────────────────────── */
+      .skills-desc { display: none !important; }
+      .skills-body { display: block; }
+      .skills-list { width: 100%; }
+      .skill-btn {
+        display: flex; justify-content: space-between; align-items: center;
+        padding-right: 0; white-space: normal; font-size: 16px;
+      }
+      .skill-btn .cta-underline { display: none; }
+      .skill-btn.active { color: var(--text-hero); }
+      .skill-chevron { flex-shrink: 0; margin-left: 12px; transition: transform 0.2s ease; opacity: 0.4; }
+      .skill-btn.mob-open { color: #CD3D23; }
+      .skill-btn.mob-open .skill-chevron { transform: rotate(180deg); opacity: 1; color: #CD3D23; }
+      .skill-accordion-body {
+        display: none;
+        padding: 8px 0 16px 16px;
+        border-left: 1px solid #CD3D23;
+        font-family: 'Stack Sans Text', sans-serif; font-weight: 300;
+        font-size: 15px; line-height: 1.6;
+        color: rgba(255,255,255,0.7);
+        margin-bottom: 4px;
+      }
+      :root[data-theme="light"] .skill-accordion-body { color: rgba(15,15,18,0.7); }
+      .skill-accordion-body.open { display: block; }
+
+      /* ── Contact ──────────────────────────────────────────────── */
+      .about-contacts { display: flex !important; flex-direction: column !important; align-items: flex-start !important; gap: 24px !important; }
+      .contact-link { align-self: flex-start; }
+      .contact-email-about .icon-copy { display: none; }
+      .skills-heading { text-wrap: balance; margin-bottom: 24px; }
+
+      /* ── Section spacing + scroll offset ─────────────────────── */
+      .project-section { margin-bottom: 64px; padding: 8px; }
+      #skills-section, #contact-section { scroll-margin-top: 109px; }
+
+      /* ── Mobile nav links in menu ─────────────────────────────── */
+      .mobile-nav-link {
+        display: block; padding: 12px 16px; text-align: right; text-decoration: none;
+        font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 200;
+        letter-spacing: 0.08em; color: rgba(255,255,255,0.7);
+      }
 
       .mobile-topbar {
         display: flex; align-items: center; justify-content: space-between;
         position: fixed; top: 16px; left: 16px; right: 16px; z-index: 1000;
         height: 60px; padding: 0 16px;
-        background: linear-gradient(to right, #990B66 0%, #FF12AA 100%);
-        border: 1px solid #FF12AA; border-radius: 16px;
+        background: var(--bg);
+        border: 1px solid var(--section-border); border-radius: 16px;
       }
       .mobile-topbar-left { display: flex; align-items: center; gap: 8px; }
-      .mobile-back { color: #ffffff; display: flex; align-items: center; text-decoration: none; flex-shrink: 0; }
-      .mobile-topbar-title { font-family: 'Stack Sans Notch', sans-serif; font-weight: 700; font-size: 32px; color: #ffffff; line-height: 1; }
-      .mobile-menu-btn { background: none; border: none; padding: 0; color: #ffffff; display: flex; align-items: center; justify-content: center; }
+      .mobile-back { color: var(--text-hero); display: flex; align-items: center; text-decoration: none; flex-shrink: 0; }
+      .mobile-topbar-title { font-family: 'Stack Sans Notch', sans-serif; font-weight: 700; font-size: 32px; color: var(--text-hero); line-height: 1; }
+      .mobile-menu-btn { background: none; border: none; padding: 0; color: var(--text-hero); display: flex; align-items: center; justify-content: center; }
       .mobile-menu {
         display: flex; flex-direction: column; align-items: flex-end;
         position: fixed; top: calc(16px + 60px + 8px);
@@ -303,7 +361,7 @@
         transition: opacity 0.2s ease, transform 0.2s ease;
       }
       .mobile-menu.open { opacity: 1; transform: translateY(0); pointer-events: auto; }
-      .mobile-divider { height: 1px; background: rgba(255,255,255,0.2); align-self: stretch; margin: 4px 16px 4px -24px; }
+      .mobile-divider { height: 1px; background: rgba(255,255,255,0.2); align-self: stretch; margin: 16px 16px 16px -24px; }
       .mobile-lang-row, .mobile-theme-row { display: flex; align-items: center; gap: 20px; padding: 10px 16px; }
       .mobile-lang-opt {
         background: none; border: none; padding: 0;
@@ -354,24 +412,26 @@
       <a href="index.html" class="mobile-back" aria-label="Home">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
       </a>
-      <span class="mobile-topbar-title" data-i18n="mobile.title">ABOUT ME</span>
+      <span class="mobile-topbar-title" data-i18n="mobile.title">About Me</span>
     </div>
     <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
     </button>
   </div>
   <div class="mobile-menu" id="mobile-menu">
-    <div class="mobile-lang-row">
-      <button class="mobile-lang-opt" data-lang="pt">PT</button>
-      <button class="mobile-lang-opt" data-lang="en">EN</button>
-    </div>
+    <a href="#skills-section" class="mobile-nav-link" id="mob-nav-skills">SKILLS</a>
+    <a href="#contact-section" class="mobile-nav-link" id="mob-nav-contact">CONTACT</a>
     <div class="mobile-divider"></div>
+    <div class="mobile-lang-row">
+      <button class="mobile-lang-opt" data-lang="en">EN</button>
+      <button class="mobile-lang-opt" data-lang="pt">PT</button>
+    </div>
     <div class="mobile-theme-row">
-      <button class="mobile-theme-opt" data-theme="light">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
-      </button>
       <button class="mobile-theme-opt" data-theme="dark">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      </button>
+      <button class="mobile-theme-opt" data-theme="light">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
       </button>
     </div>
   </div>
@@ -415,7 +475,7 @@
     </div>
 
     <section class="project-section about-content">
-      <div class="about-photo-col"></div>
+      <div class="about-photo-col"><img src="images/About/LM2.png" alt=""></div>
       <div class="about-text-col">
         <p class="section-body" data-i18n="about.p1"><span class="about-bold">This story started somewhere between numbers and drawings.</span> As a kid, I was always in this middle ground, solving problems and trying to understand how things worked, while also spending hours drawing and creating. For a long time, those felt like separate interests, and as I grew up, Engineering seemed like the obvious path. Design was always there, just not as a career yet.</p>
         <p class="section-body" data-i18n="about.p2"><span class="about-bold">I went on to study Engineering at a renowned university, where I spent four years building a strong analytical foundation.</span> Over time, I started to notice where my attention naturally went: I was more interested in sketching ideas than working through equations. That shift pushed me in a different direction, where <span class="about-bold">I graduated in Graphic Design and built a creative side to match my analytical one.</span></p>
@@ -423,8 +483,8 @@
       </div>
     </section>
 
-    <section class="project-section skills-section">
-      <h2 class="skills-heading">Things I'm good at<span style="color:#CD3D23">:</span></h2>
+    <section class="project-section skills-section" id="skills-section">
+      <h2 class="skills-heading" data-i18n="skills.heading">Things I'm good at<span style="color:#CD3D23">:</span></h2>
       <div class="skills-body">
         <ul class="skills-list" id="skills-list">
           <li><button class="skill-btn active" data-skill="ai"><span class="skill-label">AI-ASSISTED DESIGN</span></button></li>
@@ -451,13 +511,13 @@
       </div>
     </section>
 
-    <section class="project-section contact-section">
-      <h2 class="skills-heading">Some stories can't be fully told in<br>just a few screens or paragraphs<span style="color:#CD3D23">...</span></h2>
-      <p class="section-body contact-section-body">If you'd like to know more about my journey,<br>or create a new one together, you can reach out below:</p>
+    <section class="project-section contact-section" id="contact-section">
+      <h2 class="skills-heading" data-i18n="contact.heading">Some stories can't be fully told in just a few screens or paragraphs<span style="color:#CD3D23">...</span></h2>
+      <p class="section-body contact-section-body" data-i18n="contact.body">If you'd like to know more about my journey,<br>or create a new one together, you can reach out below:</p>
       <div class="about-contacts">
         <a href="#" class="contact-link">RESUME</a>
         <a href="https://linkedin.com/in/lucasmartinez43" class="contact-link" target="_blank" rel="noopener">LINKEDIN</a>
-        <a href="#" class="contact-link contact-email-about">
+        <a href="mailto:lucas.martinez43@gmail.com" class="contact-link contact-email-about">
           <span class="email-clip-wrap">
             <span class="email-inner">
               <svg class="contact-icon icon-copy" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
@@ -468,6 +528,13 @@
         </a>
       </div>
     </section>
+
+    <a href="#top" class="mobile-back-top back-link">
+      <span class="back-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>
+      </span>
+      <span data-i18n="nav.back-top">BACK TO TOP</span>
+    </a>
 
   </main>
 
@@ -642,27 +709,51 @@
       function closeMenu() { menu.classList.remove('open'); overlay.classList.remove('open'); }
       menuBtn.addEventListener('click', function () { menu.classList.contains('open') ? closeMenu() : openMenu(); });
       overlay.addEventListener('click', closeMenu);
+      document.querySelectorAll('.mobile-nav-link').forEach(function(link) {
+        link.addEventListener('click', closeMenu);
+      });
     })();
 
     (function () {
       var SKILLS = {
-        ai:           'AI is part of the process at every stage, used to accelerate work and raise the quality of the output. From structure and execution to ideation and visual exploration, tools like Relume, UX Pilot, Figma Make, ChatGPT, Gemini, Kling, NanoBanana, and Claude Code have all been part of that experimentation.',
-        discovery:    'Figuring out what the actual problem is before anything gets designed. This means talking to stakeholders, digging into goals and constraints, and making sure there\'s a real need behind whatever is being built.',
-        research:     'Getting close to the people who will use the product. Through interviews, surveys, and observation, the goal is to understand how they think and behave, and where current experiences cause friction.',
-        benchmarking: 'Looking at what already exists in the market before starting to design. Useful for spotting patterns, understanding expectations, and finding gaps worth exploring.',
-        ia:           'Deciding how content and navigation should be structured so people can find what they need without having to think too hard about it. Covers hierarchy, labeling, and flow.',
-        wireframing:  'Drawing out screens in low fidelity before any visual decisions are made. The point is to test whether the structure and layout make sense, without getting distracted by colors or type.',
-        interaction:  'Defining how the product responds to user actions. This includes states, transitions, feedback, and the small details that make something feel smooth and deliberate to use.',
-        prototyping:  'Making something clickable and testable before development begins. Depending on the stage, this can range from a rough flow to a realistic simulation of the final product.',
-        usability:    'Sitting with real users and watching them try to complete tasks. The goal is to catch confusion and friction early, before they become expensive to fix.',
-        data:         'Using analytics, heatmaps, and funnel data alongside research findings to understand what is and isn\'t working. Helps prioritise what to improve and why.',
-        typography:   'Working with type at a foundational level, across brand, product, and editorial contexts. An area of deep practice that shapes how hierarchy, tone, and readability come together in everything else.',
-        color:        'Building palettes that reflect brand, guide attention, and communicate state. An area of deep practice, applied across brand identity, product design, and design systems with accessibility built in.',
-        hifi:         'Producing final, detailed screens where every spacing decision, type choice, and component state is fully resolved. The stage where all earlier decisions come together into something ready to build.',
-        systems:      'Building component libraries and guidelines from scratch, and scaling existing ones as products grow. Reduces repeated decisions, keeps the experience consistent, and gives teams a shared language to work from.',
-        accessibility:'Making sure the product works for people with different needs and abilities. Covers contrast ratios and touch target sizes from the start, not as an afterthought.',
-        handoff:      'Preparing design files and documentation so developers have everything they need to build it accurately. Includes specs, edge cases, and staying available to answer questions during implementation.',
-        collab:       'Working across disciplines throughout the process. Regular sync with product managers, developers, and researchers, making sure design decisions are understood and agreed on by the people building the product.',
+        en: {
+          ai:           'AI is part of the process at every stage, used to accelerate work and raise the quality of the output. From structure and execution to ideation and visual exploration, tools like Relume, UX Pilot, Figma Make, ChatGPT, Gemini, Kling, NanoBanana, and Claude Code have all been part of that experimentation.',
+          discovery:    'Figuring out what the actual problem is before anything gets designed. This means talking to stakeholders, digging into goals and constraints, and making sure there\'s a real need behind whatever is being built.',
+          research:     'Getting close to the people who will use the product. Through interviews, surveys, and observation, the goal is to understand how they think and behave, and where current experiences cause friction.',
+          benchmarking: 'Looking at what already exists in the market before starting to design. Useful for spotting patterns, understanding expectations, and finding gaps worth exploring.',
+          ia:           'Deciding how content and navigation should be structured so people can find what they need without having to think too hard about it. Covers hierarchy, labeling, and flow.',
+          wireframing:  'Drawing out screens in low fidelity before any visual decisions are made. The point is to test whether the structure and layout make sense, without getting distracted by colors or type.',
+          interaction:  'Defining how the product responds to user actions. This includes states, transitions, feedback, and the small details that make something feel smooth and deliberate to use.',
+          prototyping:  'Making something clickable and testable before development begins. Depending on the stage, this can range from a rough flow to a realistic simulation of the final product.',
+          usability:    'Sitting with real users and watching them try to complete tasks. The goal is to catch confusion and friction early, before they become expensive to fix.',
+          data:         'Using analytics, heatmaps, and funnel data alongside research findings to understand what is and isn\'t working. Helps prioritise what to improve and why.',
+          typography:   'Working with type at a foundational level, across brand, product, and editorial contexts. An area of deep practice that shapes how hierarchy, tone, and readability come together in everything else.',
+          color:        'Building palettes that reflect brand, guide attention, and communicate state. An area of deep practice, applied across brand identity, product design, and design systems with accessibility built in.',
+          hifi:         'Producing final, detailed screens where every spacing decision, type choice, and component state is fully resolved. The stage where all earlier decisions come together into something ready to build.',
+          systems:      'Building component libraries and guidelines from scratch, and scaling existing ones as products grow. Reduces repeated decisions, keeps the experience consistent, and gives teams a shared language to work from.',
+          accessibility:'Making sure the product works for people with different needs and abilities. Covers contrast ratios and touch target sizes from the start, not as an afterthought.',
+          handoff:      'Preparing design files and documentation so developers have everything they need to build it accurately. Includes specs, edge cases, and staying available to answer questions during implementation.',
+          collab:       'Working across disciplines throughout the process. Regular sync with product managers, developers, and researchers, making sure design decisions are understood and agreed on by the people building the product.',
+        },
+        pt: {
+          ai:           'A IA faz parte do processo em todas as etapas, usada para acelerar o trabalho e elevar a qualidade da entrega. Da estrutura e execução à ideação e exploração visual, ferramentas como Relume, UX Pilot, Figma Make, ChatGPT, Gemini, Kling, NanoBanana e Claude Code já fizeram parte dessa experimentação.',
+          discovery:    'Entender qual é o problema real antes de projetar qualquer coisa. Isso significa conversar com stakeholders, entender objetivos e restrições, e garantir que existe uma necessidade concreta por trás do que está sendo construído.',
+          research:     'Chegar perto das pessoas que vão usar o produto. Por meio de entrevistas, pesquisas e observação, o objetivo é entender como elas pensam e se comportam, e onde as experiências atuais geram atrito.',
+          benchmarking: 'Analisar o que já existe no mercado antes de começar a projetar. Útil para identificar padrões, entender expectativas e encontrar lacunas que vale a pena explorar.',
+          ia:           'Decidir como o conteúdo e a navegação devem ser estruturados para que as pessoas encontrem o que precisam sem precisar pensar demais. Envolve hierarquia, nomenclatura e fluxo.',
+          wireframing:  'Desenhar telas em baixa fidelidade antes de tomar qualquer decisão visual. O objetivo é testar se a estrutura e o layout fazem sentido, sem se distrair com cores ou tipografia.',
+          interaction:  'Definir como o produto responde às ações do usuário. Inclui estados, transições, feedbacks e os pequenos detalhes que fazem algo parecer fluido e intencional.',
+          prototyping:  'Criar algo clicável e testável antes do desenvolvimento começar. Dependendo da etapa, pode variar de um fluxo básico a uma simulação realista do produto final.',
+          usability:    'Sentar com usuários reais e observá-los tentando concluir tarefas. O objetivo é identificar confusão e atrito cedo, antes que se tornem caros de corrigir.',
+          data:         'Usar analytics, heatmaps e dados de funil junto com os resultados de pesquisa para entender o que está e o que não está funcionando. Ajuda a priorizar o que melhorar e por quê.',
+          typography:   'Trabalhar com tipografia em nível fundamental, em contextos de marca, produto e editorial. Uma área de prática profunda que molda como hierarquia, tom e legibilidade se unem em tudo mais.',
+          color:        'Construir paletas que reflitam a marca, guiem a atenção e comuniquem estado. Uma área de prática profunda, aplicada em identidade de marca, design de produto e sistemas de design com acessibilidade embutida.',
+          hifi:         'Produzir telas finais e detalhadas onde cada decisão de espaçamento, escolha tipográfica e estado de componente está completamente resolvida. A etapa onde todas as decisões anteriores se unem em algo pronto para ser construído.',
+          systems:      'Construir bibliotecas de componentes e diretrizes do zero, e escalar as existentes conforme os produtos crescem. Reduz decisões repetidas, mantém a experiência consistente e dá às equipes uma linguagem comum para trabalhar.',
+          accessibility:'Garantir que o produto funcione para pessoas com diferentes necessidades e habilidades. Envolve proporções de contraste e tamanhos de área de toque desde o início, não como uma reflexão tardia.',
+          handoff:      'Preparar arquivos de design e documentação para que os desenvolvedores tenham tudo o que precisam para construir com precisão. Inclui especificações, casos extremos e disponibilidade para responder perguntas durante a implementação.',
+          collab:       'Trabalhar em conjunto com outras áreas ao longo do processo. Sincronização regular com product managers, desenvolvedores e pesquisadores, garantindo que as decisões de design sejam compreendidas e acordadas pelas pessoas que constroem o produto.',
+        },
       };
 
       var descText  = document.getElementById('skills-desc-text');
@@ -691,7 +782,8 @@
 
       function revealDescription(btn) {
         if (revealRaf) { cancelAnimationFrame(revealRaf); revealRaf = null; }
-        descText.textContent = SKILLS[btn.dataset.skill] || '';
+        var _l = localStorage.getItem('portfolio-lang') || 'en';
+        descText.textContent = (SKILLS[_l] || SKILLS.en)[btn.dataset.skill] || '';
         positionDesc(btn);
         descText.style.opacity = '1';
         var blurPct = 80, range = 100 + blurPct;
@@ -733,39 +825,105 @@
         }
       }
 
-      if (btns.length) {
+      if (btns.length && window.innerWidth > 800) {
         btns[0].classList.add('active');
         setUnderline(btns[0], true);
-        descText.textContent = SKILLS[btns[0].dataset.skill] || '';
+        var _l0 = localStorage.getItem('portfolio-lang') || 'en';
+        descText.textContent = (SKILLS[_l0] || SKILLS.en)[btns[0].dataset.skill] || '';
         descText.classList.add('visible');
         requestAnimationFrame(function () { positionDesc(btns[0]); });
       }
 
+      window.ABOUT_SKILLS = SKILLS;
+
       btns.forEach(function (btn) {
-        btn.addEventListener('click', function () { selectSkill(btn); });
+        btn.addEventListener('click', function () {
+          if (window.innerWidth <= 800) return;
+          selectSkill(btn);
+        });
+      });
+    })();
+
+    (function () {
+      if (!window.matchMedia('(max-width: 800px)').matches) return;
+      var SKILLS = window.ABOUT_SKILLS || {};
+      var btns = document.querySelectorAll('.skill-btn');
+
+      function _skillText(skill) {
+        var _lang = localStorage.getItem('portfolio-lang') || 'en';
+        return (SKILLS[_lang] || SKILLS.en || {})[skill] || '';
+      }
+
+      btns.forEach(function (btn) {
+        var chevron = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        chevron.setAttribute('class', 'skill-chevron');
+        chevron.setAttribute('width', '16'); chevron.setAttribute('height', '16');
+        chevron.setAttribute('viewBox', '0 0 24 24'); chevron.setAttribute('fill', 'none');
+        chevron.setAttribute('stroke', 'currentColor'); chevron.setAttribute('stroke-width', '2');
+        chevron.setAttribute('stroke-linecap', 'round'); chevron.setAttribute('stroke-linejoin', 'round');
+        var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', 'M6 9l6 6 6-6');
+        chevron.appendChild(path);
+        btn.appendChild(chevron);
+
+        var body = document.createElement('div');
+        body.className = 'skill-accordion-body';
+        body.textContent = _skillText(btn.dataset.skill);
+        btn.closest('li').appendChild(body);
+      });
+
+      function openSkill(btn) {
+        btns.forEach(function (b) {
+          b.classList.remove('mob-open');
+          var bd = b.closest('li').querySelector('.skill-accordion-body');
+          if (bd) bd.classList.remove('open');
+        });
+        btn.classList.add('mob-open');
+        var bd = btn.closest('li').querySelector('.skill-accordion-body');
+        if (bd) bd.classList.add('open');
+      }
+
+      if (btns.length) openSkill(btns[0]);
+
+      btns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          if (btn.classList.contains('mob-open')) {
+            btn.classList.remove('mob-open');
+            var bd = btn.closest('li').querySelector('.skill-accordion-body');
+            if (bd) bd.classList.remove('open');
+          } else {
+            openSkill(btn);
+          }
+        });
       });
     })();
 
     var TRANSLATIONS = {
       en: {
-        'mobile.title':  'ABOUT ME',
-        'nav.home':      'HOME',
-        'nav.back-top':  'BACK TO TOP',
-        'about.line1':   'Solving problems like an Engineer<span class="title-accent">.</span>',
-        'about.line2':   'Designing like an Artist',
-        'about.p1': '<span class="about-bold">This story started somewhere between numbers and drawings.</span> As a kid, I was always in this middle ground, solving problems and trying to understand how things worked, while also spending hours drawing and creating. For a long time, those felt like separate interests, and as I grew up, Engineering seemed like the obvious path. Design was always there, just not as a career yet.',
-        'about.p2': '<span class="about-bold">I went on to study Engineering at a renowned university, where I spent four years building a strong analytical foundation.</span> Over time, I started to notice where my attention naturally went: I was more interested in sketching ideas than working through equations. That shift pushed me in a different direction, where <span class="about-bold">I graduated in Graphic Design and built a creative side to match my analytical one.</span>',
-        'about.p3': '<span class="about-bold">Since then, I\'ve been combining both in my work. I use structure and logic to break down problems, and visual thinking to turn them into solutions that are clear, usable, and hold up in real scenarios. It\'s a balance I\'ve been refining over time, and it still shapes how I approach every&nbsp;project.</span>',
+        'mobile.title':   'About Me',
+        'nav.home':       'HOME',
+        'nav.back-top':   'BACK TO TOP',
+        'about.line1':    'Solving problems like an Engineer<span class="title-accent">.</span>',
+        'about.line2':    'Designing like an Artist',
+        'about.p1':       '<span class="about-bold">This story started somewhere between numbers and drawings.</span> As a kid, I was always in this middle ground, solving problems and trying to understand how things worked, while also spending hours drawing and creating. For a long time, those felt like separate interests, and as I grew up, Engineering seemed like the obvious path. Design was always there, just not as a career yet.',
+        'about.p2':       '<span class="about-bold">I went on to study Engineering at a renowned university, where I spent four years building a strong analytical foundation.</span> Over time, I started to notice where my attention naturally went: I was more interested in sketching ideas than working through equations. That shift pushed me in a different direction, where <span class="about-bold">I graduated in Graphic Design and built a creative side to match my analytical one.</span>',
+        'about.p3':       '<span class="about-bold">Since then, I\'ve been combining both in my work. I use structure and logic to break down problems, and visual thinking to turn them into solutions that are clear, usable, and hold up in real scenarios. It\'s a balance I\'ve been refining over time, and it still shapes how I approach every&nbsp;project.</span>',
+        'skills.heading': 'Things I\'m good at<span style="color:#CD3D23">:</span>',
+        'contact.heading':'Some stories can\'t be fully told in just a few screens or paragraphs<span style="color:#CD3D23">...</span>',
+        'contact.body':   'If you\'d like to know more about my journey,<br>or create a new one together, you can reach out below:',
       },
       pt: {
-        'mobile.title':  'SOBRE MIM',
-        'nav.home':      'INÍCIO',
-        'nav.back-top':  'VOLTAR AO TOPO',
-        'about.line1':   'Solving problems like an Engineer<span class="title-accent">.</span>',
-        'about.line2':   'Designing like an Artist',
-        'about.p1': '<span class="about-bold">This story started somewhere between numbers and drawings.</span> As a kid, I was always in this middle ground, solving problems and trying to understand how things worked, while also spending hours drawing and creating. For a long time, those felt like separate interests, and as I grew up, Engineering seemed like the obvious path. Design was always there, just not as a career yet.',
-        'about.p2': '<span class="about-bold">I went on to study Engineering at a renowned university, where I spent four years building a strong analytical foundation.</span> Over time, I started to notice where my attention naturally went: I was more interested in sketching ideas than working through equations. That shift pushed me in a different direction, where <span class="about-bold">I graduated in Graphic Design and built a creative side to match my analytical one.</span>',
-        'about.p3': '<span class="about-bold">Since then, I\'ve been combining both in my work. I use structure and logic to break down problems, and visual thinking to turn them into solutions that are clear, usable, and hold up in real scenarios. It\'s a balance I\'ve been refining over time, and it still shapes how I approach every&nbsp;project.</span>',
+        'mobile.title':   'Sobre Mim',
+        'nav.home':       'INÍCIO',
+        'nav.back-top':   'VOLTAR AO TOPO',
+        'about.line1':    'Resolvendo problemas como Engenheiro<span class="title-accent">.</span>',
+        'about.line2':    'Projetando como um Artista',
+        'about.p1':       '<span class="about-bold">Essa história começou em algum lugar entre números e desenhos.</span> Desde criança, eu sempre estive nesse meio-termo, resolvendo problemas e tentando entender como as coisas funcionavam, enquanto passava horas desenhando e criando. Por muito tempo, pareciam interesses separados, e conforme fui crescendo, a Engenharia parecia o caminho óbvio. O Design sempre esteve lá, só ainda não como carreira.',
+        'about.p2':       '<span class="about-bold">Fui estudar Engenharia em uma universidade reconhecida, onde passei quatro anos construindo uma base analítica sólida.</span> Com o tempo, comecei a perceber para onde minha atenção ia naturalmente: eu estava mais interessado em esboçar ideias do que resolver equações. Essa mudança me levou em uma direção diferente, onde <span class="about-bold">me formei em Design Gráfico e construí um lado criativo à altura do analítico.</span>',
+        'about.p3':       '<span class="about-bold">Desde então, tenho combinado os dois no meu trabalho. Uso estrutura e lógica para decompor problemas, e pensamento visual para transformá-los em soluções claras, utilizáveis e que se sustentam em cenários reais. É um equilíbrio que venho refinando ao longo do tempo, e que ainda molda a forma como abordo cada&nbsp;projeto.</span>',
+        'skills.heading': 'No que sou bom<span style="color:#CD3D23">:</span>',
+        'contact.heading':'Algumas histórias não cabem em algumas telas ou parágrafos<span style="color:#CD3D23">...</span>',
+        'contact.body':   'Se quiser saber mais sobre a minha trajetória,<br>ou criar uma nova juntos, pode entrar em contato abaixo:',
       }
     };
     function applyLang(lang) {
@@ -779,6 +937,22 @@
       document.querySelectorAll('.lang-option').forEach(function(o) { o.classList.toggle('active', o.getAttribute('data-lang') === lang); });
       document.querySelectorAll('.mobile-lang-opt').forEach(function(o) { o.classList.toggle('active', o.getAttribute('data-lang') === lang); });
       document.documentElement.setAttribute('lang', lang === 'pt' ? 'pt-BR' : 'en');
+      // Refresh desktop active skill description
+      if (window.innerWidth > 800 && window.ABOUT_SKILLS) {
+        var activeBtn = document.querySelector('.skill-btn.active');
+        var descEl = document.getElementById('skills-desc-text');
+        if (activeBtn && descEl) {
+          descEl.textContent = (window.ABOUT_SKILLS[lang] || window.ABOUT_SKILLS.en || {})[activeBtn.dataset.skill] || '';
+        }
+      }
+      // Refresh mobile accordion body text
+      document.querySelectorAll('.skill-accordion-body').forEach(function(body) {
+        var li = body.closest('li');
+        var btn = li && li.querySelector('[data-skill]');
+        if (btn && window.ABOUT_SKILLS) {
+          body.textContent = (window.ABOUT_SKILLS[lang] || window.ABOUT_SKILLS.en || {})[btn.dataset.skill] || '';
+        }
+      });
     }
     (function() {
       var toggle = document.getElementById('lang-toggle');
