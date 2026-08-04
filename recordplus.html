@@ -51,10 +51,9 @@
     }
     .cursor-ring { width: 24px; height: 24px; border: 1.5px solid #ffffff; transition: border-color 0.3s ease, border-width 0.2s ease; }
     .cursor-dot  { width: 8px; height: 8px; background: #ffffff; transition: background 0.3s, width 0.2s, height 0.2s, opacity 0.2s; }
-    .cursor-dot.is-hovering { width: 24px; height: 24px; opacity: 0.3; background: #ffffff; }
-    .cursor-ring.over-content  { border-color: #ffffff; }
-    .cursor-ring.is-hovering   { border-color: #ffffff; border-width: 2px; }
-    .cursor-dot.over-content   { background: #ffffff; }
+    .cursor-dot.is-hovering { width: 24px; height: 24px; opacity: 0.3; }
+    
+    .cursor-ring.over-image, .cursor-dot.over-image { mix-blend-mode: difference; }
     .cursor-dot-nib {
       position: fixed; pointer-events: none; z-index: 9999;
       width: 5px; height: 2px; background: #ffffff;
@@ -62,7 +61,6 @@
       transform: translate(-50%, -50%) rotate(135deg);
       transition: background 0.3s, width 0.12s ease; display: none;
     }
-    .cursor-dot-nib.over-content { background: #ffffff; }
     .cursor-dot-nib.is-pressing  { width: 14px; }
     .cursor-brush { position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); display: none; }
     body.pen-1 .cursor-dot               { display: none; }
@@ -131,6 +129,12 @@
 
     /* ── HEADER: title centered, BACK overlaid top-left ─────────────── */
 
+
+    @keyframes nav-appear {
+      from { opacity: 0; transform: translateY(32px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
     .project-header {
       position: relative;
       height: 104px;
@@ -185,6 +189,7 @@
     /* ── NAV BAR: gradient pill ───────────────────────────────────────── */
 
     .project-nav {
+      animation: nav-appear 0.6s ease-out both;
       width: 780px;
       height: 53px;
       background: linear-gradient(to right, #990B66 0%, #FF12AA 100%);
@@ -214,7 +219,7 @@
       background: currentColor;
       pointer-events: none;
     }
-    .back-link .cta-underline { bottom: 4px; }
+    .project-header .back-link .cta-underline { bottom: 4px; }
 
     /* ── SECTIONS ─────────────────────────────────────────────────────── */
 
@@ -388,7 +393,8 @@
     .project-header, .project-nav, .project-footer { display: none; }
 
     .mobile-topbar {
-      display: flex; align-items: center; justify-content: space-between;
+      display: flex;
+        align-items: center; justify-content: space-between;
       position: fixed; top: 16px; left: 16px; right: 16px; z-index: 1000;
       height: 60px; padding: 0 16px;
       background: linear-gradient(to right, #990B66 0%, #FF12AA 100%);
@@ -439,6 +445,11 @@
     .img-plain, .img-titled, .img-carousel, .callout-card, .impact-cards, .proj-comparison { margin-left: 8px; margin-right: 8px; }
     .project-section { margin-bottom: 40px; }
   }
+  @keyframes img-reveal {
+    from { clip-path: inset(0 100% 0 0); }
+    to   { clip-path: inset(0 0% 0 0); }
+  }
+  .img-reveal-animate { animation: img-reveal 1s cubic-bezier(0.2, 0, 0.24, 1) forwards; }
   </style>
 </head>
 <body>
@@ -767,6 +778,10 @@
         dot.classList.toggle('over-content', onDark);
         if (nib) nib.classList.toggle('over-content', onDark);
         brushDark = onDark;
+        var onImg = !!e.target.closest('.img-titled, .img-plain, .img-carousel, .proj-comparison');
+        ring.classList.toggle('over-image', onImg);
+        dot.classList.toggle('over-image', onImg);
+        if (nib) nib.classList.toggle('over-image', onImg);
         var hovering = !!e.target.closest('a, button');
         dot.classList.toggle('is-hovering', hovering);
         if (nib)   nib.classList.toggle('is-hovering', hovering);
@@ -1113,6 +1128,24 @@
       applyLang('pt'); var wPt = mMenu.offsetWidth;
       mMenu.style.minWidth = Math.max(wEn, wPt) + 'px';
       applyLang(saved);
+    })();
+
+    (function () {
+      var imgs = document.querySelectorAll('.image-placeholder img');
+      imgs.forEach(function (img) { img.style.clipPath = 'inset(0 100% 0 0)'; });
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          var img = entry.target;
+          img.style.clipPath = '';
+          img.classList.add('img-reveal-animate');
+          img.addEventListener('animationend', function () {
+            img.classList.remove('img-reveal-animate');
+          }, { once: true });
+          observer.unobserve(img);
+        });
+      }, { threshold: 0 });
+      imgs.forEach(function (img) { observer.observe(img); });
     })();
   </script>
 

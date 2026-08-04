@@ -48,7 +48,8 @@
     .cursor-ring { width: 24px; height: 24px; border: 1.5px solid var(--cursor-color); transition: border-color 0.3s ease, border-width 0.2s ease; }
     .cursor-dot  { width: 8px; height: 8px; background: var(--cursor-color); transition: background 0.3s, width 0.2s, height 0.2s, opacity 0.2s; }
     .cursor-dot.is-hovering  { width: 24px; height: 24px; opacity: 0.3; }
-    .cursor-ring.is-hovering { border-width: 2px; }
+    
+    .cursor-ring.over-image, .cursor-dot.over-image { mix-blend-mode: difference; }
     .cursor-dot-nib {
       position: fixed; pointer-events: none; z-index: 99999;
       left: -100px; top: -100px;
@@ -124,6 +125,12 @@
     }
 
     /* ── Header ─────────────────────────────────────────── */
+
+    @keyframes nav-appear {
+      from { opacity: 0; transform: translateX(-64px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
     .project-header {
       position: relative;
       width: min(780px, calc(100vw - 128px));
@@ -148,6 +155,7 @@
 
     /* ── Filter nav ─────────────────────────────────────── */
     .filter-nav {
+      animation: nav-appear 0.6s ease-out both;
       width: min(780px, calc(100vw - 128px));
       height: 53px;
       background: var(--nav-bg);
@@ -168,7 +176,7 @@
       position: absolute; bottom: -2px; left: 0;
       width: 100%; height: 1px; background: currentColor; pointer-events: none;
     }
-    .back-link .cta-underline { bottom: 4px; }
+    .project-header .back-link .cta-underline { bottom: 4px; }
 
     /* ── Grid ───────────────────────────────────────────── */
     .pg-grid {
@@ -274,14 +282,22 @@
       .filter-nav { display: none; }
 
       .pg-page { padding: 96px 16px 48px; align-items: flex-start; }
-      .project-header { width: 100%; margin-bottom: 32px; align-items: flex-start; }
+  
+    @keyframes nav-appear {
+      from { opacity: 0; transform: translateX(-64px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    .project-header {
+      width: 100%; margin-bottom: 32px; align-items: flex-start; }
       .project-title { display: none; }
       .pg-subtitle { text-align: left; }
       .pg-grid { width: 100%; grid-template-columns: repeat(3, 1fr); gap: 8px; min-height: 0; }
 
       /* ── Mobile topbar ──────────────────────────────────── */
       .mobile-topbar {
-        display: flex; align-items: center; justify-content: space-between;
+        display: flex;
+        align-items: center; justify-content: space-between;
         position: fixed; top: 16px; left: 16px; right: 16px; z-index: 1000;
         height: 60px; padding: 0 16px;
         background: var(--bg);
@@ -551,6 +567,10 @@
         if (nib) nib.classList.toggle('is-hovering', hovering);
         ring.classList.toggle('is-hovering', hovering);
         if (brush) brush.classList.toggle('is-hovering', hovering);
+        var onImg = !!e.target.closest('.pg-item');
+        ring.classList.toggle('over-image', onImg);
+        dot.classList.toggle('over-image', onImg);
+        if (nib) nib.classList.toggle('over-image', onImg);
       });
 
       window.addEventListener('mousedown', function () { brushDown = true;  if (nib) nib.classList.add('is-pressing'); });

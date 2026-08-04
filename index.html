@@ -77,6 +77,7 @@
       transform: translate(-50%, -50%);
       left: -100px;
       top: -100px;
+     
     }
 
     .cursor-ring {
@@ -86,8 +87,8 @@
       transition: border-color 0.3s ease, border-width 0.2s ease;
     }
 
-    .cursor-ring.over-content { border-color: #ffffff; }
-    .cursor-ring.is-hovering  { border-color: #ffffff; border-width: 2px; }
+    
+    .cursor-ring.over-image, .cursor-dot.over-image { mix-blend-mode: difference; }
 
     .cursor-dot {
       width: 8px;
@@ -96,13 +97,10 @@
       transition: width 0.2s ease, height 0.2s ease, opacity 0.2s ease, background-color 0.3s ease;
     }
 
-    .cursor-dot.over-content  { background: #ffffff; }
-
     .cursor-dot.is-hovering {
       width: 24px;
       height: 24px;
       opacity: 0.3;
-      background: #ffffff;
     }
 
     .cursor-brush {
@@ -130,7 +128,6 @@
       display: none;
       transition: background-color 0.3s ease, width 0.12s ease;
     }
-    .cursor-dot-nib.over-content  { background: #ffffff; }
     .cursor-dot-nib.is-pressing   { width: 14px; }
 
     /* Swap dragged indicator per pen — ring is always unchanged */
@@ -904,6 +901,15 @@
     .card-jarvics .tag,
     .card-cashback .tag { background-color: rgba(15, 15, 18, 0.5); }
 
+    /* ── CARD APPEAR ANIMATION ──────────────────────────────────────── */
+    @keyframes card-appear {
+      from { opacity: 0; transform: translateX(-64px); }
+      to   { opacity: 1; transform: none; }
+    }
+    .card-animating {
+      animation: card-appear 0.6s ease-out forwards;
+    }
+
     /* ── RESPONSIVE ─────────────────────────────────────────────────── */
 
     /* Shrink container to maintain 64px gap from screen edges.
@@ -1542,6 +1548,10 @@
         dot.classList.toggle('over-content', onDark);
         nib.classList.toggle('over-content', onDark);
         brushDark = onDark;
+        var onImg = !!e.target.closest('.card-image, .card-playground');
+        ring.classList.toggle('over-image', onImg);
+        dot.classList.toggle('over-image', onImg);
+        nib.classList.toggle('over-image', onImg);
       });
 
       window.addEventListener('mousedown', function () { brushDown = true;  nib.classList.add('is-pressing');    });
@@ -2087,6 +2097,39 @@
       _splitChars(document.querySelector('.hero-tagline'), 0.85, 0.022, 0.85);
       _splitChars(document.querySelector('.hero-headline'), 1.85, 0.042, 1.15);
     }
+
+    /* ── Card appear animations ─────────────────────────────────────── */
+    (function () {
+      var cards = Array.prototype.slice.call(
+        document.querySelectorAll('.card')
+      );
+
+      if (_isReturning) return;
+
+      // Hide initially via inline style — no CSS class, no transition residue
+      cards.forEach(function (c) {
+        c.style.opacity = '0';
+        c.style.transform = 'translateX(-64px)';
+      });
+
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          var card = entry.target;
+          // Clear inline styles so the keyframe animation owns the from→to
+          card.style.opacity = '';
+          card.style.transform = '';
+          card.classList.add('card-animating');
+          // Strip the class once done — leaves card completely clean for hover
+          card.addEventListener('animationend', function () {
+            card.classList.remove('card-animating');
+          }, { once: true });
+          observer.unobserve(card);
+        });
+      }, { threshold: 0 });
+
+      cards.forEach(function (c) { observer.observe(c); });
+    })();
 
   </script>
 

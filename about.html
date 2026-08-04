@@ -43,10 +43,9 @@
     }
     .cursor-ring { width: 24px; height: 24px; border: 1.5px solid #ffffff; transition: border-color 0.3s ease, border-width 0.2s ease; }
     .cursor-dot  { width: 8px; height: 8px; background: #ffffff; transition: background 0.3s, width 0.2s, height 0.2s, opacity 0.2s; }
-    .cursor-dot.is-hovering { width: 24px; height: 24px; opacity: 0.3; background: #ffffff; }
-    .cursor-ring.over-content  { border-color: #ffffff; }
-    .cursor-ring.is-hovering   { border-color: #ffffff; border-width: 2px; }
-    .cursor-dot.over-content   { background: #ffffff; }
+    .cursor-dot.is-hovering { width: 24px; height: 24px; opacity: 0.3; }
+    
+    .cursor-ring.over-image, .cursor-dot.over-image { mix-blend-mode: difference; }
     .cursor-dot-nib {
       position: fixed; pointer-events: none; z-index: 9999;
       width: 5px; height: 2px; background: #ffffff;
@@ -54,7 +53,6 @@
       transform: translate(-50%, -50%) rotate(135deg);
       transition: background 0.3s, width 0.12s ease; display: none;
     }
-    .cursor-dot-nib.over-content { background: #ffffff; }
     .cursor-dot-nib.is-pressing  { width: 14px; }
     .cursor-brush { position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); display: none; }
     body.pen-1 .cursor-dot               { display: none; }
@@ -229,7 +227,7 @@
       background: currentColor;
       pointer-events: none;
     }
-    .back-link .cta-underline { bottom: 4px; }
+    .project-header .back-link .cta-underline { bottom: 4px; }
 
     .skill-label {
       position: relative;
@@ -273,6 +271,14 @@
       color: rgba(15, 15, 18, 0.7);
     }
     .skills-desc-text.visible { opacity: 1; }
+    @keyframes skill-appear {
+      from { opacity: 0; transform: translateX(-24px); }
+      to   { opacity: 1; transform: none; }
+    }
+    #skills-desc-inner { display: block; }
+    #skills-desc-inner.animating {
+      animation: skill-appear 0.5s ease-out forwards;
+    }
 
     /* ── Mobile ──────────────────────────────────────────────────────── */
     .mobile-topbar       { display: none; }
@@ -506,7 +512,7 @@
           <li><button class="skill-btn" data-skill="collab"><span class="skill-label">CROSS-COLLABORATION</span></button></li>
         </ul>
         <div class="skills-desc" id="skills-desc">
-          <p class="skills-desc-text" id="skills-desc-text"></p>
+          <p class="skills-desc-text" id="skills-desc-text"><span id="skills-desc-inner"></span></p>
         </div>
       </div>
     </section>
@@ -757,6 +763,7 @@
       };
 
       var descText  = document.getElementById('skills-desc-text');
+      var descInner = document.getElementById('skills-desc-inner');
       var skillsDesc = document.getElementById('skills-desc');
       var btns      = document.querySelectorAll('.skill-btn');
 
@@ -781,35 +788,16 @@
       }
 
       function revealDescription(btn) {
-        if (revealRaf) { cancelAnimationFrame(revealRaf); revealRaf = null; }
         var _l = localStorage.getItem('portfolio-lang') || 'en';
-        descText.textContent = (SKILLS[_l] || SKILLS.en)[btn.dataset.skill] || '';
+        descInner.textContent = (SKILLS[_l] || SKILLS.en)[btn.dataset.skill] || '';
         positionDesc(btn);
-        descText.style.opacity = '1';
-        var blurPct = 80, range = 100 + blurPct;
-        var initMask = 'linear-gradient(to right, black 0%, transparent 0%)';
-        descText.style.maskImage = initMask;
-        descText.style.webkitMaskImage = initMask;
-        var startTime = null;
-        function tick(now) {
-          if (!startTime) startTime = now;
-          var e = ease(Math.min((now - startTime) / 256, 1));
-          var pos = e * range - blurPct;
-          var s  = Math.max(0, pos).toFixed(2);
-          var en = Math.min(pos + blurPct, 100).toFixed(2);
-          var mask = 'linear-gradient(to right, black ' + s + '%, transparent ' + en + '%)';
-          descText.style.maskImage = mask;
-          descText.style.webkitMaskImage = mask;
-          if (now - startTime < 256) { revealRaf = requestAnimationFrame(tick); }
-          else {
-            descText.style.maskImage = '';
-            descText.style.webkitMaskImage = '';
-            descText.style.opacity = '';
-            descText.classList.add('visible');
-            revealRaf = null;
-          }
-        }
-        revealRaf = requestAnimationFrame(tick);
+        descText.classList.add('visible');
+        descInner.classList.remove('animating');
+        void descInner.offsetWidth;
+        descInner.classList.add('animating');
+        descInner.addEventListener('animationend', function () {
+          descInner.classList.remove('animating');
+        }, { once: true });
       }
 
       function selectSkill(btn) {
@@ -829,7 +817,7 @@
         btns[0].classList.add('active');
         setUnderline(btns[0], true);
         var _l0 = localStorage.getItem('portfolio-lang') || 'en';
-        descText.textContent = (SKILLS[_l0] || SKILLS.en)[btns[0].dataset.skill] || '';
+        descInner.textContent = (SKILLS[_l0] || SKILLS.en)[btns[0].dataset.skill] || '';
         descText.classList.add('visible');
         requestAnimationFrame(function () { positionDesc(btns[0]); });
       }
@@ -940,7 +928,7 @@
       // Refresh desktop active skill description
       if (window.innerWidth > 800 && window.ABOUT_SKILLS) {
         var activeBtn = document.querySelector('.skill-btn.active');
-        var descEl = document.getElementById('skills-desc-text');
+        var descEl = document.getElementById('skills-desc-inner');
         if (activeBtn && descEl) {
           descEl.textContent = (window.ABOUT_SKILLS[lang] || window.ABOUT_SKILLS.en || {})[activeBtn.dataset.skill] || '';
         }
@@ -1336,6 +1324,10 @@
         if (nib)   nib.classList.toggle('is-hovering', hovering);
         ring.classList.toggle('is-hovering', hovering);
         if (brush) brush.classList.toggle('is-hovering', hovering);
+        var onImg = !!e.target.closest('.about-photo-col');
+        ring.classList.toggle('over-image', onImg);
+        dot.classList.toggle('over-image', onImg);
+        if (nib) nib.classList.toggle('over-image', onImg);
       });
 
       window.addEventListener('mousedown', function () { brushDown = true;  if (nib) nib.classList.add('is-pressing'); });
