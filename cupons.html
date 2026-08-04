@@ -1394,8 +1394,7 @@
     (function () {
       var imgs = Array.prototype.filter.call(document.querySelectorAll('.image-placeholder img'), function (img) {
         if (img.closest('.proj-comparison')) return false;
-        var slide = img.closest('.carousel-slide');
-        if (slide) return slide.parentElement && slide.parentElement.firstElementChild === slide;
+        if (img.closest('.carousel-slide')) return false;
         return true;
       });
       imgs.forEach(function (img) { img.style.clipPath = 'inset(0 100% 0 0)'; });
@@ -1412,6 +1411,34 @@
         });
       }, { threshold: 0 });
       imgs.forEach(function (img) { observer.observe(img); });
+      var carouselObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          var carousel = entry.target;
+          var track = carousel.querySelector('.carousel-track');
+          if (!track) return;
+          var firstSlide = track.firstElementChild;
+          if (!firstSlide) return;
+          var img = firstSlide.querySelector('img');
+          if (!img) return;
+          img.style.clipPath = '';
+          img.classList.add('img-reveal-animate');
+          img.addEventListener('animationend', function () {
+            img.classList.remove('img-reveal-animate');
+          }, { once: true });
+          carouselObserver.unobserve(carousel);
+        });
+      }, { threshold: 0 });
+      document.querySelectorAll('.img-carousel').forEach(function (carousel) {
+        var track = carousel.querySelector('.carousel-track');
+        if (!track) return;
+        var firstSlide = track.firstElementChild;
+        if (!firstSlide) return;
+        var img = firstSlide.querySelector('img');
+        if (!img) return;
+        img.style.clipPath = 'inset(0 100% 0 0)';
+        carouselObserver.observe(carousel);
+      });
     })();
   </script>
 
