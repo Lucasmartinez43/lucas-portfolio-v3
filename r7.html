@@ -383,6 +383,16 @@
     to   { clip-path: inset(0 0% 0 0); }
   }
   .img-reveal-animate { animation: img-reveal 1s cubic-bezier(0.2, 0, 0.24, 1) forwards; }
+  .ticker-wrap { position: relative; overflow: hidden; margin-top: 40px; }
+  .ticker-track { display: flex; gap: 12px; will-change: transform; }
+  .ticker-item {
+    flex: 0 0 auto; width: 220px; aspect-ratio: 460 / 900;
+    border-radius: 16px; overflow: hidden;
+  }
+  .ticker-item img { width: 100%; height: auto; display: block; }
+  .ticker-fade { position: absolute; top: 0; bottom: 0; width: 100px; z-index: 1; pointer-events: none; }
+  .ticker-fade-left  { left:  0; background: linear-gradient(to right, var(--bg), transparent); }
+  .ticker-fade-right { right: 0; background: linear-gradient(to left,  var(--bg), transparent); }
   </style>
 </head>
 <body>
@@ -406,10 +416,11 @@
 
   <div class="mobile-menu" id="mobile-menu">
     <a href="#overview" data-i18n="nav.overview">OVERVIEW</a>
+    <a href="#problem" data-i18n="nav.problem">THE PROBLEM</a>
+    <a href="#design" data-i18n="nav.design">DESIGN SYSTEM</a>
     <a href="#challenge" data-i18n="nav.challenge">THE CHALLENGE</a>
     <a href="#solutions" data-i18n="nav.solutions">SOLUTIONS</a>
     <a href="#impact" data-i18n="nav.impact">IMPACT</a>
-    <a href="#design" data-i18n="nav.design">DESIGN SYSTEM</a>
     <div class="mobile-divider"></div>
     <div class="mobile-lang-row">
       <button class="mobile-lang-opt" data-lang="en">EN</button>
@@ -472,10 +483,11 @@
     <nav class="project-nav">
       <a href="#top" data-i18n="nav.top">TOP</a>
       <a href="#overview" data-i18n="nav.overview">OVERVIEW</a>
+      <a href="#problem" data-i18n="nav.problem-short">PROBLEM</a>
+      <a href="#design" data-i18n="nav.design">DESIGN SYSTEM</a>
       <a href="#challenge" data-i18n="nav.challenge-short">CHALLENGE</a>
       <a href="#solutions" data-i18n="nav.solutions">SOLUTIONS</a>
       <a href="#impact" data-i18n="nav.impact">IMPACT</a>
-      <a href="#design" data-i18n="nav.design">DESIGN SYSTEM</a>
     </nav>
 
     <!-- 01 OVERVIEW -->
@@ -504,104 +516,52 @@
       </div>
     </section>
 
-    <!-- 02 THE CHALLENGE -->
-    <section id="challenge" class="project-section">
+    <!-- 02 THE PROBLEM -->
+    <section id="problem" class="project-section">
       <div class="section-header">
         <span class="section-num">02</span>
-        <h2 class="section-heading" data-i18n="s2.heading">THE CHALLENGE</h2>
+        <h2 class="section-heading" data-i18n="s2.heading">THE PROBLEM</h2>
       </div>
-      <p class="section-body" data-i18n="s2.body1">R7 presents multiple product and business challenges due to its scale and diverse audience.</p>
-      <p class="section-body" data-i18n="s2.body2">One example of this is the platform's revenue model.</p>
-      <p class="section-body" data-i18n="s2.body3">Most of the platform's revenue comes from advertising displayed across pages. This creates a strong need to keep users navigating through the website and consuming multiple pieces of content per session.</p>
+      <p class="section-body" data-i18n="s2.body1">A platform this broad, covering so many different topics for so many different types of users at once, faces an inevitable structural challenge: maintaining consistency. Every section needs to feel like part of the same product, regardless of who is reading it or what they came to find.</p>
+      <p class="section-body" data-i18n="s2.body2">Serving such a wide audience, across dozens of different topics and sub-products, creates a unique challenge: maintaining consistency. As technology evolves and new ways to consume content emerge, the platform must constantly adapt, introducing new features, layouts, and experiences.</p>
       <div class="callout-card">
         <div class="callout-icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
         </div>
-        <p class="callout-text" data-i18n="s2.callout">The challenge was to design experiences that increase engagement, encourage return visits, and extend user sessions without compromising usability or content clarity.</p>
+        <p class="callout-text" data-i18n="s2.callout">Without strong consistency, this constant evolution risks fragmenting the experience. Users navigating across different sections may encounter different patterns, interactions, and visual languages, making the product feel disjointed and harder to trust. Consistent design communicates where users are, what content they are seeing, and what they can expect next.</p>
+      </div>
+      <div class="ticker-wrap" id="ticker-wrap">
+        <div class="ticker-track" id="ticker-track">
+          <div class="ticker-item"><img src="images/R7com/Ticker 01.webp" alt=""></div>
+          <div class="ticker-item"><img src="images/R7com/Ticker 02.webp" alt=""></div>
+          <div class="ticker-item"><img src="images/R7com/Ticker 03.webp" alt=""></div>
+          <div class="ticker-item"><img src="images/R7com/Ticker 04.webp" alt=""></div>
+          <div class="ticker-item"><img src="images/R7com/Ticker 05.webp" alt=""></div>
+          <div class="ticker-item"><img src="images/R7com/Ticker 06.webp" alt=""></div>
+          <div class="ticker-item"><img src="images/R7com/Ticker 07.webp" alt=""></div>
+          <div class="ticker-item"><img src="images/R7com/Ticker 01.webp" alt=""></div>
+          <div class="ticker-item"><img src="images/R7com/Ticker 02.webp" alt=""></div>
+          <div class="ticker-item"><img src="images/R7com/Ticker 03.webp" alt=""></div>
+          <div class="ticker-item"><img src="images/R7com/Ticker 04.webp" alt=""></div>
+          <div class="ticker-item"><img src="images/R7com/Ticker 05.webp" alt=""></div>
+          <div class="ticker-item"><img src="images/R7com/Ticker 06.webp" alt=""></div>
+          <div class="ticker-item"><img src="images/R7com/Ticker 07.webp" alt=""></div>
+        </div>
+        <div class="ticker-fade ticker-fade-left"></div>
+        <div class="ticker-fade ticker-fade-right"></div>
       </div>
     </section>
 
-    <!-- 03 SOLUTIONS -->
-    <section id="solutions" class="project-section">
-      <div class="section-header">
-        <span class="section-num">03</span>
-        <h2 class="section-heading" data-i18n="s3.heading">SOLUTIONS</h2>
-      </div>
-      <p class="section-body" data-i18n="s3.body1">The product team continuously provides data on user behavior, such as clicks, time on page, and navigation flows. These insights guide design decisions focused on increasing engagement and retention. Based on this data, multiple features were designed to encourage users to stay longer and return more frequently.</p>
-      <p class="section-body" data-i18n="s3.body2"><strong>Newsletter:</strong> Topic-based newsletters allow users to subscribe to specific interests. Each newsletter curates related articles and is sent periodically via email.</p>
-      <p class="section-body" data-i18n="s3.body3">This creates a recurring entry point to the platform and brings users back independently of their usual browsing habits.</p>
-      <div class="img-plain image-container"><div class="image-placeholder"><img src="images/R7com/R7 02.webp" alt="Newsletter"></div></div>
-      <p class="section-body" data-i18n="s3.body4"><strong>Follow Authors:</strong> Users can follow specific authors, journalists, or bloggers. When new content is published, users are notified and encouraged to return.</p>
-      <p class="section-body" data-i18n="s3.body5">A dedicated page lists all available authors, and the follow option is also accessible directly from articles.</p>
-      <div class="img-plain image-container"><div class="image-placeholder"><img src="images/R7com/R7 03.webp" alt="Follow Authors"></div></div>
-      <p class="section-body" data-i18n="s3.body6"><strong>Interactive Quizzes:</strong> For a Record TV quiz-based reality show, interactive quizzes were introduced within the show's page. Users can answer questions, see their ranking, and share results with others.</p>
-      <p class="section-body" data-i18n="s3.body7">New quizzes are released with each episode, encouraging repeated participation and social sharing.</p>
-      <div class="img-plain image-container"><div class="image-placeholder"><img src="images/R7com/R7 04.webp" alt="Interactive Quizzes"></div></div>
-    </section>
-
-    <!-- 04 IMPACT -->
-    <section id="impact" class="project-section">
-      <div class="section-header">
-        <span class="section-num">04</span>
-        <h2 class="section-heading" data-i18n="s4.heading">IMPACT</h2>
-      </div>
-      <div class="impact-cards">
-        <div class="impact-card">
-          <div class="impact-card-header">
-            <div class="impact-card-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 9 5 12 1.774-5.226L21 14 9 9z"/><path d="m16.071 16.071 4.243 4.243"/><path d="m7.188 2.239.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656-2.12 2.122"/></svg>
-            </div>
-            <span class="impact-card-title" data-i18n="s4.t1">Engagement</span>
-          </div>
-          <div class="impact-card-bottom">
-            <div class="impact-card-desc" data-i18n="s4.d1">More interactions across content and features</div>
-          </div>
-        </div>
-        <div class="impact-card">
-          <div class="impact-card-header">
-            <div class="impact-card-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            </div>
-            <span class="impact-card-title" data-i18n="s4.t2">Session Duration</span>
-          </div>
-          <div class="impact-card-bottom">
-            <div class="impact-card-desc" data-i18n="s4.d2">Longer time spent reading and exploring content</div>
-          </div>
-        </div>
-        <div class="impact-card">
-          <div class="impact-card-header">
-            <div class="impact-card-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m17 2 4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
-            </div>
-            <span class="impact-card-title" data-i18n="s4.t3">Retention</span>
-          </div>
-          <div class="impact-card-bottom">
-            <div class="impact-card-desc" data-i18n="s4.d3">Users returning more frequently via newsletters and notifications</div>
-          </div>
-        </div>
-        <div class="impact-card">
-          <div class="impact-card-header">
-            <div class="impact-card-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
-            </div>
-            <span class="impact-card-title" data-i18n="s4.t4">User Acquisition</span>
-          </div>
-          <div class="impact-card-bottom">
-            <div class="impact-card-desc" data-i18n="s4.d4">New users entering through shared quiz challenges</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 05 DESIGN SYSTEM -->
+    <!-- 03 DESIGN SYSTEM -->
     <section id="design" class="project-section">
       <div class="section-header">
-        <span class="section-num">05</span>
-        <h2 class="section-heading" data-i18n="s5.heading">DESIGN SYSTEM</h2>
+        <span class="section-num">03</span>
+        <h2 class="section-heading" data-i18n="s3.heading">DESIGN SYSTEM</h2>
       </div>
-      <p class="section-body" data-i18n="s5.body1">R7 includes multiple sections and sub-products, each targeting different audiences, from younger users consuming entertainment content to older audiences following news and TV programs. This requires a scalable design system that maintains consistency while allowing flexibility for different contexts and user needs.</p>
-      <p class="section-body" data-i18n="s5.body2">The main focus is to balance variation and consistency, ensuring that new features and experiences align with core principles, visual language, and usability standards.</p>
-      <p class="section-body" data-i18n="s5.body3">The following screens represent a small portion of the full design system, which includes a much broader set of components and variations.</p>
+      <p class="section-body" data-i18n="s3.body1">A platform of R7's scale and diversity can only maintain consistency through a comprehensive and well-defined Design System.</p>
+      <p class="section-body" data-i18n="s3.body2">The Design System serves as the single source of truth across all teams and surfaces. It defines the visual language, interaction patterns, and component behavior that ensure every page, regardless of topic, audience, or sub-product, feels like part of the same experience.</p>
+      <p class="section-body" data-i18n="s3.body3">Whenever something new needs to be built, the process begins by going back to the Design System: identifying what already exists and can be reused with the same tokens and components, and understanding what needs to be created from scratch. Everything new must follow the same guidelines, principles, and rules already established in the system.</p>
+      <p class="section-body" data-i18n="s3.body4">The following screens represent a small portion of the full design system, which includes a much broader set of components and variations.</p>
       <div class="img-carousel">
         <div class="carousel-frame">
           <div class="carousel-clip">
@@ -625,6 +585,95 @@
             <button class="carousel-next">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
             </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 THE CHALLENGE -->
+    <section id="challenge" class="project-section">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading" data-i18n="s4.heading">THE CHALLENGE</h2>
+      </div>
+      <p class="section-body" data-i18n="s4.body1">R7 presents multiple product and business challenges due to its scale and diverse audience.</p>
+      <p class="section-body" data-i18n="s4.body2">One example of this is the platform's revenue model.</p>
+      <p class="section-body" data-i18n="s4.body3">Most of the platform's revenue comes from advertising displayed across pages. This creates a strong need to keep users navigating through the website and consuming multiple pieces of content per session.</p>
+      <div class="callout-card">
+        <div class="callout-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+        </div>
+        <p class="callout-text" data-i18n="s4.callout">The challenge was to design experiences that increase engagement, encourage return visits, and extend user sessions without compromising usability or content clarity.</p>
+      </div>
+    </section>
+
+    <!-- 05 SOLUTIONS -->
+    <section id="solutions" class="project-section">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading" data-i18n="s5.heading">SOLUTIONS</h2>
+      </div>
+      <p class="section-body" data-i18n="s5.body1">The product team continuously provides data on user behavior, such as clicks, time on page, and navigation flows. These insights guide design decisions focused on increasing engagement and retention. Based on this data, multiple features were designed to encourage users to stay longer and return more frequently.</p>
+      <p class="section-body" data-i18n="s5.body2"><strong>Newsletter:</strong> Topic-based newsletters allow users to subscribe to specific interests. Each newsletter curates related articles and is sent periodically via email.</p>
+      <p class="section-body" data-i18n="s5.body3">This creates a recurring entry point to the platform and brings users back independently of their usual browsing habits.</p>
+      <div class="img-plain image-container"><div class="image-placeholder"><img src="images/R7com/R7 02.webp" alt="Newsletter"></div></div>
+      <p class="section-body" data-i18n="s5.body4"><strong>Follow Authors:</strong> Users can follow specific authors, journalists, or bloggers. When new content is published, users are notified and encouraged to return.</p>
+      <p class="section-body" data-i18n="s5.body5">A dedicated page lists all available authors, and the follow option is also accessible directly from articles.</p>
+      <div class="img-plain image-container"><div class="image-placeholder"><img src="images/R7com/R7 03.webp" alt="Follow Authors"></div></div>
+      <p class="section-body" data-i18n="s5.body6"><strong>Interactive Quizzes:</strong> For a Record TV quiz-based reality show, interactive quizzes were introduced within the show's page. Users can answer questions, see their ranking, and share results with others.</p>
+      <p class="section-body" data-i18n="s5.body7">New quizzes are released with each episode, encouraging repeated participation and social sharing.</p>
+      <div class="img-plain image-container"><div class="image-placeholder"><img src="images/R7com/R7 04.webp" alt="Interactive Quizzes"></div></div>
+    </section>
+
+    <!-- 06 IMPACT -->
+    <section id="impact" class="project-section">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-heading" data-i18n="s6.heading">IMPACT</h2>
+      </div>
+      <div class="impact-cards">
+        <div class="impact-card">
+          <div class="impact-card-header">
+            <div class="impact-card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 9 5 12 1.774-5.226L21 14 9 9z"/><path d="m16.071 16.071 4.243 4.243"/><path d="m7.188 2.239.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656-2.12 2.122"/></svg>
+            </div>
+            <span class="impact-card-title" data-i18n="s6.t1">Engagement</span>
+          </div>
+          <div class="impact-card-bottom">
+            <div class="impact-card-desc" data-i18n="s6.d1">More interactions across content and features</div>
+          </div>
+        </div>
+        <div class="impact-card">
+          <div class="impact-card-header">
+            <div class="impact-card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <span class="impact-card-title" data-i18n="s6.t2">Session Duration</span>
+          </div>
+          <div class="impact-card-bottom">
+            <div class="impact-card-desc" data-i18n="s6.d2">Longer time spent reading and exploring content</div>
+          </div>
+        </div>
+        <div class="impact-card">
+          <div class="impact-card-header">
+            <div class="impact-card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m17 2 4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+            </div>
+            <span class="impact-card-title" data-i18n="s6.t3">Retention</span>
+          </div>
+          <div class="impact-card-bottom">
+            <div class="impact-card-desc" data-i18n="s6.d3">Users returning more frequently via newsletters and notifications</div>
+          </div>
+        </div>
+        <div class="impact-card">
+          <div class="impact-card-header">
+            <div class="impact-card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#218EE1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+            </div>
+            <span class="impact-card-title" data-i18n="s6.t4">User Acquisition</span>
+          </div>
+          <div class="impact-card-bottom">
+            <div class="impact-card-desc" data-i18n="s6.d4">New users entering through shared quiz challenges</div>
           </div>
         </div>
       </div>
@@ -741,7 +790,8 @@
     var TRANSLATIONS = {
       en: {
         'nav.home':'HOME','nav.back':'BACK','nav.back-top':'BACK TO TOP','nav.top':'TOP',
-        'nav.overview':'OVERVIEW','nav.challenge':'THE CHALLENGE','nav.challenge-short':'CHALLENGE',
+        'nav.overview':'OVERVIEW','nav.problem':'THE PROBLEM','nav.problem-short':'PROBLEM',
+        'nav.challenge':'THE CHALLENGE','nav.challenge-short':'CHALLENGE',
         'nav.solutions':'SOLUTIONS','nav.impact':'IMPACT','nav.design':'DESIGN SYSTEM',
         'meta.year':'YEAR','meta.scope':'SCOPE','meta.resp':'RESPONSIBILITIES',
         'meta.scope1':'News Platform','meta.scope2':'Feature Expansion','meta.scope3':'Mobile / Desktop',
@@ -753,32 +803,38 @@
         's1.body2':'Because of this broad coverage, the platform serves a highly diverse audience with different interests, behaviors, and levels of engagement.',
         's1.cap1':'Home Page','s1.cap2':'Elections Coverage','s1.cap3':'Soccer Championship Tables',
         's1.cap4':'A Fazenda (The Farm) - One of the biggest Brazilian Reality Shows',
-        's2.heading':'THE CHALLENGE',
-        's2.body1':'R7 presents multiple product and business challenges due to its scale and diverse audience.',
-        's2.body2':"One example of this is the platform's revenue model.",
-        's2.body3':"Most of the platform's revenue comes from advertising displayed across pages. This creates a strong need to keep users navigating through the website and consuming multiple pieces of content per session.",
-        's2.callout':'The challenge was to design experiences that increase engagement, encourage return visits, and extend user sessions without compromising usability or content clarity.',
-        's3.heading':'SOLUTIONS',
-        's3.body1':'The product team continuously provides data on user behavior, such as clicks, time on page, and navigation flows. These insights guide design decisions focused on increasing engagement and retention. Based on this data, multiple features were designed to encourage users to stay longer and return more frequently.',
-        's3.body2':'<strong>Newsletter:</strong> Topic-based newsletters allow users to subscribe to specific interests. Each newsletter curates related articles and is sent periodically via email.',
-        's3.body3':'This creates a recurring entry point to the platform and brings users back independently of their usual browsing habits.',
-        's3.body4':'<strong>Follow Authors:</strong> Users can follow specific authors, journalists, or bloggers. When new content is published, users are notified and encouraged to return.',
-        's3.body5':'A dedicated page lists all available authors, and the follow option is also accessible directly from articles.',
-        's3.body6':'<strong>Interactive Quizzes:</strong> For a Record TV quiz-based reality show, interactive quizzes were introduced within the show\'s page. Users can answer questions, see their ranking, and share results with others.',
-        's3.body7':'New quizzes are released with each episode, encouraging repeated participation and social sharing.',
-        's4.heading':'IMPACT',
-        's4.t1':'Engagement','s4.d1':'More interactions across content and features',
-        's4.t2':'Session Duration','s4.d2':'Longer time spent reading and exploring content',
-        's4.t3':'Retention','s4.d3':'Users returning more frequently via newsletters and notifications',
-        's4.t4':'User Acquisition','s4.d4':'New users entering through shared quiz challenges',
-        's5.heading':'DESIGN SYSTEM',
-        's5.body1':'R7 includes multiple sections and sub-products, each targeting different audiences, from younger users consuming entertainment content to older audiences following news and TV programs. This requires a scalable design system that maintains consistency while allowing flexibility for different contexts and user needs.',
-        's5.body2':'The main focus is to balance variation and consistency, ensuring that new features and experiences align with core principles, visual language, and usability standards.',
-        's5.body3':'The following screens represent a small portion of the full design system, which includes a much broader set of components and variations.',
+        's2.heading':'THE PROBLEM',
+        's2.body1':'A platform this broad, covering so many different topics for so many different types of users at once, faces an inevitable structural challenge: maintaining consistency. Every section needs to feel like part of the same product, regardless of who is reading it or what they came to find.',
+        's2.body2':'Serving such a wide audience, across dozens of different topics and sub-products, creates a unique challenge: maintaining consistency. As technology evolves and new ways to consume content emerge, the platform must constantly adapt, introducing new features, layouts, and experiences.',
+        's2.callout':'Without strong consistency, this constant evolution risks fragmenting the experience. Users navigating across different sections may encounter different patterns, interactions, and visual languages, making the product feel disjointed and harder to trust. Consistent design communicates where users are, what content they are seeing, and what they can expect next.',
+        's3.heading':'DESIGN SYSTEM',
+        's3.body1':'A platform of R7\'s scale and diversity can only maintain consistency through a comprehensive and well-defined Design System.',
+        's3.body2':'The Design System serves as the single source of truth across all teams and surfaces. It defines the visual language, interaction patterns, and component behavior that ensure every page, regardless of topic, audience, or sub-product, feels like part of the same experience.',
+        's3.body3':'Whenever something new needs to be built, the process begins by going back to the Design System: identifying what already exists and can be reused with the same tokens and components, and understanding what needs to be created from scratch. Everything new must follow the same guidelines, principles, and rules already established in the system.',
+        's3.body4':'The following screens represent a small portion of the full design system, which includes a much broader set of components and variations.',
+        's4.heading':'THE CHALLENGE',
+        's4.body1':'R7 presents multiple product and business challenges due to its scale and diverse audience.',
+        's4.body2':"One example of this is the platform's revenue model.",
+        's4.body3':"Most of the platform's revenue comes from advertising displayed across pages. This creates a strong need to keep users navigating through the website and consuming multiple pieces of content per session.",
+        's4.callout':'The challenge was to design experiences that increase engagement, encourage return visits, and extend user sessions without compromising usability or content clarity.',
+        's5.heading':'SOLUTIONS',
+        's5.body1':'The product team continuously provides data on user behavior, such as clicks, time on page, and navigation flows. These insights guide design decisions focused on increasing engagement and retention. Based on this data, multiple features were designed to encourage users to stay longer and return more frequently.',
+        's5.body2':'<strong>Newsletter:</strong> Topic-based newsletters allow users to subscribe to specific interests. Each newsletter curates related articles and is sent periodically via email.',
+        's5.body3':'This creates a recurring entry point to the platform and brings users back independently of their usual browsing habits.',
+        's5.body4':'<strong>Follow Authors:</strong> Users can follow specific authors, journalists, or bloggers. When new content is published, users are notified and encouraged to return.',
+        's5.body5':'A dedicated page lists all available authors, and the follow option is also accessible directly from articles.',
+        's5.body6':'<strong>Interactive Quizzes:</strong> For a Record TV quiz-based reality show, interactive quizzes were introduced within the show\'s page. Users can answer questions, see their ranking, and share results with others.',
+        's5.body7':'New quizzes are released with each episode, encouraging repeated participation and social sharing.',
+        's6.heading':'IMPACT',
+        's6.t1':'Engagement','s6.d1':'More interactions across content and features',
+        's6.t2':'Session Duration','s6.d2':'Longer time spent reading and exploring content',
+        's6.t3':'Retention','s6.d3':'Users returning more frequently via newsletters and notifications',
+        's6.t4':'User Acquisition','s6.d4':'New users entering through shared quiz challenges',
       },
       pt: {
         'nav.home':'HOME','nav.back':'VOLTAR','nav.back-top':'VOLTAR AO TOPO','nav.top':'TOPO',
-        'nav.overview':'VISÃO GERAL','nav.challenge':'O DESAFIO','nav.challenge-short':'DESAFIO',
+        'nav.overview':'VISÃO GERAL','nav.problem':'O PROBLEMA','nav.problem-short':'PROBLEMA',
+        'nav.challenge':'O DESAFIO','nav.challenge-short':'DESAFIO',
         'nav.solutions':'SOLUÇÕES','nav.impact':'IMPACTO','nav.design':'DESIGN SYSTEM',
         'meta.year':'ANO','meta.scope':'ESCOPO','meta.resp':'RESPONSABILIDADES',
         'meta.scope1':'Plataforma de Notícias','meta.scope2':'Expansão de Funcionalidades','meta.scope3':'Mobile / Desktop',
@@ -790,28 +846,33 @@
         's1.body2':'Por conta dessa ampla cobertura, a plataforma atende a um público altamente diversificado, com diferentes interesses, comportamentos e níveis de engajamento.',
         's1.cap1':'Página Inicial','s1.cap2':'Cobertura das Eleições','s1.cap3':'Tabelas de Campeonato de Futebol',
         's1.cap4':'A Fazenda - Um dos maiores reality shows brasileiros',
-        's2.heading':'O DESAFIO',
-        's2.body1':'O R7 apresenta múltiplos desafios de produto e negócio devido à sua escala e público diversificado.',
-        's2.body2':'Um exemplo disso é o modelo de receita da plataforma.',
-        's2.body3':'A maior parte da receita da plataforma vem de publicidade exibida nas páginas. Isso cria uma necessidade constante de manter os usuários navegando pelo site e consumindo múltiplos conteúdos por sessão.',
-        's2.callout':'O desafio era projetar experiências que aumentassem o engajamento, incentivassem o retorno dos usuários e estendessem as sessões sem comprometer a usabilidade ou a clareza do conteúdo.',
-        's3.heading':'SOLUÇÕES',
-        's3.body1':'O time de produto fornece continuamente dados sobre o comportamento dos usuários, como cliques, tempo na página e fluxos de navegação. Esses dados orientam decisões de design focadas em aumentar o engajamento e a retenção. Com base neles, diversas funcionalidades foram projetadas para incentivar os usuários a ficarem mais tempo e voltarem com mais frequência.',
-        's3.body2':'<strong>Newsletter:</strong> Newsletters temáticas permitem que os usuários se inscrevam em assuntos de interesse. Cada newsletter reúne artigos relacionados e é enviada periodicamente por e-mail.',
-        's3.body3':'Isso cria um ponto de entrada recorrente para a plataforma e traz os usuários de volta independentemente de seus hábitos de navegação.',
-        's3.body4':'<strong>Seguir Autores:</strong> Os usuários podem seguir autores, jornalistas ou blogueiros específicos. Quando novos conteúdos são publicados, os usuários são notificados e incentivados a retornar.',
-        's3.body5':'Uma página dedicada lista todos os autores disponíveis, e a opção de seguir também está acessível diretamente nos artigos.',
-        's3.body6':'<strong>Quizzes Interativos:</strong> Para um reality show da Record TV baseado em quizzes, foram introduzidos quizzes interativos na página do programa. Os usuários podem responder perguntas, ver seu ranking e compartilhar os resultados.',
-        's3.body7':'Novos quizzes são lançados a cada episódio, incentivando a participação recorrente e o compartilhamento nas redes sociais.',
-        's4.heading':'IMPACTO',
-        's4.t1':'Engajamento','s4.d1':'Mais interações com conteúdos e funcionalidades',
-        's4.t2':'Duração das Sessões','s4.d2':'Mais tempo dedicado à leitura e exploração de conteúdos',
-        's4.t3':'Retenção','s4.d3':'Usuários retornando com mais frequência via newsletters e notificações',
-        's4.t4':'Aquisição de Usuários','s4.d4':'Novos usuários chegando por meio de quizzes compartilhados',
-        's5.heading':'DESIGN SYSTEM',
-        's5.body1':'O R7 inclui diversas seções e sub-produtos, cada um direcionado a públicos diferentes — de usuários mais jovens consumindo entretenimento a audiências mais maduras acompanhando notícias e programas de TV. Isso exige um design system escalável que mantenha consistência e ao mesmo tempo permita flexibilidade para diferentes contextos e necessidades.',
-        's5.body2':'O foco principal é equilibrar variação e consistência, garantindo que novas funcionalidades e experiências estejam alinhadas com os princípios centrais, a linguagem visual e os padrões de usabilidade.',
-        's5.body3':'As telas a seguir representam uma pequena parte do design system completo, que inclui um conjunto muito mais amplo de componentes e variações.',
+        's2.heading':'O PROBLEMA',
+        's2.body1':'Uma plataforma tão abrangente, cobrindo tantos tópicos diferentes para tantos tipos de usuários ao mesmo tempo, enfrenta um desafio estrutural inevitável: manter a consistência. Cada seção precisa parecer parte do mesmo produto, independentemente de quem está lendo ou do que veio procurar.',
+        's2.body2':'Atender a um público tão diversificado, em dezenas de tópicos e sub-produtos diferentes, cria um desafio único: manter a consistência. À medida que a tecnologia evolui e surgem novas formas de consumir conteúdo, a plataforma precisa se adaptar constantemente, introduzindo novas funcionalidades, layouts e experiências.',
+        's2.callout':'Sem uma consistência sólida, essa evolução constante corre o risco de fragmentar a experiência. Usuários navegando por diferentes seções podem encontrar padrões, interações e linguagens visuais distintas, fazendo com que o produto pareça desconexo e difícil de confiar. Um design consistente comunica onde os usuários estão, qual conteúdo estão vendo e o que podem esperar a seguir.',
+        's3.heading':'DESIGN SYSTEM',
+        's3.body1':'Uma plataforma com a escala e diversidade do R7 só consegue manter a consistência por meio de um Design System abrangente e bem definido.',
+        's3.body2':'O Design System funciona como a fonte única de verdade para todas as equipes e superfícies. Ele define a linguagem visual, os padrões de interação e o comportamento dos componentes, garantindo que cada página — independentemente do tema, do público ou do sub-produto — faça parte da mesma experiência.',
+        's3.body3':'Sempre que algo novo precisa ser construído, o processo começa revisitando o Design System: identificando o que já existe e pode ser reutilizado com os mesmos tokens e componentes, e entendendo o que precisa ser criado do zero. Tudo que é novo deve seguir as mesmas diretrizes, princípios e regras já estabelecidos no sistema.',
+        's3.body4':'As telas a seguir representam uma pequena parte do design system completo, que inclui um conjunto muito mais amplo de componentes e variações.',
+        's4.heading':'O DESAFIO',
+        's4.body1':'O R7 apresenta múltiplos desafios de produto e negócio devido à sua escala e público diversificado.',
+        's4.body2':'Um exemplo disso é o modelo de receita da plataforma.',
+        's4.body3':'A maior parte da receita da plataforma vem de publicidade exibida nas páginas. Isso cria uma necessidade constante de manter os usuários navegando pelo site e consumindo múltiplos conteúdos por sessão.',
+        's4.callout':'O desafio era projetar experiências que aumentassem o engajamento, incentivassem o retorno dos usuários e estendessem as sessões sem comprometer a usabilidade ou a clareza do conteúdo.',
+        's5.heading':'SOLUÇÕES',
+        's5.body1':'O time de produto fornece continuamente dados sobre o comportamento dos usuários, como cliques, tempo na página e fluxos de navegação. Esses dados orientam decisões de design focadas em aumentar o engajamento e a retenção. Com base neles, diversas funcionalidades foram projetadas para incentivar os usuários a ficarem mais tempo e voltarem com mais frequência.',
+        's5.body2':'<strong>Newsletter:</strong> Newsletters temáticas permitem que os usuários se inscrevam em assuntos de interesse. Cada newsletter reúne artigos relacionados e é enviada periodicamente por e-mail.',
+        's5.body3':'Isso cria um ponto de entrada recorrente para a plataforma e traz os usuários de volta independentemente de seus hábitos de navegação.',
+        's5.body4':'<strong>Seguir Autores:</strong> Os usuários podem seguir autores, jornalistas ou blogueiros específicos. Quando novos conteúdos são publicados, os usuários são notificados e incentivados a retornar.',
+        's5.body5':'Uma página dedicada lista todos os autores disponíveis, e a opção de seguir também está acessível diretamente nos artigos.',
+        's5.body6':'<strong>Quizzes Interativos:</strong> Para um reality show da Record TV baseado em quizzes, foram introduzidos quizzes interativos na página do programa. Os usuários podem responder perguntas, ver seu ranking e compartilhar os resultados.',
+        's5.body7':'Novos quizzes são lançados a cada episódio, incentivando a participação recorrente e o compartilhamento nas redes sociais.',
+        's6.heading':'IMPACTO',
+        's6.t1':'Engajamento','s6.d1':'Mais interações com conteúdos e funcionalidades',
+        's6.t2':'Duração das Sessões','s6.d2':'Mais tempo dedicado à leitura e exploração de conteúdos',
+        's6.t3':'Retenção','s6.d3':'Usuários retornando com mais frequência via newsletters e notificações',
+        's6.t4':'Aquisição de Usuários','s6.d4':'Novos usuários chegando por meio de quizzes compartilhados',
       }
     };
     function applyLang(lang) {
@@ -991,6 +1052,7 @@
       var imgs = Array.prototype.filter.call(document.querySelectorAll('.image-placeholder img'), function (img) {
         if (img.closest('.proj-comparison')) return false;
         if (img.closest('.carousel-slide')) return false;
+        if (img.closest('.ticker-item')) return false;
         return true;
       });
       imgs.forEach(function (img) { img.style.clipPath = 'inset(0 100% 0 0)'; });
@@ -1035,6 +1097,28 @@
         img.style.clipPath = 'inset(0 100% 0 0)';
         carouselObserver.observe(carousel);
       });
+    })();
+
+    (function () {
+      var wrap  = document.getElementById('ticker-wrap');
+      var track = document.getElementById('ticker-track');
+      if (!wrap || !track) return;
+      var speed       = 0.35;
+      var hoverSpeed  = 0.2;
+      var currentSpeed = speed;
+      var targetSpeed  = speed;
+      var x = 0;
+      function tick() {
+        currentSpeed += (targetSpeed - currentSpeed) * 0.06;
+        x -= currentSpeed;
+        var half = track.scrollWidth / 2;
+        if (half > 0 && x <= -half) x += half;
+        track.style.transform = 'translateX(' + x + 'px)';
+        requestAnimationFrame(tick);
+      }
+      wrap.addEventListener('mouseenter', function () { targetSpeed = hoverSpeed; });
+      wrap.addEventListener('mouseleave', function () { targetSpeed = speed; });
+      requestAnimationFrame(tick);
     })();
   </script>
 
