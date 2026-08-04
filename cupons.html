@@ -1392,7 +1392,7 @@
     })();
 
     (function () {
-      var imgs = document.querySelectorAll('.image-placeholder img');
+      var imgs = Array.prototype.filter.call(document.querySelectorAll('.image-placeholder img'), function (img) { return !img.closest('.proj-comparison'); });
       imgs.forEach(function (img) { img.style.clipPath = 'inset(0 100% 0 0)'; });
       var observer = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
