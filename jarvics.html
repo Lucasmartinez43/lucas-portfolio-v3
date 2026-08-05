@@ -248,6 +248,11 @@
       background: transparent; border-radius: 8px; overflow: hidden;
     }
     .image-placeholder img { width: 100%; height: auto; display: block; }
+    .carousel-subtitle {
+      font-family: 'Stack Sans Text', sans-serif; font-weight: 300; font-size: 14px;
+      color: rgba(15,15,18,0.5); text-align: center; line-height: 1.5;
+    }
+    :root[data-theme="dark"] .carousel-subtitle { color: rgba(255,255,255,0.5); }
 
     .impact-cards { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 16px; }
     .impact-card {
@@ -741,6 +746,7 @@
           </div>
         </div>
       </div>
+      <p class="carousel-subtitle" style="margin-top: 12px;" data-i18n="nda.note">Some data is protected by NDA, but I'm happy to go into detail over a call.</p>
     </section>
 
     <!-- 06 DESIGN SYSTEM -->
@@ -1446,6 +1452,7 @@
         'nav.solutions': 'SOLUTIONS', 'nav.subscribers': 'SUBSCRIBERS',
         'nav.outcome': 'OUTCOME', 'nav.design': 'DESIGN SYSTEM',
         'nav.back': 'BACK', 'nav.back-top': 'BACK TO TOP',
+        'nda.note': '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:8px"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Some data is protected by NDA, but I\'m happy to go into detail over a call.',
         'meta.year': 'YEAR', 'meta.scope': 'SCOPE', 'meta.resp': 'RESPONSIBILITIES',
         'meta.scope1': 'Enterprise CMS', 'meta.scope2': 'Subscribers Managing',
         'meta.resp1': '• Designed the whole visual<br>identity from scratch',
@@ -1516,6 +1523,7 @@
         'nav.solutions': 'SOLUÇÕES', 'nav.subscribers': 'ASSINANTES',
         'nav.outcome': 'RESULTADOS', 'nav.design': 'DESIGN SYSTEM',
         'nav.back': 'VOLTAR', 'nav.back-top': 'VOLTAR AO TOPO',
+        'nda.note': '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:8px"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Alguns dados são protegidos por NDA, mas fico feliz em detalhar em uma ligação.',
         'meta.year': 'ANO', 'meta.scope': 'ESCOPO', 'meta.resp': 'RESPONSABILIDADES',
         'meta.scope1': 'CMS Empresarial', 'meta.scope2': 'Gestão de Assinantes',
         'meta.resp1': '• Desenhei toda a identidade visual do zero',
